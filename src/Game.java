@@ -2,7 +2,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -14,7 +17,16 @@ public class Game extends JPanel{
 	private int posX = 0;
 	private int posY = 0;
 	private int counter = 0;
-	
+	private Character testChar;
+	public Game()
+	{
+		try {
+			testChar = new Character(ImageIO.read(new File("resources/RPG_Hero_Walk_Trans.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static void main(String[] args) {
 		tehGame = new Game();
         
@@ -36,12 +48,13 @@ public class Game extends JPanel{
 		Graphics2D g2d = (Graphics2D) g;
 		
 		
-		Color colors[] = {Color.RED, Color.BLUE, Color.YELLOW, Color.GRAY, Color.GREEN, Color.ORANGE};
-		
-		for(int i=0; i < colors.length; i++){
-			g2d.setColor(colors[i]);
-			g2d.fillOval(posX+i*30, posY+i*30, 30, 30);
-		}
+//		Color colors[] = {Color.RED, Color.BLUE, Color.YELLOW, Color.GRAY, Color.GREEN, Color.ORANGE};
+//		
+//		for(int i=0; i < colors.length; i++){
+//			g2d.setColor(colors[i]);
+//			g2d.fillOval(posX+i*30, posY+i*30, 30, 30);
+//		}
+		testChar.paint(g2d);
 	}
 	
 

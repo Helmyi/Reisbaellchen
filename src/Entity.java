@@ -2,9 +2,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 public abstract class Entity {
-	int x;
-	int y;
-	Image entityImage;
+	protected int x;
+	protected int y;
+	protected Image entityImage;
+	protected int tileWidth;
+	protected int tileHeight;
 	
 	public Entity(Image image)
 	{
