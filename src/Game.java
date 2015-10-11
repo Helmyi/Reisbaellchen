@@ -62,9 +62,7 @@ public class Game extends JPanel{
 	 * game logic
 	 */
 	private void tick(){
-		counter++;
-		posX = (int)(Math.sin(counter/100.0)*70 + 100);
-		posY = (int)(Math.cos(counter/100.0)*70 + 100);
+		testChar.tick();
 	}
 	
 	public void run() {
