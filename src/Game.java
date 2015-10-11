@@ -23,7 +23,7 @@ public class Game extends JPanel{
 		frame.setSize(600, 600);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
 		tehGame.run();
 	}
 	
