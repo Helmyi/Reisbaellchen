@@ -1,0 +1,7 @@
+Name: Jani 
+Klasse: Alchimist
+Merkmale: Lange Haare, weise Sprüche
+
+Beschreibung:
+Jani betreibt einen Alchimistengeschäft in Mönchengladbach. Er versorgt die Helden
+mit mächtigen Tränken und magischen Items.

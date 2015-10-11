@@ -1,0 +1,6 @@
+Name: Mortymer
+Klasse: Katze/ Assassine
+Merkmale: rotes Fell, drei Beine
+
+Beschreibung:
+Mortymer ist eine hinterhältige Katze die die Helden jederzeit in Mönchengladbach angreift.
