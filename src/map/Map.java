@@ -1,7 +1,10 @@
+package map;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
@@ -18,8 +21,7 @@ public class Map {
 	int tileSize;
 	int mapWidth;
 	int mapHeight;
-	Image tiles[];
-	int tileFirstID[];
+	List<TileInfo> tileInfoList;
 	
 	int layers[][];
 	
@@ -27,7 +29,7 @@ public class Map {
 	public Map(){
 		tileSize = 32;
 		tilePath = "resources/Zones/TestMap/";
-		loadMap("resources/Zones/TestMap/TestMap.tmx");
+		loadMap("resources/Zones/TestMap/Wüste.tmx");
 	}
 	
 	
@@ -40,7 +42,7 @@ public class Map {
 				//tileID=0 => skip
 				if(layers[layerNr][i] == 0) continue;
 				
-				g.drawImage(tiles[tileIdToImageId(layers[layerNr][i])],
+				g.drawImage(tileIdToImage(layers[layerNr][i]),
 						x, y, x + tileSize, y + tileSize,
 						tileIdToTileX(layers[layerNr][i]) * tileSize,
 						tileIdToTileY(layers[layerNr][i]) * tileSize,
@@ -52,9 +54,10 @@ public class Map {
 	}
 	
 	private int tileIdToTileX(int tileID){
-		for(int i=0;i<tiles.length;i++){
-			if(tileID >= tileFirstID[i] && tileID < tileFirstID[i]+18){
-				return (tileID-tileFirstID[i])%3;
+		for(int i=0;i<tileInfoList.size();i++){
+			if(tileID >= tileInfoList.get(i).getTileFirstID()
+					&& tileID < tileInfoList.get(i).getTileFirstID() + tileInfoList.get(i).getTileCount()){
+				return (tileID-tileInfoList.get(i).getTileFirstID())%tileInfoList.get(i).getTileImageCulomns();
 			}
 		}
 		System.out.println("Map.tileIdToTileX error " + tileID);
@@ -62,23 +65,25 @@ public class Map {
 	}
 	
 	private int tileIdToTileY(int tileID){
-		for(int i=0;i<tiles.length;i++){
-			if(tileID >= tileFirstID[i] && tileID < tileFirstID[i]+18){
-				return (tileID-tileFirstID[i])/3;
+		for(int i=0;i<tileInfoList.size();i++){
+			if(tileID >= tileInfoList.get(i).getTileFirstID()
+					&& tileID < tileInfoList.get(i).getTileFirstID() + tileInfoList.get(i).getTileCount()){
+				return (tileID-tileInfoList.get(i).getTileFirstID())/tileInfoList.get(i).getTileImageCulomns();
 			}
 		}
 		System.out.println("Map.tileIdToTileY error " + tileID);
 		return 0;
 	}
 	
-	private int tileIdToImageId(int tileID){
-		for(int i=0;i<tiles.length;i++){
-			if(tileID >= tileFirstID[i] && tileID < tileFirstID[i]+18){
-				return i;
+	private Image tileIdToImage(int tileID){
+		for(int i=0;i<tileInfoList.size();i++){
+			if(tileID >= tileInfoList.get(i).getTileFirstID()
+					&& tileID < tileInfoList.get(i).getTileFirstID() + tileInfoList.get(i).getTileCount()){
+				return tileInfoList.get(i).getTileImage();
 			}
 		}
-		System.out.println("Map.tileIdToImageId error " + tileID);
-		return 0;
+		System.out.println("Map.tileIdToImage error " + tileID);
+		return null;
 	}
 	
 	private void loadMap(String file){
@@ -97,30 +102,45 @@ public class Map {
 			mapHeight = Integer.parseInt(doc.getDocumentElement().getAttributes().getNamedItem("height").getNodeValue().toString());
 
 			NodeList nList = doc.getElementsByTagName("tileset");
-			tiles = new Image[nList.getLength()];
-			tileFirstID = new int[nList.getLength()];
+			tileInfoList = new ArrayList<TileInfo>();
 			
 			//load tileset info
 			for(int i=0; i<nList.getLength(); i++){
-				tileFirstID[i] = Integer.parseInt(nList.item(i).getAttributes().getNamedItem("firstgid").getNodeValue().toString());
+				Image tileImage;
+				int tileWidth = Integer.parseInt(nList.item(i).getAttributes().getNamedItem("tilewidth").getNodeValue().toString());
+				int tileHeight = Integer.parseInt(nList.item(i).getAttributes().getNamedItem("tileheight").getNodeValue().toString());
+				int tileFirstID = Integer.parseInt(nList.item(i).getAttributes().getNamedItem("firstgid").getNodeValue().toString());
+				int tileCount = Integer.parseInt(nList.item(i).getAttributes().getNamedItem("tilecount").getNodeValue().toString());
+				int tileImageRows = 0;
+				int tileImageCulomns = 0;
+				
+				
 				Node nNode = nList.item(i);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					String tempImagePath = eElement.getElementsByTagName("image").item(0).getAttributes().getNamedItem("source").getNodeValue().toString();
+					tileImageRows = Integer.parseInt(eElement.getElementsByTagName("image").item(0).getAttributes().getNamedItem("height").getNodeValue().toString())/tileHeight;
+					tileImageCulomns = Integer.parseInt(eElement.getElementsByTagName("image").item(0).getAttributes().getNamedItem("width").getNodeValue().toString())/tileWidth;
+					
 					tempImagePath = tilePath+tempImagePath;
 					try {
-						tiles[i] = ImageIO.read(new File(tempImagePath));
+						tileImage = ImageIO.read(new File(tempImagePath));
+						tileInfoList.add(new TileInfo(tileImage, tileWidth, tileHeight, tileFirstID, tileCount, tileImageRows, tileImageCulomns));
 					} catch (IOException e) {
 						System.out.println("Map: Image load failed, path: " + tempImagePath);
 						e.printStackTrace();
 					}
 				}
+				
 			}
 			//load map data
 			nList = doc.getElementsByTagName("layer");
 			layers = new int[nList.getLength()][mapHeight*mapWidth];
 			
 			for(int i=0; i<nList.getLength(); i++){
+				//Collision layer // TODO, layer with name Collision used for collision and not for drawing
+				if("Collision".equals(nList.item(i).getAttributes().getNamedItem("name").getNodeValue().toString())) continue;
+				
 				Node nNode = nList.item(i);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
