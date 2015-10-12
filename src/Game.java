@@ -94,16 +94,22 @@ public class Game extends JPanel implements KeyListener{
 	public void keyPressed(KeyEvent arg0) {
 		testChar.setMoving(true);
 		if(arg0.getKeyCode() == KeyEvent.VK_W){
-			testChar.setMovingDirection(Character.MovingDirection.UP);
+			testChar.setMovingDirection(Character.CharacterAction.UP);
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_S){
-			testChar.setMovingDirection(Character.MovingDirection.DOWN);
+			testChar.setMovingDirection(Character.CharacterAction.DOWN);
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_D){
-			testChar.setMovingDirection(Character.MovingDirection.RIGHT);
+			testChar.setMovingDirection(Character.CharacterAction.RIGHT);
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_A){
-			testChar.setMovingDirection(Character.MovingDirection.LEFT);
+			testChar.setMovingDirection(Character.CharacterAction.LEFT);
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_J){
+			testChar.setMovingDirection(Character.CharacterAction.PUNCH);
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_K){
+			testChar.setMovingDirection(Character.CharacterAction.KICK);
 		}
 	}
 
