@@ -1,16 +1,15 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
-
-
 public class Character extends Entity {
 	private boolean isMoving;
+	private boolean isFighting;
 	private int animationStep;
 	private int animationStepCount;
 	private CharacterAction currentCharacterAction;
 
 	public static enum CharacterAction {
-		DOWN(0), UP(1), RIGHT(2), LEFT(3), PUNCH(4), KICK(5);
+		DOWN(0), UP(1), RIGHT(2), LEFT(3), ATTACK_DOWN(4), ATTACK_UP(5), ATTACK_RIGHT(6), ATTACK_LEFT(7);
 		private int code;
 
 		private CharacterAction(int code) {
@@ -21,8 +20,7 @@ public class Character extends Entity {
 			return code;
 		}
 	}
-	
-	
+
 	public Character(Image image) {
 		super(image);
 		init();
@@ -30,14 +28,14 @@ public class Character extends Entity {
 
 	@Override
 	public void tick() {
-		if (this.isMoving()) {
+		if (this.isMoving() || this.isFighting()) {
 			animationStep++;
 			// TODO weitere animationen für angriffe etc hinzufügen und "4"
 			// durch variable ersetzen
 			animationStep %= animationStepCount;
-			
-			//move forward
-			switch(currentCharacterAction){
+
+			// move forward
+			switch (currentCharacterAction) {
 			case DOWN:
 				y++;
 				break;
@@ -50,9 +48,13 @@ public class Character extends Entity {
 			case LEFT:
 				x--;
 				break;
-			case PUNCH:
+			case ATTACK_DOWN:
 				break;
-			case KICK:
+			case ATTACK_UP:
+				break;
+			case ATTACK_RIGHT:
+				break;
+			case ATTACK_LEFT:
 				break;
 			}
 		}
@@ -65,22 +67,31 @@ public class Character extends Entity {
 				(this.currentCharacterAction.toInt() + 1) * tileHeight, null);
 	}
 
-	public void setMovingDirection(CharacterAction action) {
+	public void setCharacterAction(CharacterAction action) {
 		this.currentCharacterAction = action;
 	}
 
 	public boolean isMoving() {
 		return isMoving;
 	}
-	
-	public void setMoving(boolean isMoving){
+
+	public void setMoving(boolean isMoving) {
 		this.isMoving = isMoving;
 	}
-	
+
+	public boolean isFighting() {
+		return isFighting;
+	}
+
+	public void setFighting(boolean isFighting) {
+		this.isFighting = isFighting;
+	}
+
 	private void init() {
 		isMoving = false;
+		isFighting = false;
 		animationStep = 0;
-		animationStepCount = 8;
+		animationStepCount = 4;
 		this.tileHeight = 64;
 		this.tileWidth = 32;
 		this.currentCharacterAction = CharacterAction.DOWN;

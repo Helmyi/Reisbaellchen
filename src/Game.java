@@ -92,30 +92,44 @@ public class Game extends JPanel implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		testChar.setMoving(true);
 		if(arg0.getKeyCode() == KeyEvent.VK_W){
-			testChar.setMovingDirection(Character.CharacterAction.UP);
+			testChar.setCharacterAction(Character.CharacterAction.UP);
+			testChar.setMoving(true);
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_S){
-			testChar.setMovingDirection(Character.CharacterAction.DOWN);
+			testChar.setCharacterAction(Character.CharacterAction.DOWN);
+			testChar.setMoving(true);
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_D){
-			testChar.setMovingDirection(Character.CharacterAction.RIGHT);
+			testChar.setCharacterAction(Character.CharacterAction.RIGHT);
+			testChar.setMoving(true);
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_A){
-			testChar.setMovingDirection(Character.CharacterAction.LEFT);
+			testChar.setCharacterAction(Character.CharacterAction.LEFT);
+			testChar.setMoving(true);
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_J){
-			testChar.setMovingDirection(Character.CharacterAction.PUNCH);
+			testChar.setCharacterAction(Character.CharacterAction.ATTACK_LEFT);
+			testChar.setFighting(true);
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_K){
-			testChar.setMovingDirection(Character.CharacterAction.KICK);
+			testChar.setCharacterAction(Character.CharacterAction.ATTACK_DOWN);
+			testChar.setFighting(true);
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_I){
+			testChar.setCharacterAction(Character.CharacterAction.ATTACK_UP);
+			testChar.setFighting(true);
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_L){
+			testChar.setCharacterAction(Character.CharacterAction.ATTACK_RIGHT);
+			testChar.setFighting(true);
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		testChar.setMoving(false);
+		testChar.setFighting(false);
 	}
 
 	@Override
