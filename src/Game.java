@@ -1,5 +1,4 @@
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.File;
@@ -11,12 +10,9 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel{
-	private static Game tehGame;
+	private static Game theGame;
 	private int fps = 60; 
 	
-	private int posX = 0;
-	private int posY = 0;
-	private int counter = 0;
 	private Character testChar;
 	public Game()
 	{
@@ -27,16 +23,17 @@ public class Game extends JPanel{
 			e.printStackTrace();
 		}
 	}
+	
 	public static void main(String[] args) {
-		tehGame = new Game();
+		theGame = new Game();
         
         JFrame frame = new JFrame("Reisbaellchen Game");
-		frame.add(tehGame);
+		frame.add(theGame);
 		frame.setSize(600, 600);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		tehGame.run();
+		theGame.run();
 	}
 	
 	/**
@@ -47,13 +44,6 @@ public class Game extends JPanel{
 		super.paint(g); //clears the content of the last frame
 		Graphics2D g2d = (Graphics2D) g;
 		
-		
-//		Color colors[] = {Color.RED, Color.BLUE, Color.YELLOW, Color.GRAY, Color.GREEN, Color.ORANGE};
-//		
-//		for(int i=0; i < colors.length; i++){
-//			g2d.setColor(colors[i]);
-//			g2d.fillOval(posX+i*30, posY+i*30, 30, 30);
-//		}
 		testChar.paint(g2d);
 	}
 	
@@ -66,27 +56,27 @@ public class Game extends JPanel{
 	}
 	
 	public void run() {
-		long beforeTime, timeDiff, sleep;		
-		beforeTime = System.currentTimeMillis();
+		long timeBefore, timePassed, sleepTime;		
+		timeBefore = System.currentTimeMillis();
 		
 		//loop
 		while (true) {
 			tick();
 			repaint();
-			//passed time
-			timeDiff = System.currentTimeMillis() - beforeTime;
-			//calc sleep time
-			sleep = (1000/fps) - timeDiff;
-			if (sleep < 0) {
-				sleep = 0;
+
+			timePassed = System.currentTimeMillis() - timeBefore;
+
+			sleepTime = (1000/fps) - timePassed;
+			if (sleepTime < 0) {
+				sleepTime = 0;
 			}
 
 			try {
-				Thread.sleep(sleep);
+				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
 				System.out.println("Interrupted: " + e.getMessage());
 			}
-			beforeTime = System.currentTimeMillis();
+			timeBefore = System.currentTimeMillis();
 		}
 	}
 }

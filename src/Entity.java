@@ -32,7 +32,7 @@ public abstract class Entity {
 	{
 		this.y = y;
 	}
-	//TODO: sinnvollen namen/funktion finden
+
 	public abstract void tick();
 	public abstract void paint(Graphics g);
 }
