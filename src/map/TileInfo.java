@@ -28,13 +28,24 @@ public class TileInfo {
 	public int getTileFirstID(){
 		return tileFirstID;
 	}
-	public int getTileCount(){
+	public
+	int getTileCount(){
 		return tileCount;
 	}
+	
 	public int getTileImageRows(){
 		return tileImageRows;
 	}
+	
 	public int getTileImageCulomns(){
 		return tileImageCulomns;
+	}
+	
+	public int getTileWidth(){
+		return tileWidth;
+	}
+	
+	public int getTileHeight(){
+		return tileHeight;
 	}
 }
