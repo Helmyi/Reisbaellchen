@@ -7,13 +7,13 @@ public class Character extends Entity {
 	private boolean isMoving;
 	private int animationStep;
 	private int animationStepCount;
-	private MovingDirection currentDirection;
+	private CharacterAction currentCharacterAction;
 
-	public static enum MovingDirection {
-		DOWN(0), UP(1), RIGHT(2), LEFT(3);
+	public static enum CharacterAction {
+		DOWN(0), UP(1), RIGHT(2), LEFT(3), PUNCH(4), KICK(5);
 		private int code;
 
-		private MovingDirection(int code) {
+		private CharacterAction(int code) {
 			this.code = code;
 		}
 
@@ -21,6 +21,7 @@ public class Character extends Entity {
 			return code;
 		}
 	}
+	
 	
 	public Character(Image image) {
 		super(image);
@@ -36,7 +37,7 @@ public class Character extends Entity {
 			animationStep %= animationStepCount;
 			
 			//move forward
-			switch(currentDirection){
+			switch(currentCharacterAction){
 			case DOWN:
 				y++;
 				break;
@@ -49,6 +50,10 @@ public class Character extends Entity {
 			case LEFT:
 				x--;
 				break;
+			case PUNCH:
+				break;
+			case KICK:
+				break;
 			}
 		}
 	}
@@ -56,12 +61,12 @@ public class Character extends Entity {
 	@Override
 	public void paint(Graphics g) {
 		g.drawImage(entityImage, x, y, x + tileWidth, y + tileHeight, animationStep * tileWidth,
-				this.currentDirection.toInt() * tileHeight, (animationStep + 1) * tileWidth,
-				(this.currentDirection.toInt() + 1) * tileHeight, null);
+				this.currentCharacterAction.toInt() * tileHeight, (animationStep + 1) * tileWidth,
+				(this.currentCharacterAction.toInt() + 1) * tileHeight, null);
 	}
 
-	public void setMovingDirection(MovingDirection direction) {
-		this.currentDirection = direction;
+	public void setMovingDirection(CharacterAction action) {
+		this.currentCharacterAction = action;
 	}
 
 	public boolean isMoving() {
@@ -70,15 +75,14 @@ public class Character extends Entity {
 	
 	public void setMoving(boolean isMoving){
 		this.isMoving = isMoving;
-		
 	}
 	
 	private void init() {
 		isMoving = false;
 		animationStep = 0;
-		animationStepCount = 4;
+		animationStepCount = 8;
 		this.tileHeight = 64;
 		this.tileWidth = 32;
-		this.currentDirection = MovingDirection.DOWN;
+		this.currentCharacterAction = CharacterAction.DOWN;
 	}
 }
