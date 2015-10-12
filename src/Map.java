@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
 
 
 public class Map {
+	String tilePath;
 	int tileSize;
 	int mapWidth;
 	int mapHeight;
@@ -25,6 +26,7 @@ public class Map {
 	
 	public Map(){
 		tileSize = 32;
+		tilePath = "resources/Zones/TestMap/";
 		loadMap("resources/Zones/TestMap/TestMap.tmx");
 	}
 	
@@ -105,7 +107,7 @@ public class Map {
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					String tempImagePath = eElement.getElementsByTagName("image").item(0).getAttributes().getNamedItem("source").getNodeValue().toString();
-					tempImagePath = "resources/Zones/TestMap/"+tempImagePath;
+					tempImagePath = tilePath+tempImagePath;
 					try {
 						tiles[i] = ImageIO.read(new File(tempImagePath));
 					} catch (IOException e) {
