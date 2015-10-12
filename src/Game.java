@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 public class Game extends JPanel implements KeyListener{
 	private static Game theGame;
 	private int fps = 60; 
+	private Map map;
 	
 	private Character testChar;
 	public Game()
@@ -28,6 +29,8 @@ public class Game extends JPanel implements KeyListener{
 		}
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
+		
+		map = new Map();
 	}
 	
 	public static void main(String[] args) {
@@ -35,7 +38,7 @@ public class Game extends JPanel implements KeyListener{
         
         JFrame frame = new JFrame("Reisbaellchen Game");
 		frame.add(theGame);
-		frame.setSize(600, 600);
+		frame.setSize(1000, 600);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -50,6 +53,7 @@ public class Game extends JPanel implements KeyListener{
 		super.paint(g); //clears the content of the last frame
 		Graphics2D g2d = (Graphics2D) g;
 		
+		map.paint(g2d);
 		testChar.paint(g2d);
 	}
 	
