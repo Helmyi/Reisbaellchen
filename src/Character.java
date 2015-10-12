@@ -1,13 +1,15 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+
+
 public class Character extends Entity {
 	private boolean isMoving;
 	private int animationStep;
 	private int animationStepCount;
 	private MovingDirection currentDirection;
 
-	enum MovingDirection {
+	public static enum MovingDirection {
 		DOWN(0), UP(1), RIGHT(2), LEFT(3);
 		private int code;
 
@@ -19,7 +21,7 @@ public class Character extends Entity {
 			return code;
 		}
 	}
-
+	
 	public Character(Image image) {
 		super(image);
 		init();
@@ -32,6 +34,22 @@ public class Character extends Entity {
 			// TODO weitere animationen für angriffe etc hinzufügen und "4"
 			// durch variable ersetzen
 			animationStep %= animationStepCount;
+			
+			//move forward
+			switch(currentDirection){
+			case DOWN:
+				y++;
+				break;
+			case UP:
+				y--;
+				break;
+			case RIGHT:
+				x++;
+				break;
+			case LEFT:
+				x--;
+				break;
+			}
 		}
 	}
 
@@ -49,7 +67,12 @@ public class Character extends Entity {
 	public boolean isMoving() {
 		return isMoving;
 	}
-
+	
+	public void setMoving(boolean isMoving){
+		this.isMoving = isMoving;
+		
+	}
+	
 	private void init() {
 		isMoving = false;
 		animationStep = 0;

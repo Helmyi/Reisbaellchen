@@ -1,6 +1,8 @@
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -8,8 +10,10 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+
+
 @SuppressWarnings("serial")
-public class Game extends JPanel{
+public class Game extends JPanel implements KeyListener{
 	private static Game theGame;
 	private int fps = 60; 
 	
@@ -17,11 +21,13 @@ public class Game extends JPanel{
 	public Game()
 	{
 		try {
-			testChar = new Character(ImageIO.read(new File("resources/RPG_Hero_Walk_Trans.png")));
+			testChar = new Character(ImageIO.read(new File("resources/Hero_Base.png")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		setFocusable(true); // needed for listeners to work
+		addKeyListener(this);
 	}
 	
 	public static void main(String[] args) {
@@ -78,5 +84,31 @@ public class Game extends JPanel{
 			}
 			timeBefore = System.currentTimeMillis();
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		testChar.setMoving(true);
+		if(arg0.getKeyCode() == KeyEvent.VK_W){
+			testChar.setMovingDirection(Character.MovingDirection.UP);
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_S){
+			testChar.setMovingDirection(Character.MovingDirection.DOWN);
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_D){
+			testChar.setMovingDirection(Character.MovingDirection.RIGHT);
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_A){
+			testChar.setMovingDirection(Character.MovingDirection.LEFT);
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		testChar.setMoving(false);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
 	}
 }
