@@ -1,6 +1,8 @@
 package map;
 
 import game.Game;
+import game.Player;
+import game.PlayerCamera;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -35,15 +37,21 @@ public class Map {
 	}
 
 	public void paint(Graphics g) {
+		Player player = Game.getGameInstance().getPlayer();
+		PlayerCamera cam = Game.getGameInstance().getPlayer().getPlayerCamera();
+		player.updatePlayerPosition();
+		cam.updateViewPointX();
+		cam.updateViewPointY();
+		
 		for (int layerNr = 0; layerNr < layers.length; layerNr++) {
-			int startX = (int) Game.getGameInstance().getViewBegin().getX()
+			int startX = (int) cam.getViewPointX()
 					/ tileSize - 2;
-			int endX = (int) Game.getGameInstance().getViewBegin().getX()
+			int endX = (int) cam.getViewPointX()
 					/ tileSize + Game.getGameInstance().getWidth() / tileSize
 					+ 2;
-			int startY = (int) Game.getGameInstance().getViewBegin().getY()
+			int startY = (int) cam.getViewPointY()
 					/ tileSize - 2;
-			int endY = (int) Game.getGameInstance().getViewBegin().getY()
+			int endY = (int) cam.getViewPointY()
 					/ tileSize + Game.getGameInstance().getHeight() / tileSize
 					+ 2;
 
@@ -58,7 +66,7 @@ public class Map {
 
 			for (int xTile = startX; xTile < endX; xTile++) {
 				int x = xTile * tileSize
-						- (int) Game.getGameInstance().getViewBegin().getX();
+						- (int) cam.getViewPointX();
 				for (int yTile = startY; yTile < endY; yTile++) {
 					int y = yTile
 							* tileSize

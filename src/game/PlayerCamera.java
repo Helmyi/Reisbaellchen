@@ -73,6 +73,16 @@ public class PlayerCamera {
 						* Game.getGameInstance().getMap().getTileSize() <= Game.getGameInstance().getHeight();
 	}
 
+	public int getViewPointX()
+	{
+		return this.viewPointX;
+	}
+	
+	public int getViewPointY()
+	{
+		return this.viewPointY;
+	}
+	
 	public void setPlayerPositionX(int x) {
 		this.playerPositionX = x;
 	}
