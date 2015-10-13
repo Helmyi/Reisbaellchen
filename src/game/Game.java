@@ -79,9 +79,10 @@ public class Game extends JPanel implements KeyListener {
 	 */
 	@Override
 	public void paint(Graphics g) {
-		if (imageBuffer == null)
+		if (imageBuffer == null){
 			imageBuffer = this.createImage(width, height);
-		graphicBuffer = imageBuffer.getGraphics();
+			graphicBuffer = imageBuffer.getGraphics();
+		}
 		graphicBuffer.setColor(Color.BLACK);
 		graphicBuffer.fillRect(0, 0, width, height);
 

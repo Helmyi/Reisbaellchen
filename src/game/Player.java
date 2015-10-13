@@ -136,6 +136,7 @@ public class Player {
 			key_MoveLeft_Pressed = false;
 		}
 		
+		playerUnit.setFighting(false);
 		calcMoveDirection();
 	}
 
