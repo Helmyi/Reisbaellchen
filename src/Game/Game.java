@@ -68,13 +68,22 @@ public class Game extends JPanel implements KeyListener {
 	 */
 	private void tick() {
 		testChar.tick();
-		if (testChar.getX() < this.getWidth() / 2 - 16 || map.getTileCountX() <= this.getWidth()) {
+		if (testChar.getX() < this.getWidth() / 2 - 16 || map.getTileCountX()*map.getTileSize() <= this.getWidth()) {
 			viewBegin.setLocation(0, viewBegin.getY());
 		} else {
-			if (testChar.getX() > map.getTileCountX() - this.getWidth() / 2 - 16) {
+			if (testChar.getX() > map.getTileCountX()*map.getTileSize() - this.getWidth() / 2 - 16) {
 				viewBegin.setLocation(map.getTileCountX() - this.getWidth(), viewBegin.getY());
 			} else {
 				viewBegin.setLocation((int) testChar.getX() - this.getWidth() / 2 + 16, viewBegin.getY());
+			}
+		}
+		if (testChar.getY() < this.getWidth() / 2 - 16 || map.getTileCountY()*map.getTileSize() <= this.getHeight()) {
+			viewBegin.setLocation(viewBegin.getX(), 0);
+		} else {
+			if (testChar.getY() > map.getTileCountY()*map.getTileSize() - this.getHeight() / 2 - 16) {
+				viewBegin.setLocation(map.getTileCountX(), viewBegin.getY() - this.getHeight());
+			} else {
+				viewBegin.setLocation(testChar.getX() , (int) viewBegin.getY()- this.getHeight() / 2 + 16);
 			}
 		}
 	}
