@@ -26,11 +26,6 @@ public class Unit extends Entity {
 		}
 	}
 
-	public Unit(Image image) {
-		super(image);
-		init();
-	}
-
 	public Unit(Image image, double x, double y) {
 		super(image, x, y);
 		init();
