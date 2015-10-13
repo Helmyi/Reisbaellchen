@@ -20,6 +20,9 @@ import map.Map;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements KeyListener {
+	Image imageBuffer;
+	Graphics graphicBuffer;
+
 	private static Game theGame;
 	private int fps = 60;
 	private static int width = 1000;
@@ -71,14 +74,20 @@ public class Game extends JPanel implements KeyListener {
 	 */
 	@Override
 	public void paint(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, width, height);
-		Graphics2D g2d = (Graphics2D) g;
+		if (imageBuffer == null)
+			imageBuffer = this.createImage(width, height);
+		graphicBuffer = imageBuffer.getGraphics();
+		graphicBuffer.setColor(Color.BLACK);
+		graphicBuffer.fillRect(0, 0, width, height);
+
+		Graphics2D g2d = (Graphics2D) graphicBuffer;
 		map.paint(g2d);
 
 		for (Entity ent : entityList) {
 			ent.paint(g2d);
 		}
+
+		g.drawImage(imageBuffer, 0, 0, this);
 	}
 
 	/**
@@ -89,16 +98,21 @@ public class Game extends JPanel implements KeyListener {
 			ent.tick();
 		}
 		Unit testChar = player.getPlayerUnit();
-		
-		// adjust top left corner of image source to player position in order to scroll map
+
+		// adjust top left corner of image source to player position in order to
+		// scroll map
 		// check and adjust x position
-		if (testChar.getX() < this.getWidth() / 2 - 16 || map.getTileCountX() * map.getTileSize() <= this.getWidth()) {
+		if (testChar.getX() < this.getWidth() / 2 - 16
+				|| map.getTileCountX() * map.getTileSize() <= this.getWidth()) {
 			viewBegin.setLocation(0, viewBegin.getY());
 		} else {
-			if (testChar.getX() > map.getTileCountX() * map.getTileSize() - this.getWidth() / 2 - 16) {
-				viewBegin.setLocation(map.getTileCountX() * map.getTileSize() - this.getWidth(), viewBegin.getY());
+			if (testChar.getX() > map.getTileCountX() * map.getTileSize()
+					- this.getWidth() / 2 - 16) {
+				viewBegin.setLocation(map.getTileCountX() * map.getTileSize()
+						- this.getWidth(), viewBegin.getY());
 			} else {
-				viewBegin.setLocation((int) testChar.getX() - this.getWidth() / 2 + 16, viewBegin.getY());
+				viewBegin.setLocation((int) testChar.getX() - this.getWidth()
+						/ 2 + 16, viewBegin.getY());
 			}
 		}
 		// check and adjust y position
@@ -106,10 +120,13 @@ public class Game extends JPanel implements KeyListener {
 				|| map.getTileCountY() * map.getTileSize() <= this.getHeight()) {
 			viewBegin.setLocation(viewBegin.getX(), 0);
 		} else {
-			if (testChar.getY() > map.getTileCountY() * map.getTileSize() - this.getHeight() / 2 - 16) {
-				viewBegin.setLocation(viewBegin.getX(), map.getTileCountY() * map.getTileSize() - this.getHeight());
+			if (testChar.getY() > map.getTileCountY() * map.getTileSize()
+					- this.getHeight() / 2 - 16) {
+				viewBegin.setLocation(viewBegin.getX(), map.getTileCountY()
+						* map.getTileSize() - this.getHeight());
 			} else {
-				viewBegin.setLocation(viewBegin.getX(), (int) testChar.getY() - this.getHeight() / 2 + 16);
+				viewBegin.setLocation(viewBegin.getX(), (int) testChar.getY()
+						- this.getHeight() / 2 + 16);
 			}
 		}
 	}
