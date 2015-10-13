@@ -38,11 +38,16 @@ public class Game extends JPanel implements KeyListener {
 		entityList = new ArrayList<Entity>();
 		unitImages = new ArrayList<Image>();
 		player = new Player();
+		
 
 		try {
 			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
 			entityList.add(new Unit(unitImages.get(0), 10 * 32, 5 * 32));
 			player.setPlayerUnit((Unit) entityList.get(0));
+			PlayerCamera cam = new PlayerCamera((int)player.getPlayerUnit().getX(), (int)player.getPlayerUnit().getY());
+			cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
+			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
+			player.setPlayerCamera(cam);
 
 			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32));
 			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32));

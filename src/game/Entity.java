@@ -34,6 +34,14 @@ public abstract class Entity {
 		this.y = y;
 	}
 
+	public int getTileWidth() {
+		return tileWidth;
+	}
+
+	public int getTileHeight() {
+		return tileHeight;
+	}
+
 	public abstract void tick();
 
 	public abstract void paint(Graphics g);
