@@ -40,11 +40,8 @@ public class Unit extends Entity {
 	public void tick() {
 		if (this.isMoving() || this.isFighting()) {
 			animationStep++;
-			// TODO weitere animationen für angriffe etc hinzufügen und "4"
-			// durch variable ersetzen
 			animationStep %= animationStepCount;
 
-			// move forward
 			switch (currentUnitAction) {
 			case MOVE_DOWN:
 				y += speed;
