@@ -157,4 +157,9 @@ public class Game extends JPanel implements KeyListener {
 	public Point getViewBegin() {
 		return viewBegin;
 	}
+	
+	public Map getMap()
+	{
+		return map;
+	}
 }
