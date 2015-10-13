@@ -33,21 +33,47 @@ public class Unit extends Entity {
 	
 	private boolean unitCollision()
 	{
-		int tempX, tempY;
+		int tempX[] = new int[2];
+		int tempY[] = new int[2];
 		if (currentUnitAction == UnitAction.MOVE_DOWN)
 		{
-			tempX = (int) this.x + tileWidth/2;
-			tempY = (int) this.y + tileHeight;
+			tempX[0] = (int) this.x;
+			tempX[1] = (int) this.x + tileWidth;
+			tempY[0] = (int) this.y + tileHeight;
+			tempY[1] = (int) this.y + tileHeight;
 		}
-		else
+		else if (currentUnitAction == UnitAction.MOVE_UP)
 		{
-			tempX = (int) this.x + tileWidth/2;
-			tempY = (int) this.y + tileHeight/2;
+			tempX[0] = (int) this.x;
+			tempX[1] = (int) this.x + tileWidth;
+			tempY[0] = (int) this.y + tileHeight/ 2;
+			tempY[1] = (int) this.y + tileHeight/ 2;
 		}
-		if (Game.getGameInstance().getMap().getPositionCollision(tempX,tempY))
+		else if(currentUnitAction == UnitAction.MOVE_LEFT)
 		{
-			return true;
+			tempX[0] = (int) this.x + tileWidth/ 2;
+			tempX[1] = (int) this.x + tileWidth/ 2;
+			tempY[0] = (int) this.y;
+			tempY[1] = (int) this.y + tileHeight;
 		}
+		else if(currentUnitAction == UnitAction.MOVE_RIGHT)
+		{
+			tempX[0] = (int) this.x + tileWidth / 2;
+			tempX[1] = (int) this.x + tileWidth / 2;
+			tempY[0] = (int) this.y;
+			tempY[1] = (int) this.y + tileHeight;
+		}
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				if (Game.getGameInstance().getMap().getPositionCollision(tempX[i],tempY[j]))
+				{
+					return true;
+				}
+			}
+		}
+		
 		return false;
 	}
 
