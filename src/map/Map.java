@@ -36,10 +36,9 @@ public class Map {
 	public void paint(Graphics g) {
 		for (int layerNr = 0; layerNr < layers.length; layerNr++) {
 			for (int i = 0; i < layers[layerNr].length; i++) {
-				int x = i % tileCountX * tileSize + (int)Game.getGameInstance().getViewBegin().getX();
-				int y = i / tileCountY * tileSize + (int)Game.getGameInstance().getViewBegin().getY();
-				System.out.println("VIEWBEGIN X: " + Game.getGameInstance().getViewBegin().getX());
-				System.out.println("VIEWBEGIN X: " + Game.getGameInstance().getViewBegin().getY());
+				int x = i % tileCountX * tileSize - (int) Game.getGameInstance().getViewBegin().getX();
+				int y = i / tileCountY * tileSize - (int) Game.getGameInstance().getViewBegin().getY();
+
 				// tileID=0 => skip
 				if (layers[layerNr][i] == 0)
 					continue;
@@ -57,6 +56,10 @@ public class Map {
 
 	public int getTileCountY() {
 		return tileCountY;
+	}
+
+	public int getTileSize() {
+		return tileSize;
 	}
 
 	private int tileIdToTileX(int tileID) {
