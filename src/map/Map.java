@@ -31,8 +31,7 @@ public class Map {
 		tilePath = "resources/Zones/TestMap/";
 		loadMap(path);
 	}
-	
-	
+
 	public void paint(Graphics g) {
 		for (int layerNr = 0; layerNr < layers.length; layerNr++) {
 			for (int i = 0; i < layers[layerNr].length; i++) {
@@ -61,14 +60,12 @@ public class Map {
 	public int getTileSize() {
 		return tileSize;
 	}
-	
-	public int getMapWidth()
-	{
+
+	public int getMapWidth() {
 		return tileCountX * tileSize;
 	}
-	
-	public int getMapHeight()
-	{
+
+	public int getMapHeight() {
 		return tileCountY * tileSize;
 	}
 
