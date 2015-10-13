@@ -1,6 +1,6 @@
 package map;
 
-import Game.Game;
+import game.Game;
 
 import java.awt.Graphics;
 import java.awt.Image;
