@@ -117,7 +117,7 @@ public class Unit extends Entity {
 	}
 
 	private void init() {
-		speed = 2;
+		speed = 10;
 		isMoving = false;
 		isFighting = false;
 		animationStep = 0;
