@@ -70,8 +70,7 @@ public class Map {
 				for (int yTile = startY; yTile < endY; yTile++) {
 					int y = yTile
 							* tileSize
-							- (int) Game.getGameInstance().getViewBegin()
-									.getY();
+							- (int) cam.getViewPointY();
 
 					// tileID=0 => skip
 					if (layers[layerNr][xTile + yTile * tileCountX] == 0)
