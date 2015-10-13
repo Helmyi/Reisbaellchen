@@ -1,18 +1,19 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
-public class Character extends Entity {
+public class Unit extends Entity {
 	private boolean isMoving;
 	private boolean isFighting;
 	private int animationStep;
 	private int animationStepCount;
-	private CharacterAction currentCharacterAction;
+	private UnitAction currentUnitAction;
+	private double speed;
 
-	public static enum CharacterAction {
+	public static enum UnitAction {
 		DOWN(0), UP(1), RIGHT(2), LEFT(3), ATTACK_DOWN(4), ATTACK_UP(5), ATTACK_RIGHT(6), ATTACK_LEFT(7);
 		private int code;
 
-		private CharacterAction(int code) {
+		private UnitAction(int code) {
 			this.code = code;
 		}
 
@@ -21,8 +22,13 @@ public class Character extends Entity {
 		}
 	}
 
-	public Character(Image image) {
+	public Unit(Image image) {
 		super(image);
+		init();
+	}
+
+	public Unit(Image image, double x, double y) {
+		super(image,x,y);
 		init();
 	}
 
@@ -35,18 +41,18 @@ public class Character extends Entity {
 			animationStep %= animationStepCount;
 
 			// move forward
-			switch (currentCharacterAction) {
+			switch (currentUnitAction) {
 			case DOWN:
-				y++;
+				y += speed;
 				break;
 			case UP:
-				y--;
+				y -= speed;
 				break;
 			case RIGHT:
-				x++;
+				x += speed;
 				break;
 			case LEFT:
-				x--;
+				x -= speed;
 				break;
 			case ATTACK_DOWN:
 				break;
@@ -63,12 +69,12 @@ public class Character extends Entity {
 	@Override
 	public void paint(Graphics g) {
 		g.drawImage(entityImage, (int)x, (int)y, (int)x + tileWidth, (int)y + tileHeight, animationStep * tileWidth,
-				this.currentCharacterAction.toInt() * tileHeight, (animationStep + 1) * tileWidth,
-				(this.currentCharacterAction.toInt() + 1) * tileHeight, null);
+				this.currentUnitAction.toInt() * tileHeight, (animationStep + 1) * tileWidth,
+				(this.currentUnitAction.toInt() + 1) * tileHeight, null);
 	}
 
-	public void setCharacterAction(CharacterAction action) {
-		this.currentCharacterAction = action;
+	public void setUnitAction(UnitAction action) {
+		this.currentUnitAction = action;
 	}
 
 	public boolean isMoving() {
@@ -88,12 +94,13 @@ public class Character extends Entity {
 	}
 
 	private void init() {
+		speed = 2;
 		isMoving = false;
 		isFighting = false;
 		animationStep = 0;
 		animationStepCount = 4;
 		this.tileHeight = 64;
 		this.tileWidth = 32;
-		this.currentCharacterAction = CharacterAction.DOWN;
+		this.currentUnitAction = UnitAction.DOWN;
 	}
 }

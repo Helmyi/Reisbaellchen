@@ -1,10 +1,13 @@
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -19,12 +22,22 @@ public class Game extends JPanel implements KeyListener{
 	private static Game theGame;
 	private int fps = 60; 
 	private Map map;
+	private Player player;
+	
+	private List<Image> unitImages;
+	private List<Entity> entityList;
 	
 	private Character testChar;
 	public Game()
 	{
+		entityList = new ArrayList<Entity>();
+		unitImages = new ArrayList<Image>();
 		try {
-			testChar = new Character(ImageIO.read(new File("resources/Hero_Base.png")));
+			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
+			testChar = new Character(unitImages.get(0));
+			entityList.add(new Unit(unitImages.get(0), 10*32, 5*32));
+			entityList.add(new Unit(unitImages.get(0), 11*32, 5*32));
+			entityList.add(new Unit(unitImages.get(0), 13*32, 7*32));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,6 +46,8 @@ public class Game extends JPanel implements KeyListener{
 		addKeyListener(this);
 		
 		map = new Map();
+		
+		
 	}
 	
 	public static void main(String[] args) {
@@ -57,6 +72,10 @@ public class Game extends JPanel implements KeyListener{
 		
 		map.paint(g2d);
 		testChar.paint(g2d);
+		
+		for(Entity ent: entityList){
+			ent.paint(g2d);
+		}
 	}
 	
 

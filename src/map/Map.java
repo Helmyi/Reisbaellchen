@@ -34,6 +34,7 @@ public class Map {
 	
 	
 	public void paint(Graphics g){
+	
 		for(int layerNr=0; layerNr< layers.length; layerNr++){
 			for(int i=0; i< layers[layerNr].length;i++){
 				int x = i%mapWidth * tileSize;
