@@ -21,7 +21,7 @@ import map.Map;
 public class Game extends JPanel implements KeyListener {
 	private static Game theGame;
 	private int fps = 60;
-	private static int width = 500;
+	private static int width = 1000;
 	private static int height = 600;
 	private Point viewBegin;
 	private Map map;
