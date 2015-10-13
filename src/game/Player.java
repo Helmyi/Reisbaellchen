@@ -41,6 +41,12 @@ public class Player {
 		return playerUnit;
 	}
 	
+	public void updatePlayerPosition()
+	{
+		this.camera.setPlayerPositionX((int)this.getPlayerUnit().getX());
+		this.camera.setPlayerPositionY((int)this.getPlayerUnit().getY());
+	}
+	
 	private void calcMoveDirection(){
 		if((key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed && lastPressedMoveKey==key_MoveUp)
