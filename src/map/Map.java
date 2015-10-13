@@ -239,7 +239,7 @@ public class Map {
 			collision = new boolean[tileCountY * tileCountX];
 
 			for (int i = 0; i < nList.getLength(); i++) {
-				// Collision layer // TODO, layer with name Collision used for
+				// Collision layer
 				// collision and not for drawing
 				if ("Collision".equals(nList.item(i).getAttributes()
 						.getNamedItem("name").getNodeValue().toString())) {
