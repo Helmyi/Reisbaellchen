@@ -12,12 +12,16 @@ public abstract class Entity {
 
 	public Entity(Image image, double x, double y) {
 		this.entityImage = image;
+		this.tileHeight = image.getHeight(null);
+		this.tileWidth = image.getWidth(null);
 		this.x = x;
 		this.y = y;
 	}
 
 	public Entity(Image image) {
 		this.entityImage = image;
+		this.tileHeight = image.getHeight(null);
+		this.tileWidth = image.getWidth(null);
 	}
 
 	public double getX() {

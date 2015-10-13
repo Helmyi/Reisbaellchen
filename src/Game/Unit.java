@@ -47,28 +47,28 @@ public class Unit extends Entity {
 			switch (currentUnitAction) {
 			case MOVE_DOWN:
 				y += speed;
-				if (y > Game.getGameInstance().getMap().getMapHeight())
+				if (y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2)
 				{
-					y = Game.getGameInstance().getMap().getMapHeight();
+					y = Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2;
 				}
 				break;
 			case MOVE_UP:
 				y -= speed;
-				if (y < Game.getGameInstance().getMap().getMapHeight())
+				if (y < 0)
 				{
 					y = 0;
 				}
 				break;
 			case MOVE_RIGHT:
 				x += speed;
-				if (x > Game.getGameInstance().getMap().getMapWidth())
+				if (x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2)
 				{
-					x = Game.getGameInstance().getMap().getMapWidth();
+					x = Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2;
 				}
 				break;
 			case MOVE_LEFT:
 				x -= speed;
-				if (x < Game.getGameInstance().getMap().getMapWidth())
+				if (x < 0)
 				{
 					x = 0;
 				}
