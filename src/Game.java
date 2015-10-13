@@ -1,6 +1,7 @@
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -16,6 +17,7 @@ import map.Map;
 public class Game extends JPanel implements KeyListener {
 	private static Game theGame;
 	private int fps = 60;
+	private Point viewBegin;
 	private Map map;
 
 	private Character testChar;
@@ -27,6 +29,7 @@ public class Game extends JPanel implements KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		viewBegin = new Point(0, 0);
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
 
@@ -62,6 +65,15 @@ public class Game extends JPanel implements KeyListener {
 	 */
 	private void tick() {
 		testChar.tick();
+		if (testChar.getX() < this.getWidth() / 2 - 16 || map.getTileCountX() <= this.getWidth()) {
+			viewBegin.setLocation(0, viewBegin.getY());
+		} else {
+			if (testChar.getX() > map.getTileCountX() - this.getWidth() / 2 - 16) {
+				viewBegin.setLocation(map.getTileCountX() - this.getWidth(), viewBegin.getY());
+			} else {
+				viewBegin.setLocation((int) testChar.getX() - this.getWidth() / 2 + 16, viewBegin.getY());
+			}
+		}
 	}
 
 	public void run() {
@@ -133,5 +145,13 @@ public class Game extends JPanel implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+	}
+
+	public static Game getGameInstance() {
+		return theGame;
+	}
+
+	public Point getViewBegin() {
+		return viewBegin;
 	}
 }

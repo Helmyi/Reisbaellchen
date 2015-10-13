@@ -19,8 +19,8 @@ import org.w3c.dom.NodeList;
 public class Map {
 	String tilePath;
 	int tileSize;
-	int mapWidth;
-	int mapHeight;
+	int tileCountX;
+	int tileCountY;
 	List<TileInfo> tileInfoList;
 
 	int layers[][];
@@ -34,8 +34,8 @@ public class Map {
 	public void paint(Graphics g) {
 		for (int layerNr = 0; layerNr < layers.length; layerNr++) {
 			for (int i = 0; i < layers[layerNr].length; i++) {
-				int x = i % mapWidth * tileSize;
-				int y = i / mapHeight * tileSize;
+				int x = i % tileCountX * tileSize;
+				int y = i / tileCountY * tileSize;
 
 				// tileID=0 => skip
 				if (layers[layerNr][i] == 0)
@@ -47,6 +47,14 @@ public class Map {
 						(tileIdToTileY(layers[layerNr][i]) + 1) * tileSize, null);
 			}
 		}
+	}
+
+	public int getTileCountX() {
+		return tileCountX;
+	}
+
+	public int getTileCountY() {
+		return tileCountY;
 	}
 
 	private int tileIdToTileX(int tileID) {
@@ -95,9 +103,9 @@ public class Map {
 			doc.getDocumentElement().normalize();
 
 			// load mapSize
-			mapWidth = Integer
+			tileCountX = Integer
 					.parseInt(doc.getDocumentElement().getAttributes().getNamedItem("width").getNodeValue().toString());
-			mapHeight = Integer.parseInt(
+			tileCountY = Integer.parseInt(
 					doc.getDocumentElement().getAttributes().getNamedItem("height").getNodeValue().toString());
 
 			NodeList nList = doc.getElementsByTagName("tileset");
@@ -141,7 +149,7 @@ public class Map {
 			}
 			// load map data
 			nList = doc.getElementsByTagName("layer");
-			layers = new int[nList.getLength()][mapHeight * mapWidth];
+			layers = new int[nList.getLength()][tileCountY * tileCountX];
 
 			for (int i = 0; i < nList.getLength(); i++) {
 				// Collision layer // TODO, layer with name Collision used for
