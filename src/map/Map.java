@@ -75,7 +75,7 @@ public class Map {
 	}
 	
 	public boolean getTileCollision(int tileX, int tileY){
-		if(tileX + tileCountY * tileY >= collision.length) return true;
+		if(tileX + tileCountY * tileY >= collision.length || tileX + tileCountY * tileY < 0) return true;
 		return collision[tileX + tileCountY * tileY];
 	}
 	
