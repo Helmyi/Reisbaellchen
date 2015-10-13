@@ -2,11 +2,14 @@ package Game;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -22,12 +25,23 @@ public class Game extends JPanel implements KeyListener {
 	private static int height = 600;
 	private Point viewBegin;
 	private Map map;
-
-	private Character testChar;
+	
+	private Player player;
+	private List<Image> unitImages;
+	private List<Entity> entityList;
 
 	public Game() {
+		entityList = new ArrayList<Entity>();
+		unitImages = new ArrayList<Image>();
+		player = new Player();
+		
 		try {
-			testChar = new Character(ImageIO.read(new File("resources/Hero_Base.png")));
+			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
+			entityList.add(new Unit(unitImages.get(0), 10*32, 5*32));
+			player.setPlayerUnit((Unit)entityList.get(0));
+			
+			entityList.add(new Unit(unitImages.get(0), 11*32, 5*32));
+			entityList.add(new Unit(unitImages.get(0), 13*32, 7*32));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,14 +74,21 @@ public class Game extends JPanel implements KeyListener {
 		Graphics2D g2d = (Graphics2D) g;
 
 		map.paint(g2d);
-		testChar.paint(g2d);
+		
+		for(Entity ent: entityList){
+			ent.paint(g2d);
+		}
 	}
 
 	/**
 	 * game logic
 	 */
 	private void tick() {
-		testChar.tick();
+		for(Entity ent: entityList){
+			ent.tick();
+		}
+		Unit testChar = player.getPlayerUnit(); 
+		
 		if (testChar.getX() < this.getWidth() / 2 - 16 || map.getTileCountX() * map.getTileSize() <= this.getWidth()) {
 			viewBegin.setLocation(0, viewBegin.getY());
 		} else {
@@ -116,48 +137,17 @@ public class Game extends JPanel implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if (arg0.getKeyCode() == KeyEvent.VK_W) {
-			testChar.setCharacterAction(Character.CharacterAction.UP);
-			testChar.setMoving(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_S) {
-			testChar.setCharacterAction(Character.CharacterAction.DOWN);
-			testChar.setMoving(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_D) {
-			testChar.setCharacterAction(Character.CharacterAction.RIGHT);
-			testChar.setMoving(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_A) {
-			testChar.setCharacterAction(Character.CharacterAction.LEFT);
-			testChar.setMoving(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_J) {
-			testChar.setCharacterAction(Character.CharacterAction.ATTACK_LEFT);
-			testChar.setFighting(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_K) {
-			testChar.setCharacterAction(Character.CharacterAction.ATTACK_DOWN);
-			testChar.setFighting(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_I) {
-			testChar.setCharacterAction(Character.CharacterAction.ATTACK_UP);
-			testChar.setFighting(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_L) {
-			testChar.setCharacterAction(Character.CharacterAction.ATTACK_RIGHT);
-			testChar.setFighting(true);
-		}
+		player.keyPressed(arg0);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		testChar.setMoving(false);
-		testChar.setFighting(false);
+		player.keyReleased(arg0);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+		player.keyTyped(arg0);
 	}
 
 	public static Game getGameInstance() {

@@ -3,17 +3,21 @@ import java.awt.event.KeyEvent;
 
 
 public class Player {
-	Unit playerUnit;
-	int key_MoveUp = KeyEvent.VK_W;
-	int key_MoveDown = KeyEvent.VK_S;
-	int key_MoveLeft = KeyEvent.VK_A;
-	int key_MoveRight = KeyEvent.VK_D;
+	private Unit playerUnit;
+	private int key_MoveUp = KeyEvent.VK_W;
+	private int key_MoveDown = KeyEvent.VK_S;
+	private int key_MoveLeft = KeyEvent.VK_A;
+	private int key_MoveRight = KeyEvent.VK_D;
 	
 	public Player(){
 	}
 	
 	public void setPlayerUnit(Unit playerUnit){
 		this.playerUnit = playerUnit;
+	}
+	
+	public Unit getPlayerUnit(){
+		return playerUnit;
 	}
 	
 	public void keyPressed(KeyEvent arg0) {
