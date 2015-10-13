@@ -11,3 +11,8 @@ Attacke 1: Ellenbogen der Gerechtigkeit
 Attacke 2: Laternenpunch
 Ultimate:
 Passive: Aggressiver Regen
+
+
+
+Sonstiges:
+Fa macht immer 1000 Schaden
