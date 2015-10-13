@@ -46,20 +46,20 @@ public class Unit extends Entity {
 		{
 			tempX[0] = (int) this.x;
 			tempX[1] = (int) this.x + tileWidth;
-			tempY[0] = (int) this.y + tileHeight/ 2;
-			tempY[1] = (int) this.y + tileHeight/ 2;
+			tempY[0] = (int) this.y;// + tileHeight/ 2;
+			tempY[1] = (int) this.y;// + tileHeight/ 2;
 		}
 		else if(currentUnitAction == UnitAction.MOVE_LEFT)
 		{
-			tempX[0] = (int) this.x + tileWidth/ 2;
-			tempX[1] = (int) this.x + tileWidth/ 2;
+			tempX[0] = (int) this.x;// + tileWidth/ 2;
+			tempX[1] = (int) this.x;// + tileWidth/ 2;
 			tempY[0] = (int) this.y;
 			tempY[1] = (int) this.y + tileHeight;
 		}
 		else if(currentUnitAction == UnitAction.MOVE_RIGHT)
 		{
-			tempX[0] = (int) this.x + tileWidth / 2;
-			tempX[1] = (int) this.x + tileWidth / 2;
+			tempX[0] = (int) this.x + tileWidth;// / 2;
+			tempX[1] = (int) this.x + tileWidth;// / 2;
 			tempY[0] = (int) this.y;
 			tempY[1] = (int) this.y + tileHeight;
 		}
