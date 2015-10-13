@@ -58,11 +58,11 @@ public class Map {
 			if (startX < 0)
 				startX = 0;
 			if (endX > tileCountX)
-				endX = tileCountX - 1;
+				endX = tileCountX;
 			if (startY < 0)
 				startY = 0;
 			if (endY > tileCountX)
-				endY = tileCountY - 1;
+				endY = tileCountY;
 
 			for (int xTile = startX; xTile < endX; xTile++) {
 				int x = xTile * tileSize
@@ -246,7 +246,7 @@ public class Map {
 			collision = new boolean[tileCountY * tileCountX];
 
 			for (int i = 0; i < nList.getLength(); i++) {
-				// Collision layer // TODO, layer with name Collision used for
+				// Collision layer
 				// collision and not for drawing
 				if ("Collision".equals(nList.item(i).getAttributes()
 						.getNamedItem("name").getNodeValue().toString())) {

@@ -1,8 +1,6 @@
 package game;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -59,7 +57,7 @@ public class Game extends JPanel implements KeyListener {
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
 
-		map = new Map("resources/Zones/TestMap/Wüste1.tmx");
+		map = new Map("resources/Zones/TestMap/Wüste.tmx");
 	}
 
 	public static void main(String[] args) {
@@ -83,15 +81,8 @@ public class Game extends JPanel implements KeyListener {
 			imageBuffer = this.createImage(width, height);
 			graphicBuffer = imageBuffer.getGraphics();
 		}
-		graphicBuffer.setColor(Color.BLACK);
-		graphicBuffer.fillRect(0, 0, width, height);
-
-		Graphics2D g2d = (Graphics2D) graphicBuffer;
-		map.paint(g2d);
-
-		for (Entity ent : entityList) {
-			ent.paint(g2d);
-		}
+		
+		player.getPlayerCamera().paint(graphicBuffer);
 
 		g.drawImage(imageBuffer, 0, 0, this);
 	}
@@ -179,6 +170,10 @@ public class Game extends JPanel implements KeyListener {
 
 	public static Game getGameInstance() {
 		return theGame;
+	}
+	
+	public List<Entity> getEntityList(){
+		return entityList;
 	}
 
 	public Point getViewBegin() {
