@@ -1,5 +1,6 @@
 package Game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -25,7 +26,7 @@ public class Game extends JPanel implements KeyListener {
 	private static int height = 600;
 	private Point viewBegin;
 	private Map map;
-	
+
 	private Player player;
 	private List<Image> unitImages;
 	private List<Entity> entityList;
@@ -34,14 +35,14 @@ public class Game extends JPanel implements KeyListener {
 		entityList = new ArrayList<Entity>();
 		unitImages = new ArrayList<Image>();
 		player = new Player();
-		
+
 		try {
 			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
-			entityList.add(new Unit(unitImages.get(0), 10*32, 5*32));
-			player.setPlayerUnit((Unit)entityList.get(0));
-			
-			entityList.add(new Unit(unitImages.get(0), 11*32, 5*32));
-			entityList.add(new Unit(unitImages.get(0), 13*32, 7*32));
+			entityList.add(new Unit(unitImages.get(0), 10 * 32, 5 * 32));
+			player.setPlayerUnit((Unit) entityList.get(0));
+
+			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32));
+			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,12 +71,12 @@ public class Game extends JPanel implements KeyListener {
 	 */
 	@Override
 	public void paint(Graphics g) {
-		super.paint(g); // clears the content of the last frame
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, width, height);
 		Graphics2D g2d = (Graphics2D) g;
-
 		map.paint(g2d);
-		
-		for(Entity ent: entityList){
+
+		for (Entity ent : entityList) {
 			ent.paint(g2d);
 		}
 	}
@@ -84,11 +85,13 @@ public class Game extends JPanel implements KeyListener {
 	 * game logic
 	 */
 	private void tick() {
-		for(Entity ent: entityList){
+		for (Entity ent : entityList) {
 			ent.tick();
 		}
-		Unit testChar = player.getPlayerUnit(); 
+		Unit testChar = player.getPlayerUnit();
 		
+		// adjust top left corner of image source to player position in order to scroll map
+		// check and adjust x position
 		if (testChar.getX() < this.getWidth() / 2 - 16 || map.getTileCountX() * map.getTileSize() <= this.getWidth()) {
 			viewBegin.setLocation(0, viewBegin.getY());
 		} else {
@@ -98,6 +101,7 @@ public class Game extends JPanel implements KeyListener {
 				viewBegin.setLocation((int) testChar.getX() - this.getWidth() / 2 + 16, viewBegin.getY());
 			}
 		}
+		// check and adjust y position
 		if (testChar.getY() < this.getHeight() / 2 - 16
 				|| map.getTileCountY() * map.getTileSize() <= this.getHeight()) {
 			viewBegin.setLocation(viewBegin.getX(), 0);
@@ -157,9 +161,8 @@ public class Game extends JPanel implements KeyListener {
 	public Point getViewBegin() {
 		return viewBegin;
 	}
-	
-	public Map getMap()
-	{
+
+	public Map getMap() {
 		return map;
 	}
 }

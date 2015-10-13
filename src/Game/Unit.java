@@ -13,7 +13,8 @@ public class Unit extends Entity {
 	private double speed;
 
 	public static enum UnitAction {
-		MOVE_DOWN(0), MOVE_UP(1), MOVE_RIGHT(2), MOVE_LEFT(3), ATTACK_DOWN(4), ATTACK_UP(5), ATTACK_RIGHT(6), ATTACK_LEFT(7);
+		MOVE_DOWN(0), MOVE_UP(1), MOVE_RIGHT(2), MOVE_LEFT(3), ATTACK_DOWN(4), ATTACK_UP(5), ATTACK_RIGHT(
+				6), ATTACK_LEFT(7);
 		private int code;
 
 		private UnitAction(int code) {
@@ -31,7 +32,7 @@ public class Unit extends Entity {
 	}
 
 	public Unit(Image image, double x, double y) {
-		super(image,x,y);
+		super(image, x, y);
 		init();
 	}
 
@@ -39,37 +40,30 @@ public class Unit extends Entity {
 	public void tick() {
 		if (this.isMoving() || this.isFighting()) {
 			animationStep++;
-			// TODO weitere animationen für angriffe etc hinzufügen und "4"
-			// durch variable ersetzen
 			animationStep %= animationStepCount;
 
-			// move forward
 			switch (currentUnitAction) {
 			case MOVE_DOWN:
 				y += speed;
-				if (y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2)
-				{
+				if (y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2) {
 					y = Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2;
 				}
 				break;
 			case MOVE_UP:
 				y -= speed;
-				if (y < 0)
-				{
+				if (y < 0) {
 					y = 0;
 				}
 				break;
 			case MOVE_RIGHT:
 				x += speed;
-				if (x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2)
-				{
+				if (x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2) {
 					x = Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2;
 				}
 				break;
 			case MOVE_LEFT:
 				x -= speed;
-				if (x < 0)
-				{
+				if (x < 0) {
 					x = 0;
 				}
 				break;
@@ -88,10 +82,10 @@ public class Unit extends Entity {
 	@Override
 	public void paint(Graphics g) {
 		Point viewBegin = Game.getGameInstance().getViewBegin();
-		int drawX = (int)x - viewBegin.x;
-		int drawY = (int)y - viewBegin.y;
-		
-		g.drawImage(entityImage, drawX , drawY, drawX + tileWidth, drawY + tileHeight, animationStep * tileWidth,
+		int drawX = (int) x - viewBegin.x;
+		int drawY = (int) y - viewBegin.y;
+
+		g.drawImage(entityImage, drawX, drawY, drawX + tileWidth, drawY + tileHeight, animationStep * tileWidth,
 				this.currentUnitAction.toInt() * tileHeight, (animationStep + 1) * tileWidth,
 				(this.currentUnitAction.toInt() + 1) * tileHeight, null);
 	}
