@@ -18,11 +18,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Map {
-	String tilePath;
-	int tileSize;
-	int tileCountX;
-	int tileCountY;
-	List<TileInfo> tileInfoList;
+	private String tilePath;
+	private int tileSize;
+	private int tileCountX;
+	private int tileCountY;
+	private List<TileInfo> tileInfoList;
 
 	int layers[][];
 
@@ -60,6 +60,16 @@ public class Map {
 
 	public int getTileSize() {
 		return tileSize;
+	}
+	
+	public int getMapWidth()
+	{
+		return tileCountX * tileSize;
+	}
+	
+	public int getMapHeight()
+	{
+		return tileCountY * tileSize;
 	}
 
 	private int tileIdToTileX(int tileID) {
