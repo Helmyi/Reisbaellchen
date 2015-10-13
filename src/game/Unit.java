@@ -2,7 +2,6 @@ package game;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 
 public class Unit extends Entity {
 	private boolean isMoving;
@@ -138,9 +137,8 @@ public class Unit extends Entity {
 
 	@Override
 	public void paint(Graphics g) {
-		Point viewBegin = Game.getGameInstance().getViewBegin();
-		int drawX = (int) x - viewBegin.x;
-		int drawY = (int) y - viewBegin.y;
+		int drawX = (int) x - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
+		int drawY = (int) y - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
 
 		g.drawImage(entityImage, drawX, drawY, drawX + tileWidth, drawY + tileHeight, animationStep * tileWidth,
 				this.currentUnitAction.toInt() * tileHeight, (animationStep + 1) * tileWidth,

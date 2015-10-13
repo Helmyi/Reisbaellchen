@@ -1,5 +1,9 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 public class PlayerCamera {
 	int viewPointX;
 	int viewPointY;
@@ -15,6 +19,18 @@ public class PlayerCamera {
 		this.playerTileHeight = 64;
 	}
 
+	public void paint(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, Game.getGameInstance().getWidth(), Game.getGameInstance().getHeight());
+
+		Graphics2D g2d = (Graphics2D) g;
+		Game.getGameInstance().getMap().paint(g2d);
+
+		for (Entity ent : Game.getGameInstance().getEntityList()) {
+			ent.paint(g2d);
+		}
+	}
+	
 	public void updateViewPointX() {
 		if (leftBorderReached()) {
 			viewPointX = 0;

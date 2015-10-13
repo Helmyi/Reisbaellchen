@@ -58,11 +58,11 @@ public class Map {
 			if (startX < 0)
 				startX = 0;
 			if (endX > tileCountX)
-				endX = tileCountX - 1;
+				endX = tileCountX;
 			if (startY < 0)
 				startY = 0;
 			if (endY > tileCountX)
-				endY = tileCountY - 1;
+				endY = tileCountY;
 
 			for (int xTile = startX; xTile < endX; xTile++) {
 				int x = xTile * tileSize
@@ -70,8 +70,7 @@ public class Map {
 				for (int yTile = startY; yTile < endY; yTile++) {
 					int y = yTile
 							* tileSize
-							- (int) Game.getGameInstance().getViewBegin()
-									.getY();
+							- (int) cam.getViewPointY();
 
 					// tileID=0 => skip
 					if (layers[layerNr][xTile + yTile * tileCountX] == 0)
