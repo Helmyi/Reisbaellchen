@@ -17,19 +17,19 @@ public class Player {
 	
 	public void keyPressed(KeyEvent arg0) {
 		if(arg0.getKeyCode() == key_MoveUp){
-			playerUnit.setUnitAction(Unit.UnitAction.UP);
+			playerUnit.setUnitAction(Unit.UnitAction.MOVE_UP);
 			playerUnit.setMoving(true);
 		}
 		if(arg0.getKeyCode() == key_MoveDown){
-			playerUnit.setUnitAction(Unit.UnitAction.DOWN);
+			playerUnit.setUnitAction(Unit.UnitAction.MOVE_DOWN);
 			playerUnit.setMoving(true);
 		}
 		if(arg0.getKeyCode() == key_MoveRight){
-			playerUnit.setUnitAction(Unit.UnitAction.RIGHT);
+			playerUnit.setUnitAction(Unit.UnitAction.MOVE_RIGHT);
 			playerUnit.setMoving(true);
 		}
 		if(arg0.getKeyCode() == key_MoveLeft){
-			playerUnit.setUnitAction(Unit.UnitAction.LEFT);
+			playerUnit.setUnitAction(Unit.UnitAction.MOVE_LEFT);
 			playerUnit.setMoving(true);
 		}
 		

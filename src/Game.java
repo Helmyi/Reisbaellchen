@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import map.Map;
 
 
-
 @SuppressWarnings("serial")
 public class Game extends JPanel implements KeyListener{
 	private static Game theGame;
@@ -32,10 +31,14 @@ public class Game extends JPanel implements KeyListener{
 	{
 		entityList = new ArrayList<Entity>();
 		unitImages = new ArrayList<Image>();
+		player = new Player();
+		
 		try {
 			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
 			testChar = new Character(unitImages.get(0));
 			entityList.add(new Unit(unitImages.get(0), 10*32, 5*32));
+			player.setPlayerUnit((Unit)entityList.get(0));
+			
 			entityList.add(new Unit(unitImages.get(0), 11*32, 5*32));
 			entityList.add(new Unit(unitImages.get(0), 13*32, 7*32));
 		} catch (IOException e) {
@@ -84,6 +87,10 @@ public class Game extends JPanel implements KeyListener{
 	 */
 	private void tick(){
 		testChar.tick();
+
+		for(Entity ent: entityList){
+			ent.tick();
+		}
 	}
 	
 	public void run() {
@@ -113,47 +120,16 @@ public class Game extends JPanel implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(arg0.getKeyCode() == KeyEvent.VK_W){
-			testChar.setCharacterAction(Character.CharacterAction.UP);
-			testChar.setMoving(true);
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_S){
-			testChar.setCharacterAction(Character.CharacterAction.DOWN);
-			testChar.setMoving(true);
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_D){
-			testChar.setCharacterAction(Character.CharacterAction.RIGHT);
-			testChar.setMoving(true);
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_A){
-			testChar.setCharacterAction(Character.CharacterAction.LEFT);
-			testChar.setMoving(true);
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_J){
-			testChar.setCharacterAction(Character.CharacterAction.ATTACK_LEFT);
-			testChar.setFighting(true);
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_K){
-			testChar.setCharacterAction(Character.CharacterAction.ATTACK_DOWN);
-			testChar.setFighting(true);
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_I){
-			testChar.setCharacterAction(Character.CharacterAction.ATTACK_UP);
-			testChar.setFighting(true);
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_L){
-			testChar.setCharacterAction(Character.CharacterAction.ATTACK_RIGHT);
-			testChar.setFighting(true);
-		}
+		player.keyPressed(arg0);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		testChar.setMoving(false);
-		testChar.setFighting(false);
+		player.keyReleased(arg0);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+		player.keyTyped(arg0);
 	}
 }

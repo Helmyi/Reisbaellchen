@@ -10,7 +10,7 @@ public class Unit extends Entity {
 	private double speed;
 
 	public static enum UnitAction {
-		DOWN(0), UP(1), RIGHT(2), LEFT(3), ATTACK_DOWN(4), ATTACK_UP(5), ATTACK_RIGHT(6), ATTACK_LEFT(7);
+		MOVE_DOWN(0), MOVE_UP(1), MOVE_RIGHT(2), MOVE_LEFT(3), ATTACK_DOWN(4), ATTACK_UP(5), ATTACK_RIGHT(6), ATTACK_LEFT(7);
 		private int code;
 
 		private UnitAction(int code) {
@@ -42,16 +42,16 @@ public class Unit extends Entity {
 
 			// move forward
 			switch (currentUnitAction) {
-			case DOWN:
+			case MOVE_DOWN:
 				y += speed;
 				break;
-			case UP:
+			case MOVE_UP:
 				y -= speed;
 				break;
-			case RIGHT:
+			case MOVE_RIGHT:
 				x += speed;
 				break;
-			case LEFT:
+			case MOVE_LEFT:
 				x -= speed;
 				break;
 			case ATTACK_DOWN:
@@ -101,6 +101,6 @@ public class Unit extends Entity {
 		animationStepCount = 4;
 		this.tileHeight = 64;
 		this.tileWidth = 32;
-		this.currentUnitAction = UnitAction.DOWN;
+		this.currentUnitAction = UnitAction.MOVE_DOWN;
 	}
 }
