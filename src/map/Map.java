@@ -1,6 +1,7 @@
 package map;
 
 import Game.Game;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -119,6 +120,8 @@ public class Map {
 
 	private void loadMap(String file) {
 		try {
+			System.out.println("Beginn loading Map.");
+			long loadingMapStartTime = System.currentTimeMillis();
 			File fXmlFile = new File(file);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -209,6 +212,7 @@ public class Map {
 				}
 			}
 
+			System.out.println("Finished loading Map, time: " + (System.currentTimeMillis() - loadingMapStartTime)/1000.0 + "sec");
 		} catch (Exception e) {
 			System.out.println("Map: load MapFile error: " + file);
 			e.printStackTrace();
