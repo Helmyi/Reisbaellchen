@@ -18,12 +18,6 @@ public abstract class Entity {
 		this.y = y;
 	}
 
-	public Entity(Image image) {
-		this.entityImage = image;
-		this.tileHeight = image.getHeight(null);
-		this.tileWidth = image.getWidth(null);
-	}
-
 	public double getX() {
 		return this.x;
 	}
