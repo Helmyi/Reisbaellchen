@@ -57,7 +57,7 @@ public class Game extends JPanel implements KeyListener {
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
 
-		map = new Map("resources/Zones/TestMap/Wüste.tmx");
+		map = new Map("resources/Zones/TestMap/Wüste1.tmx");
 	}
 
 	public static void main(String[] args) {
@@ -94,38 +94,6 @@ public class Game extends JPanel implements KeyListener {
 		for (Entity ent : entityList) {
 			ent.tick();
 		}
-		//Unit testChar = player.getPlayerUnit();
-
-		// adjust top left corner of image source to player position in order to
-		// scroll map
-		// check and adjust x position
-//		if (testChar.getX() < this.getWidth() / 2 - 16
-//				|| map.getTileCountX() * map.getTileSize() <= this.getWidth()) {
-//			viewBegin.setLocation(0, viewBegin.getY());
-//		} else {
-//			if (testChar.getX() > map.getTileCountX() * map.getTileSize()
-//					- this.getWidth() / 2 - 16) {
-//				viewBegin.setLocation(map.getTileCountX() * map.getTileSize()
-//						- this.getWidth(), viewBegin.getY());
-//			} else {
-//				viewBegin.setLocation((int) testChar.getX() - this.getWidth()
-//						/ 2 + 16, viewBegin.getY());
-//			}
-//		}
-//		// check and adjust y position
-//		if (testChar.getY() < this.getHeight() / 2 - 16
-//				|| map.getTileCountY() * map.getTileSize() <= this.getHeight()) {
-//			viewBegin.setLocation(viewBegin.getX(), 0);
-//		} else {
-//			if (testChar.getY() > map.getTileCountY() * map.getTileSize()
-//					- this.getHeight() / 2 - 16) {
-//				viewBegin.setLocation(viewBegin.getX(), map.getTileCountY()
-//						* map.getTileSize() - this.getHeight());
-//			} else {
-//				viewBegin.setLocation(viewBegin.getX(), (int) testChar.getY()
-//						- this.getHeight() / 2 + 16);
-//			}
-//		}
 	}
 
 	public void run() {
