@@ -1,23 +1,28 @@
 package Game;
+
 import java.awt.Graphics;
 import java.awt.Image;
 
 public abstract class Entity {
-	protected int x;
-	protected int y;
+	protected double x;
+	protected double y;
 	protected Image entityImage;
 	protected int tileWidth;
 	protected int tileHeight;
 
-	public Entity(Image image) {
+	public Entity(Image image, double x, double y) {
 		this.entityImage = image;
+		this.tileHeight = image.getHeight(null);
+		this.tileWidth = image.getWidth(null);
+		this.x = x;
+		this.y = y;
 	}
 
-	public int getX() {
+	public double getX() {
 		return this.x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return this.y;
 	}
 
