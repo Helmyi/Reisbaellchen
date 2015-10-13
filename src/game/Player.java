@@ -13,7 +13,7 @@ public class Player {
 	private int key_MoveDown = KeyEvent.VK_S;
 	private int key_MoveLeft = KeyEvent.VK_A;
 	private int key_MoveRight = KeyEvent.VK_D;
-	
+	private PlayerCamera camera;
 	
 	
 	public Player(){
@@ -25,6 +25,16 @@ public class Player {
 	
 	public void setPlayerUnit(Unit playerUnit){
 		this.playerUnit = playerUnit;
+	}
+	
+	public void setPlayerCamera(PlayerCamera cam)
+	{
+		this.camera = cam;
+	}
+	
+	public PlayerCamera getPlayerCamera()
+	{
+		return this.camera;
 	}
 	
 	public Unit getPlayerUnit(){
