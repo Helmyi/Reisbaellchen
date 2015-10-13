@@ -39,27 +39,43 @@ public class Unit extends Entity {
 
 			switch (currentUnitAction) {
 			case MOVE_DOWN:
-				y += speed;
-				if (y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2) {
-					y = Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2;
+				this.y += speed;
+				if (Game.getGameInstance().getMap().getPositionCollision((int)this.x,(int) this.y))
+				{
+					this.y -= speed;
+				}
+				if (this.y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2) {
+					this.y = Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2;
 				}
 				break;
 			case MOVE_UP:
-				y -= speed;
-				if (y < 0) {
-					y = 0;
+				this.y -= speed;
+				if (Game.getGameInstance().getMap().getPositionCollision((int)this.x,(int) this.y))
+				{
+					y += speed;
+				}
+				if (this.y < 0) {
+					this.y = 0;
 				}
 				break;
 			case MOVE_RIGHT:
-				x += speed;
-				if (x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2) {
-					x = Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2;
+				this.x += speed;
+				if (Game.getGameInstance().getMap().getPositionCollision((int)this.x,(int) this.y))
+				{
+					this.x -= speed;
+				}
+				if (this.x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2) {
+					this.x = Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2;
 				}
 				break;
 			case MOVE_LEFT:
-				x -= speed;
-				if (x < 0) {
-					x = 0;
+				this.x -= speed;
+				if (Game.getGameInstance().getMap().getPositionCollision((int)this.x,(int) this.y))
+				{
+					this.x += speed;
+				}
+				if (this.x < 0) {
+					this.x = 0;
 				}
 				break;
 			case ATTACK_DOWN:
