@@ -89,7 +89,9 @@ public class Game extends JPanel implements KeyListener {
 			ent.tick();
 		}
 		Unit testChar = player.getPlayerUnit();
-
+		
+		// adjust top left corner of image source to player position in order to scroll map
+		// check and adjust x position
 		if (testChar.getX() < this.getWidth() / 2 - 16 || map.getTileCountX() * map.getTileSize() <= this.getWidth()) {
 			viewBegin.setLocation(0, viewBegin.getY());
 		} else {
@@ -99,6 +101,7 @@ public class Game extends JPanel implements KeyListener {
 				viewBegin.setLocation((int) testChar.getX() - this.getWidth() / 2 + 16, viewBegin.getY());
 			}
 		}
+		// check and adjust y position
 		if (testChar.getY() < this.getHeight() / 2 - 16
 				|| map.getTileCountY() * map.getTileSize() <= this.getHeight()) {
 			viewBegin.setLocation(viewBegin.getX(), 0);
