@@ -1,5 +1,6 @@
 package map;
 
+import Game.Game;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -34,13 +35,13 @@ public class Map {
 	public void paint(Graphics g) {
 		for (int layerNr = 0; layerNr < layers.length; layerNr++) {
 			for (int i = 0; i < layers[layerNr].length; i++) {
-				int x = i % tileCountX * tileSize;
-				int y = i / tileCountY * tileSize;
-
+				int x = i % tileCountX * tileSize + (int)Game.getGameInstance().getViewBegin().getX();
+				int y = i / tileCountY * tileSize + (int)Game.getGameInstance().getViewBegin().getY();
+				System.out.println("VIEWBEGIN X: " + Game.getGameInstance().getViewBegin().getX());
+				System.out.println("VIEWBEGIN X: " + Game.getGameInstance().getViewBegin().getY());
 				// tileID=0 => skip
 				if (layers[layerNr][i] == 0)
 					continue;
-
 				g.drawImage(tileIdToImage(layers[layerNr][i]), x, y, x + tileSize, y + tileSize,
 						tileIdToTileX(layers[layerNr][i]) * tileSize, tileIdToTileY(layers[layerNr][i]) * tileSize,
 						(tileIdToTileX(layers[layerNr][i]) + 1) * tileSize,

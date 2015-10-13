@@ -1,3 +1,4 @@
+package Game;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,6 +18,8 @@ import map.Map;
 public class Game extends JPanel implements KeyListener {
 	private static Game theGame;
 	private int fps = 60;
+	private static int width = 500;
+	private static int height = 600;
 	private Point viewBegin;
 	private Map map;
 
@@ -41,7 +44,7 @@ public class Game extends JPanel implements KeyListener {
 
 		JFrame frame = new JFrame("Reisbaellchen Game");
 		frame.add(theGame);
-		frame.setSize(1000, 600);
+		frame.setSize(width, height);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
