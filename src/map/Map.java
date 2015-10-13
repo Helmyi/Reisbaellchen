@@ -24,7 +24,8 @@ public class Map {
 	private int tileCountY;
 	private List<TileInfo> tileInfoList;
 
-	int layers[][];
+	private boolean collision[];
+	private int layers[][];
 
 	public Map(String path) {
 		tileSize = 32;
@@ -68,6 +69,19 @@ public class Map {
 	public int getMapHeight() {
 		return tileCountY * tileSize;
 	}
+	
+	public boolean[] getCollisionArray(){
+		return collision;
+	}
+	
+	public boolean getTileCollision(int tileX, int tileY){
+		return collision[tileX + tileCountY * tileY];
+	}
+	
+	public boolean getPositionCollision(int posX, int posY){
+		return getTileCollision(posX%32, posY/32);
+	}
+	
 
 	private int tileIdToTileX(int tileID) {
 		for (int i = 0; i < tileInfoList.size(); i++) {
@@ -162,12 +176,26 @@ public class Map {
 			// load map data
 			nList = doc.getElementsByTagName("layer");
 			layers = new int[nList.getLength()][tileCountY * tileCountX];
+			collision = new boolean[tileCountY * tileCountX];
 
 			for (int i = 0; i < nList.getLength(); i++) {
 				// Collision layer // TODO, layer with name Collision used for
 				// collision and not for drawing
-				if ("Collision".equals(nList.item(i).getAttributes().getNamedItem("name").getNodeValue().toString()))
+				if ("Collision".equals(nList.item(i).getAttributes().getNamedItem("name").getNodeValue().toString())){
+					Node nNode = nList.item(i);
+					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+						Element eElement = (Element) nNode;
+						NodeList mapIdList = eElement.getElementsByTagName("tile");
+						for (int j = 0; j < mapIdList.getLength(); j++) {
+							if(Integer.parseInt(mapIdList.item(j).getAttributes().getNamedItem("gid").getNodeValue().toString()) == 0){
+								collision[j] = false;
+							}else{
+								collision[j] = true;
+							}
+						}
+					}
 					continue;
+				}
 
 				Node nNode = nList.item(i);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
