@@ -35,9 +35,11 @@ public class Map {
 
 	public void paint(Graphics g) {
 		for (int layerNr = 0; layerNr < layers.length; layerNr++) {
-			for (int i = 0; i < layers[layerNr].length; i++) {
-				int x = i % tileCountX * tileSize - (int) Game.getGameInstance().getViewBegin().getX();
-				int y = i / tileCountY * tileSize - (int) Game.getGameInstance().getViewBegin().getY();
+			int tempX = (int) Game.getGameInstance().getViewBegin().getX() / tileSize;
+			int tempY = (int) Game.getGameInstance().getViewBegin().getY() / tileSize;
+			for (int i = tempX; i < tempX + tempY * tileCountY; i++) {
+				int x = i % tileCountX * tileSize;//- (int) Game.getGameInstance().getViewBegin().getX();
+				int y = i / tileCountY * tileSize;// - (int) Game.getGameInstance().getViewBegin().getY();
 
 				// tileID=0 => skip
 				if (layers[layerNr][i] == 0)
