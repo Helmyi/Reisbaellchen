@@ -1,3 +1,4 @@
+package Game;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -30,11 +31,8 @@ public class Character extends Entity {
 	public void tick() {
 		if (this.isMoving() || this.isFighting()) {
 			animationStep++;
-			// TODO weitere animationen für angriffe etc hinzufügen und "4"
-			// durch variable ersetzen
 			animationStep %= animationStepCount;
 
-			// move forward
 			switch (currentCharacterAction) {
 			case DOWN:
 				y++;
