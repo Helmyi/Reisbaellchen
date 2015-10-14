@@ -145,7 +145,7 @@ public class Game extends JPanel implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		if(arg0.getKeyCode() == KeyEvent.VK_0){
-			map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
+			map = new Map3("resources/Zones/TestMap/Wüstesd.tmx");
 
 			return;
 		}

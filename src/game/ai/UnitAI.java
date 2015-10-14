@@ -15,7 +15,7 @@ public abstract class UnitAI{
 	
 	public UnitAI(Unit controlledUnit) {
 		controlledUnits = new ArrayList<Unit>();
-		controlledUnits.add(controlledUnit);
+		addUnit(controlledUnit);
 	}
 	
 	public List<Unit> getControledUnits(){
