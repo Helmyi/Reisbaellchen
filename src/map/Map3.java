@@ -175,20 +175,46 @@ public class Map3 extends Map{
 						continue;
 					}
 					//load map info
-					if(line.contains("<data>")){
-						int data[] = new int[tileCountX*tileCountY];
-						int i=0;
-						while ((line = reader.readLine()) != null && line.contains("<tile")) {
-							if(i >= data.length){
-								System.out.println("Map3 ma load error, more data than specified ?");
-								break;
+					if(line.contains("<layer")){
+						//collision layer
+						if("Collision".equals(getValueOfLineAttribute(line, "name"))){
+							line = reader.readLine();
+							if(line.contains("<data>")){
+								collision = new boolean[tileCountX*tileCountY];
+								int i=0;
+								while ((line = reader.readLine()) != null && line.contains("<tile")) {
+									if(i >= collision.length){
+										System.out.println("Map3 ma load error, more data than specified ?");
+										break;
+									}
+									if("0".equals(getValueOfLineAttribute(line, "gid"))){
+										collision[i] = false;
+									}else{
+										collision[i] = true;
+									}
+									i++;
+								}
+								continue;
 							}
-							data[i] = Integer.parseInt(getValueOfLineAttribute(line, "gid"));
-							i++;
 						}
-						
-						layers.add(data);
-						continue;
+
+						line = reader.readLine();
+						//other layers
+						if(line.contains("<data>")){
+							int data[] = new int[tileCountX*tileCountY];
+							int i=0;
+							while ((line = reader.readLine()) != null && line.contains("<tile")) {
+								if(i >= data.length){
+									System.out.println("Map3 ma load error, more data than specified ?");
+									break;
+								}
+								data[i] = Integer.parseInt(getValueOfLineAttribute(line, "gid"));
+								i++;
+							}
+							
+							layers.add(data);
+							continue;
+						}
 					}
 				}
 				reader.close();

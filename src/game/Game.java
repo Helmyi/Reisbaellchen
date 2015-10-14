@@ -58,7 +58,7 @@ public class Game extends JPanel implements KeyListener {
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
 
-		map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
+		map = new Map3("resources/Zones/TestMap/Wüste.tmx");
 	}
 
 	public static void main(String[] args) {
