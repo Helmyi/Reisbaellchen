@@ -114,7 +114,7 @@ public class Game extends JPanel implements KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		map = new Map3("resources/Zones/TestMap/Wüste.tmx");
+		map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
 	}
 
 	public void run() {
