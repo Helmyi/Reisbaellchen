@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import map.Map;
 import map.Map1;
 import map.Map2;
+import map.Map3;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements KeyListener {
@@ -59,7 +60,7 @@ public class Game extends JPanel implements KeyListener {
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
 
-		map = new Map2("resources/Zones/TestMap/Wüste1.tmx");
+		map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
 	}
 
 	public static void main(String[] args) {
@@ -125,6 +126,12 @@ public class Game extends JPanel implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		if(arg0.getKeyCode() == KeyEvent.VK_0){
+			map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
+
+			return;
+		}
+		
 		player.keyPressed(arg0);
 	}
 

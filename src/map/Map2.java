@@ -245,6 +245,6 @@ public class Map2 extends Map{
 		} catch (Exception e) {
 			System.out.println("Map: load MapFile error: " + file);
 			e.printStackTrace();
-		}
+		}		
 	}
 }
