@@ -1,5 +1,8 @@
 package game;
 
+import game.ai.AI_MoveRandom;
+import game.ai.UnitAI;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
@@ -30,35 +33,15 @@ public class Game extends JPanel implements KeyListener {
 	private Map map;
 
 	private Player player;
+	private List<UnitAI> unitAIs;
 	private List<Image> unitImages;
 	private List<Entity> entityList;
 
 	public Game() {
-		entityList = new ArrayList<Entity>();
-		unitImages = new ArrayList<Image>();
-		player = new Player();
+		createTestLevel();
 		
-
-		try {
-			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
-			entityList.add(new Unit(unitImages.get(0), 10 * 32, 5 * 32));
-			player.setPlayerUnit((Unit) entityList.get(0));
-			PlayerCamera cam = new PlayerCamera((int)player.getPlayerUnit().getX(), (int)player.getPlayerUnit().getY());
-			cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
-			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
-			player.setPlayerCamera(cam);
-
-			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32));
-			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		viewBegin = new Point(0, 0);
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
-
-		map = new Map3("resources/Zones/TestMap/Wüste.tmx");
 	}
 
 	public static void main(String[] args) {
@@ -92,9 +75,46 @@ public class Game extends JPanel implements KeyListener {
 	 * game logic
 	 */
 	private void tick() {
+		for (UnitAI ai : unitAIs) {
+			ai.tick();
+		}
+		
 		for (Entity ent : entityList) {
 			ent.tick();
 		}
+	}
+	
+	public void createTestLevel(){
+		entityList = new ArrayList<Entity>();
+		unitImages = new ArrayList<Image>();
+		unitAIs = new ArrayList<UnitAI>();
+		player = new Player();
+		viewBegin = new Point(0, 0);
+		
+
+		try {
+			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
+			entityList.add(new Unit(unitImages.get(0), 10 * 32, 5 * 32));
+			player.setPlayerUnit((Unit) entityList.get(0));
+			PlayerCamera cam = new PlayerCamera((int)player.getPlayerUnit().getX(), (int)player.getPlayerUnit().getY());
+			cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
+			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
+			player.setPlayerCamera(cam);
+
+			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32, 2));
+			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32, 4));
+			entityList.add(new Unit(unitImages.get(0), 11 * 32, 7 * 32, 8));
+			entityList.add(new Unit(unitImages.get(0), 11 * 32, 8 * 32, 14));
+			
+			unitAIs.add(new AI_MoveRandom((Unit)entityList.get(1)));
+			unitAIs.get(0).addUnit((Unit)entityList.get(2));
+			unitAIs.get(0).addUnit((Unit)entityList.get(3));
+			unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		map = new Map3("resources/Zones/TestMap/Wüste.tmx");
 	}
 
 	public void run() {

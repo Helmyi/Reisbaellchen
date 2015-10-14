@@ -30,6 +30,12 @@ public class Unit extends Entity {
 		init();
 	}
 	
+	public Unit(Image image, double x, double y, double speed) {
+		super(image, x, y);
+		init();
+		this.speed = speed;
+	}
+	
 	private boolean unitCollision()
 	{
 		int tempX[] = new int[2];
