@@ -20,6 +20,13 @@ public class PlayerCamera {
 	}
 
 	public void paint(Graphics g) {
+		//update camera position
+		Player player = Game.getGameInstance().getPlayer();
+		PlayerCamera cam = Game.getGameInstance().getPlayer().getPlayerCamera();
+		player.updatePlayerPosition();
+		cam.updateViewPointX();
+		cam.updateViewPointY();
+		
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Game.getGameInstance().getWidth(), Game.getGameInstance().getHeight());
 
