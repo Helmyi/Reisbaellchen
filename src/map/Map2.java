@@ -21,7 +21,8 @@ import org.w3c.dom.NodeList;
 public class Map2 extends Map{
 
 	private boolean collision[];
-	private int layers[][];
+	private int layers[];
+	private int numberLayers;
 
 	public Map2(String path) {
 		super(path);
@@ -31,7 +32,7 @@ public class Map2 extends Map{
 	@Override
 	public void paint(Graphics g) {
 		PlayerCamera cam = Game.getGameInstance().getPlayer().getPlayerCamera();
-		for (int layerNr = 0; layerNr < layers.length; layerNr++) {
+		for (int layerNr = 0; layerNr < numberLayers; layerNr++) {
 			int startX = (int) cam.getViewPointX()
 					/ tileSize - 2;
 			int endX = (int) cam.getViewPointX()
@@ -61,21 +62,17 @@ public class Map2 extends Map{
 							- (int) cam.getViewPointY();
 
 					// tileID=0 => skip
-					if (layers[layerNr][xTile + yTile * tileCountX] == 0)
+					if (layers[(layerNr * tileCountX*tileCountY) + (xTile + yTile * tileCountX)] == 0)
 						continue;
-					g.drawImage(tileIdToImage(layers[layerNr][xTile + yTile
-							* tileCountX]), x, y, x + tileSize, y + tileSize,
-							tileIdToTileX(layers[layerNr][xTile + yTile
-									* tileCountX])
+					g.drawImage(tileIdToImage(layers[(layerNr * tileCountX*tileCountY) + (xTile + yTile
+							* tileCountX)]), x, y, x + tileSize, y + tileSize,
+							tileIdToTileX(layers[(layerNr * tileCountX*tileCountY) + (xTile + yTile * tileCountX)])
 									* tileSize,
-							tileIdToTileY(layers[layerNr][xTile + yTile
-									* tileCountX])
+							tileIdToTileY(layers[(layerNr * tileCountX*tileCountY) + (xTile + yTile * tileCountX)])
 									* tileSize,
-							(tileIdToTileX(layers[layerNr][xTile + yTile
-									* tileCountX]) + 1)
+							(tileIdToTileX(layers[(layerNr * tileCountX*tileCountY) + (xTile + yTile * tileCountX)]) + 1)
 									* tileSize,
-							(tileIdToTileY(layers[layerNr][xTile + yTile
-									* tileCountX]) + 1)
+							(tileIdToTileY(layers[(layerNr * tileCountX*tileCountY) + (xTile + yTile* tileCountX)]) + 1)
 									* tileSize, null);
 				}
 			}
@@ -203,7 +200,8 @@ public class Map2 extends Map{
 			}
 			// load map data
 			nList = doc.getElementsByTagName("layer");
-			layers = new int[nList.getLength()][tileCountY * tileCountX];
+			layers = new int[nList.getLength()*tileCountY * tileCountX];
+			numberLayers = nList.getLength();
 			collision = new boolean[tileCountY * tileCountX];
 
 			for (int i = 0; i < nList.getLength(); i++) {
@@ -234,7 +232,7 @@ public class Map2 extends Map{
 					Element eElement = (Element) nNode;
 					NodeList mapIdList = eElement.getElementsByTagName("tile");
 					for (int j = 0; j < mapIdList.getLength(); j++) {
-						layers[i][j] = Integer.parseInt(mapIdList.item(j)
+						layers[(i * tileCountX*tileCountY) + j] = Integer.parseInt(mapIdList.item(j)
 								.getAttributes().getNamedItem("gid")
 								.getNodeValue().toString());
 					}
