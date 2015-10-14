@@ -30,7 +30,11 @@ public class PlayerCamera {
 			ent.paint(g2d);
 		}
 	}
-	
+
+	/**
+	 * viewPointX and viewPointY are used to calculate the part of the map that
+	 * should be painted. Call this function every time before map is painted.
+	 */
 	public void updateViewPointX() {
 		if (leftBorderReached()) {
 			viewPointX = 0;
@@ -39,6 +43,10 @@ public class PlayerCamera {
 		}
 	}
 
+	/**
+	 * viewPointX and viewPointY are used to calculate the part of the map that
+	 * should be painted. Call this function every time before map is painted.
+	 */
 	public void updateViewPointY() {
 		if (topBorderReached()) {
 			viewPointY = 0;
@@ -49,17 +57,18 @@ public class PlayerCamera {
 
 	private void adjustViewPointX() {
 		if (rightBorderReached()) {
-			viewPointX = Game.getGameInstance().getMap().getTileCountX() * Game.getGameInstance().getMap().getTileSize()
-					- Game.getGameInstance().getWidth();
+			adjustViewPointXToRightBorder();
 		} else {
-			viewPointX = (int) this.playerPositionX - Game.getGameInstance().getWidth() / 2 + playerTileWidth / 2;
+			adjustViewPointXToPlayerPosition();
 		}
 	}
 
-	private boolean leftBorderReached() {
-		return this.playerPositionX < Game.getGameInstance().getWidth() / 2 - playerTileWidth / 2
-				|| Game.getGameInstance().getMap().getTileCountX()
-						* Game.getGameInstance().getMap().getTileSize() <= Game.getGameInstance().getWidth();
+	private void adjustViewPointY() {
+		if (bottomBorderReached()) {
+			adjustViewPointYToBottomBorder();
+		} else {
+			adjustViewPointYToPlayerPosition();
+		}
 	}
 
 	private boolean rightBorderReached() {
@@ -68,13 +77,28 @@ public class PlayerCamera {
 				- playerTileWidth / 2;
 	}
 
-	private void adjustViewPointY() {
-		if (bottomBorderReached()) {
-			viewPointY = Game.getGameInstance().getMap().getTileCountY() * Game.getGameInstance().getMap().getTileSize()
-					- Game.getGameInstance().getHeight();
-		} else {
-			viewPointY = (int) this.playerPositionY - Game.getGameInstance().getHeight() / 2 + playerTileHeight / 2;
-		}
+	private void adjustViewPointXToRightBorder() {
+		viewPointX = Game.getGameInstance().getMap().getTileCountX() * Game.getGameInstance().getMap().getTileSize()
+				- Game.getGameInstance().getWidth();
+	}
+
+	private void adjustViewPointXToPlayerPosition() {
+		viewPointX = (int) this.playerPositionX - Game.getGameInstance().getWidth() / 2 + playerTileWidth / 2;
+	}
+
+	private boolean leftBorderReached() {
+		return this.playerPositionX < Game.getGameInstance().getWidth() / 2 - playerTileWidth / 2
+				|| Game.getGameInstance().getMap().getTileCountX()
+						* Game.getGameInstance().getMap().getTileSize() <= Game.getGameInstance().getWidth();
+	}
+
+	private void adjustViewPointYToBottomBorder() {
+		viewPointY = Game.getGameInstance().getMap().getTileCountY() * Game.getGameInstance().getMap().getTileSize()
+				- Game.getGameInstance().getHeight();
+	}
+
+	private void adjustViewPointYToPlayerPosition() {
+		viewPointY = (int) this.playerPositionY - Game.getGameInstance().getHeight() / 2 + playerTileHeight / 2;
 	}
 
 	private boolean bottomBorderReached() {
@@ -89,16 +113,14 @@ public class PlayerCamera {
 						* Game.getGameInstance().getMap().getTileSize() <= Game.getGameInstance().getHeight();
 	}
 
-	public int getViewPointX()
-	{
+	public int getViewPointX() {
 		return this.viewPointX;
 	}
-	
-	public int getViewPointY()
-	{
+
+	public int getViewPointY() {
 		return this.viewPointY;
 	}
-	
+
 	public void setPlayerPositionX(int x) {
 		this.playerPositionX = x;
 	}
