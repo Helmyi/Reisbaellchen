@@ -154,6 +154,15 @@ public class Unit extends Entity {
 	public void setUnitAction(UnitAction action) {
 		this.currentUnitAction = action;
 	}
+	
+	public UnitAction getUnitAction() {
+		return this.currentUnitAction;
+	}
+	
+	public double getSpeed()
+	{
+		return speed;
+	}
 
 	public boolean isMoving() {
 		return isMoving;
