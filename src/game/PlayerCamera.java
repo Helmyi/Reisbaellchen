@@ -4,6 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+/**
+ * Class that administrates the viewable content for the player.
+ * 
+ * @author Dimi
+ */
+
 public class PlayerCamera {
 	int viewPointX;
 	int viewPointY;
