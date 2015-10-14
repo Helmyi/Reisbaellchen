@@ -35,9 +35,8 @@ public class AI_MoveRandom extends UnitAI{
 			default:
 				break;
 			}
-			unit.setMoving(random.nextBoolean());
-				
 			//move on off
+			unit.setMoving(random.nextBoolean());
 		}
 	}
 
