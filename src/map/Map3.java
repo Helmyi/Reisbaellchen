@@ -195,47 +195,6 @@ public class Map3 extends Map{
 				System.gc();
 			}
 
-
-//			// load map data
-//			nList = doc.getElementsByTagName("layer");
-//			layers = new int[nList.getLength()][tileCountY * tileCountX];
-//			collision = new boolean[tileCountY * tileCountX];
-//
-//			for (int i = 0; i < nList.getLength(); i++) {
-//				// Collision layer
-//				// collision and not for drawing
-//				if ("Collision".equals(nList.item(i).getAttributes()
-//						.getNamedItem("name").getNodeValue().toString())) {
-//					Node nNode = nList.item(i);
-//					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-//						Element eElement = (Element) nNode;
-//						NodeList mapIdList = eElement
-//								.getElementsByTagName("tile");
-//						for (int j = 0; j < mapIdList.getLength(); j++) {
-//							if (Integer.parseInt(mapIdList.item(j)
-//									.getAttributes().getNamedItem("gid")
-//									.getNodeValue().toString()) == 0) {
-//								collision[j] = false;
-//							} else {
-//								collision[j] = true;
-//							}
-//						}
-//					}
-//					continue;
-//				}
-//
-//				Node nNode = nList.item(i);
-//				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-//					Element eElement = (Element) nNode;
-//					NodeList mapIdList = eElement.getElementsByTagName("tile");
-//					for (int j = 0; j < mapIdList.getLength(); j++) {
-//						layers[i][j] = Integer.parseInt(mapIdList.item(j)
-//								.getAttributes().getNamedItem("gid")
-//								.getNodeValue().toString());
-//					}
-//				}
-//			}
-//
 			System.out.println("Finished loading Map, time: "
 					+ (System.currentTimeMillis() - loadingMapStartTime)
 					/ 1000.0 + "sec");

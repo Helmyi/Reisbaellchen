@@ -15,8 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import map.Map;
-import map.Map1;
-import map.Map2;
 import map.Map3;
 
 @SuppressWarnings("serial")
