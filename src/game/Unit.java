@@ -128,13 +128,6 @@ public class Unit extends Entity{
 	@Override
 	public void paint(Graphics g) {
 		actions.get(currentAction).drawCurrentImage(g);
-		
-//		int drawX = (int) x - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
-//		int drawY = (int) y - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
-//
-//		g.drawImage(entityImage, drawX, drawY, drawX + tileWidth, drawY + tileHeight, animationStep * tileWidth,
-//				this.currentViewDirection.toInt() * tileHeight, (animationStep + 1) * tileWidth,
-//				(this.currentViewDirection.toInt() + 1) * tileHeight, null);
 	}
 
 	public void setViewDirection(ViewDirection action) {
