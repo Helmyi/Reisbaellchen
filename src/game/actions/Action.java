@@ -1,6 +1,8 @@
 package game.actions;
 
 import java.awt.Graphics;
+
+import game.Game;
 import game.Unit;
 
 public abstract class Action {
@@ -24,6 +26,16 @@ public abstract class Action {
 	
 	public abstract void drawCurrentImage(Graphics g);
 
+	protected void basicImagePaint(Graphics g){
+		int drawX = (int) getOwner().getX() - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
+		int drawY = (int) getOwner().getY() - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
+
+		g.drawImage(getOwner().getImage(), drawX, drawY, drawX + getOwner().getTileWidth(), drawY + getOwner().getTileHeight(),
+				(getCurrentAnimationStep() + getFirstTileX()) * getOwner().getTileWidth(), 
+				(getOwner().getViewDirection().toInt() + getFirstTileY()) * getOwner().getTileHeight(),
+				(getCurrentAnimationStep() + getFirstTileX()+1) * getOwner().getTileWidth(),
+				(getOwner().getViewDirection().toInt() + 1 + getFirstTileY()) * getOwner().getTileHeight(), null);
+	}
 	public String getName() {
 		return name;
 	}

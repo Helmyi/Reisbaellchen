@@ -1,8 +1,6 @@
 package game.actions;
 
 import java.awt.Graphics;
-
-import game.Game;
 import game.Unit;
 
 public class Action_Kick extends Action{
@@ -23,14 +21,7 @@ public class Action_Kick extends Action{
 	
 	@Override
 	public void drawCurrentImage(Graphics g){
-		int drawX = (int) getOwner().getX() - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
-		int drawY = (int) getOwner().getY() - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
-
-		g.drawImage(getOwner().getImage(), drawX, drawY, drawX + getOwner().getTileWidth(), drawY + getOwner().getTileHeight(),
-				(getCurrentAnimationStep() + getFirstTileX()) * getOwner().getTileWidth(), 
-				(getOwner().getViewDirection().toInt() + getFirstTileY()) * getOwner().getTileHeight(),
-				(getCurrentAnimationStep() + getFirstTileX()+1) * getOwner().getTileWidth(),
-				(getOwner().getViewDirection().toInt() + 1 + getFirstTileY()) * getOwner().getTileHeight(), null);
+		basicImagePaint(g);
 	}
 
 }
