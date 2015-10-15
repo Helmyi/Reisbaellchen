@@ -105,11 +105,11 @@ public class Game extends JPanel implements KeyListener {
 			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32, 1));
 			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32, 2));
 			entityList.add(new Unit(unitImages.get(0), 15 * 32, 7 * 32, 3));
-			// entityList.add(new Unit(unitImages.get(0), 11 * 32, 8 * 32, 14));
+			entityList.add(new Unit(unitImages.get(0), 15 * 32+2, 7 * 32, 14));
 
 			unitAIs.add(new AI_MoveRandom((Unit) entityList.get(1)));
 			unitAIs.get(0).addUnit((Unit) entityList.get(2));
-			unitAIs.get(0).addUnit((Unit)entityList.get(3));
+			//unitAIs.get(0).addUnit((Unit)entityList.get(3));
 			// unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

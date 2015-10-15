@@ -48,6 +48,6 @@ public abstract class Entity implements Comparable<Entity>{
 
 	@Override
 	public int compareTo(Entity otherEnt) {
-		return otherEnt.getY() < getY() ? 1 : -1;
+		return otherEnt.getY() <= getY() ? 1 : -1;
 	}
 }
