@@ -38,28 +38,36 @@ public class AI_MoveRandom extends UnitAI {
 			// random move in random direction
 			switch (temp) {
 			case 0:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_DOWN)) {
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_DOWN)
+						&& (unit.getUnitAction() == Unit.UnitAction.MOVE_LEFT
+								|| unit.getUnitAction() == Unit.UnitAction.MOVE_RIGHT)) {
 					unit.setUnitAction(Unit.UnitAction.MOVE_DOWN);
 					unit.setMoving(random.nextBoolean());
 				} else
 					unit.setMoving(false);
 				break;
 			case 1:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_UP)) {
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_UP)
+						&& (unit.getUnitAction() == Unit.UnitAction.MOVE_LEFT
+								|| unit.getUnitAction() == Unit.UnitAction.MOVE_RIGHT)) {
 					unit.setUnitAction(Unit.UnitAction.MOVE_UP);
 					unit.setMoving(random.nextBoolean());
 				} else
 					unit.setMoving(false);
 				break;
 			case 2:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_LEFT)) {
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_LEFT)
+						&& (unit.getUnitAction() == Unit.UnitAction.MOVE_UP
+								|| unit.getUnitAction() == Unit.UnitAction.MOVE_DOWN)) {
 					unit.setUnitAction(Unit.UnitAction.MOVE_LEFT);
 					unit.setMoving(random.nextBoolean());
 				} else
 					unit.setMoving(false);
 				break;
 			case 3:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_RIGHT)) {
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_RIGHT)
+						&& (unit.getUnitAction() == Unit.UnitAction.MOVE_UP
+								|| unit.getUnitAction() == Unit.UnitAction.MOVE_DOWN)) {
 					unit.setUnitAction(Unit.UnitAction.MOVE_RIGHT);
 					unit.setMoving(random.nextBoolean());
 				} else
