@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -26,7 +27,7 @@ public class Game extends JPanel implements KeyListener {
 	Graphics graphicBuffer;
 
 	private static Game theGame;
-	private int fps = 60;
+	private int fps = 55;
 	private static int width = 1000;
 	private static int height = 600;
 	private Point viewBegin;
@@ -78,6 +79,7 @@ public class Game extends JPanel implements KeyListener {
 			ai.tick();
 		}
 
+		Collections.sort(entityList);
 		for (Entity ent : entityList) {
 			ent.tick();
 		}

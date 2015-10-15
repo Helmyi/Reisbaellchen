@@ -3,7 +3,7 @@ package game;
 import java.awt.Graphics;
 import java.awt.Image;
 
-public class Unit extends Entity {
+public class Unit extends Entity{
 	private boolean isMoving;
 	private boolean isFighting;
 	private int animationStep;
@@ -174,4 +174,5 @@ public class Unit extends Entity {
 		this.tileWidth = 32;
 		this.currentUnitAction = UnitAction.MOVE_DOWN;
 	}
+
 }
