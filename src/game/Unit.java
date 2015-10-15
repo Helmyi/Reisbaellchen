@@ -13,9 +13,6 @@ import java.util.List;
 
 public class Unit extends Entity{
 	private boolean isMoving;
-	private boolean isFighting;
-	private int animationStep;
-	private int animationStepCount;
 	private ViewDirection currentViewDirection;
 	private double speed;
 	
@@ -86,8 +83,6 @@ public class Unit extends Entity{
 		actions.get(currentAction).tick();
 		
 		if (this.isMoving()) {
-			animationStep++;
-			animationStep %= animationStepCount;
 
 			switch (currentViewDirection) {
 			case MOVE_DOWN:
@@ -178,9 +173,6 @@ public class Unit extends Entity{
 	private void init() {
 		speed = 10;
 		isMoving = false;
-		isFighting = false;
-		animationStep = 0;
-		animationStepCount = 4;
 		this.tileHeight = 64;
 		this.tileWidth = 32;
 		this.currentViewDirection = ViewDirection.MOVE_DOWN;
