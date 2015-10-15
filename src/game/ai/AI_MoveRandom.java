@@ -38,37 +38,37 @@ public class AI_MoveRandom extends UnitAI {
 			// random move in random direction
 			switch (temp) {
 			case 0:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.ViewDirection.MOVE_DOWN)
-						&& (unit.getViewDirection() == Unit.ViewDirection.MOVE_LEFT
-								|| unit.getViewDirection() == Unit.ViewDirection.MOVE_RIGHT)) {
-					unit.setViewDirection(Unit.ViewDirection.MOVE_DOWN);
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.ViewDirection.DOWN)
+						&& (unit.getViewDirection() == Unit.ViewDirection.LEFT
+								|| unit.getViewDirection() == Unit.ViewDirection.RIGHT)) {
+					unit.setViewDirection(Unit.ViewDirection.DOWN);
 					unit.setMoving(random.nextBoolean());
 				} else
 					unit.setMoving(false);
 				break;
 			case 1:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.ViewDirection.MOVE_UP)
-						&& (unit.getViewDirection() == Unit.ViewDirection.MOVE_LEFT
-								|| unit.getViewDirection() == Unit.ViewDirection.MOVE_RIGHT)) {
-					unit.setViewDirection(Unit.ViewDirection.MOVE_UP);
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.ViewDirection.UP)
+						&& (unit.getViewDirection() == Unit.ViewDirection.LEFT
+								|| unit.getViewDirection() == Unit.ViewDirection.RIGHT)) {
+					unit.setViewDirection(Unit.ViewDirection.UP);
 					unit.setMoving(random.nextBoolean());
 				} else
 					unit.setMoving(false);
 				break;
 			case 2:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.ViewDirection.MOVE_LEFT)
-						&& (unit.getViewDirection() == Unit.ViewDirection.MOVE_UP
-								|| unit.getViewDirection() == Unit.ViewDirection.MOVE_DOWN)) {
-					unit.setViewDirection(Unit.ViewDirection.MOVE_LEFT);
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.ViewDirection.LEFT)
+						&& (unit.getViewDirection() == Unit.ViewDirection.UP
+								|| unit.getViewDirection() == Unit.ViewDirection.DOWN)) {
+					unit.setViewDirection(Unit.ViewDirection.LEFT);
 					unit.setMoving(random.nextBoolean());
 				} else
 					unit.setMoving(false);
 				break;
 			case 3:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.ViewDirection.MOVE_RIGHT)
-						&& (unit.getViewDirection() == Unit.ViewDirection.MOVE_UP
-								|| unit.getViewDirection() == Unit.ViewDirection.MOVE_DOWN)) {
-					unit.setViewDirection(Unit.ViewDirection.MOVE_RIGHT);
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.ViewDirection.RIGHT)
+						&& (unit.getViewDirection() == Unit.ViewDirection.UP
+								|| unit.getViewDirection() == Unit.ViewDirection.DOWN)) {
+					unit.setViewDirection(Unit.ViewDirection.RIGHT);
 					unit.setMoving(random.nextBoolean());
 				} else
 					unit.setMoving(false);
@@ -82,16 +82,16 @@ public class AI_MoveRandom extends UnitAI {
 
 	private boolean nextMovementStepWithinMovementRadius(Unit unit, Point spawnPoint, Unit.ViewDirection action) {
 		int nextStep;
-		if (action == Unit.ViewDirection.MOVE_DOWN) {
+		if (action == Unit.ViewDirection.DOWN) {
 			nextStep = (int) unit.getY() + (int) unit.getSpeed();
 			return nextStep < spawnPoint.getY() + movementRadius;
-		} else if (action == Unit.ViewDirection.MOVE_UP) {
+		} else if (action == Unit.ViewDirection.UP) {
 			nextStep = (int) unit.getY() - (int) unit.getSpeed();
 			return nextStep > spawnPoint.getY() - movementRadius;
-		} else if (action == Unit.ViewDirection.MOVE_LEFT) {
+		} else if (action == Unit.ViewDirection.LEFT) {
 			nextStep = (int) unit.getX() - (int) unit.getSpeed();
 			return nextStep > spawnPoint.getX() - movementRadius;
-		} else if (action == Unit.ViewDirection.MOVE_RIGHT) {
+		} else if (action == Unit.ViewDirection.RIGHT) {
 			nextStep = (int) unit.getX() + (int) unit.getSpeed();
 			return nextStep < spawnPoint.getX() + movementRadius;
 		}

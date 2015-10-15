@@ -53,7 +53,7 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveUp)
 				|| (key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// up
-			playerUnit.setViewDirection(Unit.ViewDirection.MOVE_UP);
+			playerUnit.setViewDirection(Unit.ViewDirection.UP);
 			playerUnit.setMoving(true);
 		} else if ((!key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed
@@ -62,7 +62,7 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveDown)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// down
-			playerUnit.setViewDirection(Unit.ViewDirection.MOVE_DOWN);
+			playerUnit.setViewDirection(Unit.ViewDirection.DOWN);
 			playerUnit.setMoving(true);
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed
@@ -71,7 +71,7 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveLeft)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed)) {
 			// left
-			playerUnit.setViewDirection(Unit.ViewDirection.MOVE_LEFT);
+			playerUnit.setViewDirection(Unit.ViewDirection.LEFT);
 			playerUnit.setMoving(true);
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed
@@ -80,7 +80,7 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveRight)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// right
-			playerUnit.setViewDirection(Unit.ViewDirection.MOVE_RIGHT);
+			playerUnit.setViewDirection(Unit.ViewDirection.RIGHT);
 			playerUnit.setMoving(true);
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)

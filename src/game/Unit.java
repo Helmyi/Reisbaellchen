@@ -20,7 +20,7 @@ public class Unit extends Entity{
 	private int currentAction;
 
 	public static enum ViewDirection {
-		MOVE_DOWN(0), MOVE_UP(1), MOVE_RIGHT(2), MOVE_LEFT(3);
+		DOWN(0), UP(1), RIGHT(2), LEFT(3);
 		private int code;
 
 		private ViewDirection(int code) {
@@ -46,22 +46,22 @@ public class Unit extends Entity{
 	private boolean unitCollision() {
 		int tempX[] = new int[2];
 		int tempY[] = new int[2];
-		if (currentViewDirection == ViewDirection.MOVE_DOWN) {
+		if (currentViewDirection == ViewDirection.DOWN) {
 			tempX[0] = (int) this.x;
 			tempX[1] = (int) this.x + tileWidth;
 			tempY[0] = (int) this.y + tileHeight;
 			tempY[1] = (int) this.y + tileHeight;
-		} else if (currentViewDirection == ViewDirection.MOVE_UP) {
+		} else if (currentViewDirection == ViewDirection.UP) {
 			tempX[0] = (int) this.x;
 			tempX[1] = (int) this.x + tileWidth;
 			tempY[0] = (int) this.y;// + tileHeight/ 2;
 			tempY[1] = (int) this.y;// + tileHeight/ 2;
-		} else if (currentViewDirection == ViewDirection.MOVE_LEFT) {
+		} else if (currentViewDirection == ViewDirection.LEFT) {
 			tempX[0] = (int) this.x;// + tileWidth/ 2;
 			tempX[1] = (int) this.x;// + tileWidth/ 2;
 			tempY[0] = (int) this.y;
 			tempY[1] = (int) this.y + tileHeight;
-		} else if (currentViewDirection == ViewDirection.MOVE_RIGHT) {
+		} else if (currentViewDirection == ViewDirection.RIGHT) {
 			tempX[0] = (int) this.x + tileWidth;// / 2;
 			tempX[1] = (int) this.x + tileWidth;// / 2;
 			tempY[0] = (int) this.y;
@@ -85,7 +85,7 @@ public class Unit extends Entity{
 		if (this.isMoving()) {
 
 			switch (currentViewDirection) {
-			case MOVE_DOWN:
+			case DOWN:
 				this.y += speed;
 				if (unitCollision()) {
 					this.y -= speed;
@@ -94,7 +94,7 @@ public class Unit extends Entity{
 					this.y = Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2;
 				}
 				break;
-			case MOVE_UP:
+			case UP:
 				this.y -= speed;
 				if (unitCollision()) {
 					this.y += speed;
@@ -103,7 +103,7 @@ public class Unit extends Entity{
 					this.y = 0;
 				}
 				break;
-			case MOVE_RIGHT:
+			case RIGHT:
 				this.x += speed;
 				if (unitCollision()) {
 					this.x -= speed;
@@ -112,7 +112,7 @@ public class Unit extends Entity{
 					this.x = Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2;
 				}
 				break;
-			case MOVE_LEFT:
+			case LEFT:
 				this.x -= speed;
 				if (unitCollision()) {
 					this.x += speed;
@@ -164,7 +164,7 @@ public class Unit extends Entity{
 		isMoving = false;
 		this.tileHeight = 64;
 		this.tileWidth = 32;
-		this.currentViewDirection = ViewDirection.MOVE_DOWN;
+		this.currentViewDirection = ViewDirection.DOWN;
 		
 		//actions
 		actions = new ArrayList<Action>();
