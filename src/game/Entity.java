@@ -41,6 +41,10 @@ public abstract class Entity implements Comparable<Entity>{
 	public int getTileHeight() {
 		return tileHeight;
 	}
+	
+	public Image getImage(){
+		return entityImage;
+	}
 
 	public abstract void tick();
 

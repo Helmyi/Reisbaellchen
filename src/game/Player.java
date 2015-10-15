@@ -13,6 +13,8 @@ public class Player {
 	private int key_MoveDown = KeyEvent.VK_S;
 	private int key_MoveLeft = KeyEvent.VK_A;
 	private int key_MoveRight = KeyEvent.VK_D;
+	private int key_Action1 = KeyEvent.VK_F;
+	private int key_Action2 = KeyEvent.VK_G;
 	private PlayerCamera camera;
 
 	public Player() {
@@ -51,7 +53,7 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveUp)
 				|| (key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// up
-			playerUnit.setUnitAction(Unit.UnitAction.MOVE_UP);
+			playerUnit.setViewDirection(Unit.ViewDirection.MOVE_UP);
 			playerUnit.setMoving(true);
 		} else if ((!key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed
@@ -60,7 +62,7 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveDown)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// down
-			playerUnit.setUnitAction(Unit.UnitAction.MOVE_DOWN);
+			playerUnit.setViewDirection(Unit.ViewDirection.MOVE_DOWN);
 			playerUnit.setMoving(true);
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed
@@ -69,7 +71,7 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveLeft)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed)) {
 			// left
-			playerUnit.setUnitAction(Unit.UnitAction.MOVE_LEFT);
+			playerUnit.setViewDirection(Unit.ViewDirection.MOVE_LEFT);
 			playerUnit.setMoving(true);
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed
@@ -78,7 +80,7 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveRight)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// right
-			playerUnit.setUnitAction(Unit.UnitAction.MOVE_RIGHT);
+			playerUnit.setViewDirection(Unit.ViewDirection.MOVE_RIGHT);
 			playerUnit.setMoving(true);
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
@@ -105,25 +107,15 @@ public class Player {
 			key_MoveLeft_Pressed = true;
 			lastPressedMoveKey = key_MoveLeft;
 		}
-
-		if (arg0.getKeyCode() == KeyEvent.VK_J) {
-			playerUnit.setUnitAction(Unit.UnitAction.ATTACK_LEFT);
-			playerUnit.setFighting(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_K) {
-			playerUnit.setUnitAction(Unit.UnitAction.ATTACK_DOWN);
-			playerUnit.setFighting(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_I) {
-			playerUnit.setUnitAction(Unit.UnitAction.ATTACK_UP);
-			playerUnit.setFighting(true);
-		}
-		if (arg0.getKeyCode() == KeyEvent.VK_L) {
-			playerUnit.setUnitAction(Unit.UnitAction.ATTACK_RIGHT);
-			playerUnit.setFighting(true);
-		}
-
 		calcMoveDirection();
+		
+		if (arg0.getKeyCode() == key_Action1) {
+			playerUnit.setAction(2);
+		}
+		if (arg0.getKeyCode() == key_Action2) {
+			playerUnit.setAction(3);
+		}
+		
 	}
 
 	public void keyReleased(KeyEvent arg0) {
@@ -140,8 +132,10 @@ public class Player {
 			key_MoveLeft_Pressed = false;
 		}
 
-		playerUnit.setFighting(false);
 		calcMoveDirection();
+		if (arg0.getKeyCode() == key_Action1 || arg0.getKeyCode() == key_Action2) {
+			playerUnit.setAction(0);
+		}
 	}
 
 	public void keyTyped(KeyEvent arg0) {

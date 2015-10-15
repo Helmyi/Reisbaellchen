@@ -1,22 +1,32 @@
 package game;
 
+import game.actions.Action;
+import game.actions.Action_Kick;
+import game.actions.Action_Move;
+import game.actions.Action_Punch;
+import game.actions.Action_Stand;
+
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Unit extends Entity{
 	private boolean isMoving;
 	private boolean isFighting;
 	private int animationStep;
 	private int animationStepCount;
-	private UnitAction currentUnitAction;
+	private ViewDirection currentViewDirection;
 	private double speed;
+	
+	private List<Action> actions;
+	private int currentAction;
 
-	public static enum UnitAction {
-		MOVE_DOWN(0), MOVE_UP(1), MOVE_RIGHT(2), MOVE_LEFT(3), ATTACK_DOWN(4), ATTACK_UP(5), ATTACK_RIGHT(
-				6), ATTACK_LEFT(7);
+	public static enum ViewDirection {
+		MOVE_DOWN(0), MOVE_UP(1), MOVE_RIGHT(2), MOVE_LEFT(3);
 		private int code;
 
-		private UnitAction(int code) {
+		private ViewDirection(int code) {
 			this.code = code;
 		}
 
@@ -39,22 +49,22 @@ public class Unit extends Entity{
 	private boolean unitCollision() {
 		int tempX[] = new int[2];
 		int tempY[] = new int[2];
-		if (currentUnitAction == UnitAction.MOVE_DOWN) {
+		if (currentViewDirection == ViewDirection.MOVE_DOWN) {
 			tempX[0] = (int) this.x;
 			tempX[1] = (int) this.x + tileWidth;
 			tempY[0] = (int) this.y + tileHeight;
 			tempY[1] = (int) this.y + tileHeight;
-		} else if (currentUnitAction == UnitAction.MOVE_UP) {
+		} else if (currentViewDirection == ViewDirection.MOVE_UP) {
 			tempX[0] = (int) this.x;
 			tempX[1] = (int) this.x + tileWidth;
 			tempY[0] = (int) this.y;// + tileHeight/ 2;
 			tempY[1] = (int) this.y;// + tileHeight/ 2;
-		} else if (currentUnitAction == UnitAction.MOVE_LEFT) {
+		} else if (currentViewDirection == ViewDirection.MOVE_LEFT) {
 			tempX[0] = (int) this.x;// + tileWidth/ 2;
 			tempX[1] = (int) this.x;// + tileWidth/ 2;
 			tempY[0] = (int) this.y;
 			tempY[1] = (int) this.y + tileHeight;
-		} else if (currentUnitAction == UnitAction.MOVE_RIGHT) {
+		} else if (currentViewDirection == ViewDirection.MOVE_RIGHT) {
 			tempX[0] = (int) this.x + tileWidth;// / 2;
 			tempX[1] = (int) this.x + tileWidth;// / 2;
 			tempY[0] = (int) this.y;
@@ -73,11 +83,13 @@ public class Unit extends Entity{
 
 	@Override
 	public void tick() {
-		if (this.isMoving() || this.isFighting()) {
+		actions.get(currentAction).tick();
+		
+		if (this.isMoving()) {
 			animationStep++;
 			animationStep %= animationStepCount;
 
-			switch (currentUnitAction) {
+			switch (currentViewDirection) {
 			case MOVE_DOWN:
 				this.y += speed;
 				if (unitCollision()) {
@@ -114,34 +126,28 @@ public class Unit extends Entity{
 					this.x = 0;
 				}
 				break;
-			case ATTACK_DOWN:
-				break;
-			case ATTACK_UP:
-				break;
-			case ATTACK_RIGHT:
-				break;
-			case ATTACK_LEFT:
-				break;
 			}
 		}
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		int drawX = (int) x - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
-		int drawY = (int) y - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
-
-		g.drawImage(entityImage, drawX, drawY, drawX + tileWidth, drawY + tileHeight, animationStep * tileWidth,
-				this.currentUnitAction.toInt() * tileHeight, (animationStep + 1) * tileWidth,
-				(this.currentUnitAction.toInt() + 1) * tileHeight, null);
+		actions.get(currentAction).drawCurrentImage(g);
+		
+//		int drawX = (int) x - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
+//		int drawY = (int) y - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
+//
+//		g.drawImage(entityImage, drawX, drawY, drawX + tileWidth, drawY + tileHeight, animationStep * tileWidth,
+//				this.currentViewDirection.toInt() * tileHeight, (animationStep + 1) * tileWidth,
+//				(this.currentViewDirection.toInt() + 1) * tileHeight, null);
 	}
 
-	public void setUnitAction(UnitAction action) {
-		this.currentUnitAction = action;
+	public void setViewDirection(ViewDirection action) {
+		this.currentViewDirection = action;
 	}
 
-	public UnitAction getUnitAction() {
-		return this.currentUnitAction;
+	public ViewDirection getViewDirection() {
+		return this.currentViewDirection;
 	}
 
 	public double getSpeed() {
@@ -154,14 +160,19 @@ public class Unit extends Entity{
 
 	public void setMoving(boolean isMoving) {
 		this.isMoving = isMoving;
+		if(isMoving){
+			currentAction = 1;
+		}else{
+			currentAction = 0;
+		}
 	}
 
 	public boolean isFighting() {
-		return isFighting;
+		return (currentAction!=0 && currentAction!= 1) ? true: false;
 	}
 
-	public void setFighting(boolean isFighting) {
-		this.isFighting = isFighting;
+	public void setAction(int action) {
+		currentAction = action;
 	}
 
 	private void init() {
@@ -172,7 +183,15 @@ public class Unit extends Entity{
 		animationStepCount = 4;
 		this.tileHeight = 64;
 		this.tileWidth = 32;
-		this.currentUnitAction = UnitAction.MOVE_DOWN;
+		this.currentViewDirection = ViewDirection.MOVE_DOWN;
+		
+		//actions
+		actions = new ArrayList<Action>();
+		actions.add(new Action_Stand(this));
+		actions.add(new Action_Move(this));
+		actions.add(new Action_Punch(this));
+		actions.add(new Action_Kick(this));
+		currentAction = 0;
 	}
 
 }
