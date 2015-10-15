@@ -93,7 +93,7 @@ public class Game extends JPanel implements KeyListener {
 		viewBegin = new Point(0, 0);
 
 		try {
-			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
+			unitImages.add(ImageIO.read(new File("resources/Fa_big_head2.png")));
 			entityList.add(new Unit(unitImages.get(0), 10 * 32, 5 * 32));
 			player.setPlayerUnit((Unit) entityList.get(0));
 			PlayerCamera cam = new PlayerCamera((int) player.getPlayerUnit().getX(),
