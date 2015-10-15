@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -26,7 +27,7 @@ public class Game extends JPanel implements KeyListener {
 	Graphics graphicBuffer;
 
 	private static Game theGame;
-	private int fps = 60;
+	private int fps = 55;
 	private static int width = 1000;
 	private static int height = 600;
 	private Point viewBegin;
@@ -78,6 +79,7 @@ public class Game extends JPanel implements KeyListener {
 			ai.tick();
 		}
 
+		Collections.sort(entityList);
 		for (Entity ent : entityList) {
 			ent.tick();
 		}
@@ -100,14 +102,14 @@ public class Game extends JPanel implements KeyListener {
 			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
 			player.setPlayerCamera(cam);
 
-			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32, 2));
-			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32, 15));
-			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32, 8));
-			// entityList.add(new Unit(unitImages.get(0), 11 * 32, 8 * 32, 14));
+			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32, 1));
+			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32, 2));
+			entityList.add(new Unit(unitImages.get(0), 15 * 32, 7 * 32, 3));
+			entityList.add(new Unit(unitImages.get(0), 15 * 32+2, 7 * 32, 14));
 
 			unitAIs.add(new AI_MoveRandom((Unit) entityList.get(1)));
 			unitAIs.get(0).addUnit((Unit) entityList.get(2));
-			// unitAIs.get(0).addUnit((Unit)entityList.get(3));
+			//unitAIs.get(0).addUnit((Unit)entityList.get(3));
 			// unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
