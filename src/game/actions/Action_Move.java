@@ -7,7 +7,7 @@ import game.Unit;
 
 public class Action_Move extends Action{
 	long lastAnimationStepTime;
-	
+		
 	public Action_Move(Unit owner) {
 		super(owner, 4, 0, 0, "Move");
 		lastAnimationStepTime = System.currentTimeMillis();

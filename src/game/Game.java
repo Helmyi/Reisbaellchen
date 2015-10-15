@@ -75,6 +75,7 @@ public class Game extends JPanel implements KeyListener {
 	 * game logic
 	 */
 	private void tick() {
+		
 		for (UnitAI ai : unitAIs) {
 			ai.tick();
 		}
@@ -83,6 +84,13 @@ public class Game extends JPanel implements KeyListener {
 		for (Entity ent : entityList) {
 			ent.tick();
 		}
+
+		//update camera position
+		Player player = getPlayer();
+		PlayerCamera cam = getPlayer().getPlayerCamera();
+		player.updatePlayerPosition();
+		cam.updateViewPointX();
+		cam.updateViewPointY();
 	}
 
 	public void createTestLevel() {
@@ -116,7 +124,7 @@ public class Game extends JPanel implements KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
+		map = new Map3("resources/Zones/TestMap/Wüste6.tmx");
 	}
 
 	public void run() {

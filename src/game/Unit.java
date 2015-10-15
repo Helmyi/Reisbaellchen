@@ -83,7 +83,6 @@ public class Unit extends Entity{
 		actions.get(currentAction).tick();
 		
 		if (this.isMoving()) {
-
 			switch (currentViewDirection) {
 			case DOWN:
 				this.y += speed;
