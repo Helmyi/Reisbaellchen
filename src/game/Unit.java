@@ -162,10 +162,6 @@ public class Unit extends Entity{
 		}
 	}
 
-	public boolean isFighting() {
-		return (currentAction!=0 && currentAction!= 1) ? true: false;
-	}
-
 	public void setAction(int action) {
 		currentAction = action;
 	}
