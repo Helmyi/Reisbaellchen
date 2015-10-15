@@ -10,21 +10,21 @@ import game.Unit;
  * 
  * @author Helmi
  */
-public abstract class UnitAI{
-	private List<Unit> controlledUnits; 
-	
+public abstract class UnitAI {
+	private List<Unit> controlledUnits;
+
 	public UnitAI(Unit controlledUnit) {
 		controlledUnits = new ArrayList<Unit>();
 		addUnit(controlledUnit);
 	}
-	
-	public List<Unit> getControledUnits(){
+
+	public List<Unit> getControledUnits() {
 		return controlledUnits;
 	}
-	
-	public void addUnit(Unit unit){
+
+	public void addUnit(Unit unit) {
 		controlledUnits.add(unit);
 	}
-	
+
 	public abstract void tick();
 }
