@@ -23,46 +23,46 @@ public class AI_MoveRandom extends UnitAI {
 		int temp;
 		int i = 0;
 		for (Unit unit : getControledUnits()) {
-			
+
 			temp = random.nextInt() % 4;
 
-			// make sure unit doesnt move until its clear that movementRadius
+			// make sure unit doesn't move until its clear that movementRadius
 			// wont be exceeded
 			unit.setMoving(false);
-			
+
 			// prevent units from moving too often
-			if (System.currentTimeMillis() % 10 != 0)
-			{
+			// TODO: find better solution for this
+			if (System.currentTimeMillis() % 13 != 0) {
 				continue;
 			}
 			// random move in random direction
 			switch (temp) {
 			case 0:
-				unit.setUnitAction(Unit.UnitAction.MOVE_DOWN);
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_DOWN))
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_DOWN)) {
+					unit.setUnitAction(Unit.UnitAction.MOVE_DOWN);
 					unit.setMoving(random.nextBoolean());
-				else
+				} else
 					unit.setMoving(false);
 				break;
 			case 1:
-				unit.setUnitAction(Unit.UnitAction.MOVE_UP);
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_UP))
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_UP)) {
+					unit.setUnitAction(Unit.UnitAction.MOVE_UP);
 					unit.setMoving(random.nextBoolean());
-				else
+				} else
 					unit.setMoving(false);
 				break;
 			case 2:
-				unit.setUnitAction(Unit.UnitAction.MOVE_LEFT);
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_LEFT))
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_LEFT)) {
+					unit.setUnitAction(Unit.UnitAction.MOVE_LEFT);
 					unit.setMoving(random.nextBoolean());
-				else
+				} else
 					unit.setMoving(false);
 				break;
 			case 3:
-				unit.setUnitAction(Unit.UnitAction.MOVE_RIGHT);
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_RIGHT))
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_RIGHT)) {
+					unit.setUnitAction(Unit.UnitAction.MOVE_RIGHT);
 					unit.setMoving(random.nextBoolean());
-				else
+				} else
 					unit.setMoving(false);
 				break;
 			default:
