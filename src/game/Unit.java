@@ -29,56 +29,45 @@ public class Unit extends Entity {
 		super(image, x, y);
 		init();
 	}
-	
+
 	public Unit(Image image, double x, double y, double speed) {
 		super(image, x, y);
 		init();
 		this.speed = speed;
 	}
-	
-	private boolean unitCollision()
-	{
+
+	private boolean unitCollision() {
 		int tempX[] = new int[2];
 		int tempY[] = new int[2];
-		if (currentUnitAction == UnitAction.MOVE_DOWN)
-		{
+		if (currentUnitAction == UnitAction.MOVE_DOWN) {
 			tempX[0] = (int) this.x;
 			tempX[1] = (int) this.x + tileWidth;
 			tempY[0] = (int) this.y + tileHeight;
 			tempY[1] = (int) this.y + tileHeight;
-		}
-		else if (currentUnitAction == UnitAction.MOVE_UP)
-		{
+		} else if (currentUnitAction == UnitAction.MOVE_UP) {
 			tempX[0] = (int) this.x;
 			tempX[1] = (int) this.x + tileWidth;
 			tempY[0] = (int) this.y;// + tileHeight/ 2;
 			tempY[1] = (int) this.y;// + tileHeight/ 2;
-		}
-		else if(currentUnitAction == UnitAction.MOVE_LEFT)
-		{
+		} else if (currentUnitAction == UnitAction.MOVE_LEFT) {
 			tempX[0] = (int) this.x;// + tileWidth/ 2;
 			tempX[1] = (int) this.x;// + tileWidth/ 2;
 			tempY[0] = (int) this.y;
 			tempY[1] = (int) this.y + tileHeight;
-		}
-		else if(currentUnitAction == UnitAction.MOVE_RIGHT)
-		{
+		} else if (currentUnitAction == UnitAction.MOVE_RIGHT) {
 			tempX[0] = (int) this.x + tileWidth;// / 2;
 			tempX[1] = (int) this.x + tileWidth;// / 2;
 			tempY[0] = (int) this.y;
 			tempY[1] = (int) this.y + tileHeight;
 		}
-		for (int i = 0; i < 2; i++)
-		{
-			for (int j = 0; j < 2; j++)
-			{
-				if (Game.getGameInstance().getMap().getPositionCollision(tempX[i],tempY[j]))
-				{
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				if (Game.getGameInstance().getMap().getPositionCollision(tempX[i], tempY[j])) {
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -91,8 +80,7 @@ public class Unit extends Entity {
 			switch (currentUnitAction) {
 			case MOVE_DOWN:
 				this.y += speed;
-				if (unitCollision())
-				{
+				if (unitCollision()) {
 					this.y -= speed;
 				}
 				if (this.y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2) {
@@ -101,8 +89,7 @@ public class Unit extends Entity {
 				break;
 			case MOVE_UP:
 				this.y -= speed;
-				if (unitCollision())
-				{
+				if (unitCollision()) {
 					this.y += speed;
 				}
 				if (this.y < 0) {
@@ -111,8 +98,7 @@ public class Unit extends Entity {
 				break;
 			case MOVE_RIGHT:
 				this.x += speed;
-				if (unitCollision())
-				{
+				if (unitCollision()) {
 					this.x -= speed;
 				}
 				if (this.x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2) {
@@ -121,8 +107,7 @@ public class Unit extends Entity {
 				break;
 			case MOVE_LEFT:
 				this.x -= speed;
-				if (unitCollision())
-				{
+				if (unitCollision()) {
 					this.x += speed;
 				}
 				if (this.x < 0) {
@@ -154,13 +139,12 @@ public class Unit extends Entity {
 	public void setUnitAction(UnitAction action) {
 		this.currentUnitAction = action;
 	}
-	
+
 	public UnitAction getUnitAction() {
 		return this.currentUnitAction;
 	}
-	
-	public double getSpeed()
-	{
+
+	public double getSpeed() {
 		return speed;
 	}
 

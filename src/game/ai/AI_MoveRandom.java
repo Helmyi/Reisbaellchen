@@ -15,7 +15,7 @@ public class AI_MoveRandom extends UnitAI {
 	public AI_MoveRandom(Unit controlledUnit) {
 		super(controlledUnit);
 		random = new Random();
-		movementRadius = 32 * 2;
+		movementRadius = 32 * 4; // 4 tiles in every direction
 	}
 
 	@Override
@@ -23,30 +23,51 @@ public class AI_MoveRandom extends UnitAI {
 		int temp;
 		int i = 0;
 		for (Unit unit : getControledUnits()) {
+
 			temp = random.nextInt() % 4;
 
-			// random move direction
+			// make sure unit doesn't move until its clear that movementRadius
+			// wont be exceeded
+			unit.setMoving(false);
+
+			// prevent units from moving too often
+			// TODO: find better solution for this
+			if (System.currentTimeMillis() % 13 != 0) {
+				continue;
+			}
+			// random move in random direction
 			switch (temp) {
 			case 0:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_DOWN))
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_DOWN)) {
 					unit.setUnitAction(Unit.UnitAction.MOVE_DOWN);
+					unit.setMoving(random.nextBoolean());
+				} else
+					unit.setMoving(false);
 				break;
 			case 1:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_UP))
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_UP)) {
 					unit.setUnitAction(Unit.UnitAction.MOVE_UP);
+					unit.setMoving(random.nextBoolean());
+				} else
+					unit.setMoving(false);
 				break;
 			case 2:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_LEFT))
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_LEFT)) {
 					unit.setUnitAction(Unit.UnitAction.MOVE_LEFT);
+					unit.setMoving(random.nextBoolean());
+				} else
+					unit.setMoving(false);
 				break;
 			case 3:
-				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_RIGHT))
+				if (nextMovementStepWithinMovementRadius(unit, unitSpawnPoints.get(i), Unit.UnitAction.MOVE_RIGHT)) {
 					unit.setUnitAction(Unit.UnitAction.MOVE_RIGHT);
+					unit.setMoving(random.nextBoolean());
+				} else
+					unit.setMoving(false);
 				break;
 			default:
 				break;
 			}
-			unit.setMoving(random.nextBoolean());
 			i++;
 		}
 	}

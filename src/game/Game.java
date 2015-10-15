@@ -39,7 +39,7 @@ public class Game extends JPanel implements KeyListener {
 
 	public Game() {
 		createTestLevel();
-		
+
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
 	}
@@ -61,13 +61,12 @@ public class Game extends JPanel implements KeyListener {
 	 */
 	@Override
 	public void paint(Graphics g) {
-		if (imageBuffer == null){
+		if (imageBuffer == null) {
 			imageBuffer = this.createImage(width, height);
 			graphicBuffer = imageBuffer.getGraphics();
 		}
-		
-		player.getPlayerCamera().paint(graphicBuffer);
 
+		player.getPlayerCamera().paint(graphicBuffer);
 		g.drawImage(imageBuffer, 0, 0, this);
 	}
 
@@ -78,42 +77,42 @@ public class Game extends JPanel implements KeyListener {
 		for (UnitAI ai : unitAIs) {
 			ai.tick();
 		}
-		
+
 		for (Entity ent : entityList) {
 			ent.tick();
 		}
 	}
-	
-	public void createTestLevel(){
+
+	public void createTestLevel() {
 		entityList = new ArrayList<Entity>();
 		unitImages = new ArrayList<Image>();
 		unitAIs = new ArrayList<UnitAI>();
 		player = new Player();
 		viewBegin = new Point(0, 0);
-		
 
 		try {
 			unitImages.add(ImageIO.read(new File("resources/Hero_Base.png")));
 			entityList.add(new Unit(unitImages.get(0), 10 * 32, 5 * 32));
 			player.setPlayerUnit((Unit) entityList.get(0));
-			PlayerCamera cam = new PlayerCamera((int)player.getPlayerUnit().getX(), (int)player.getPlayerUnit().getY());
+			PlayerCamera cam = new PlayerCamera((int) player.getPlayerUnit().getX(),
+					(int) player.getPlayerUnit().getY());
 			cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
 			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
 			player.setPlayerCamera(cam);
 
-			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32, 2));
-			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32, 4));
-			entityList.add(new Unit(unitImages.get(0), 11 * 32, 7 * 32, 8));
-			entityList.add(new Unit(unitImages.get(0), 11 * 32, 8 * 32, 14));
-			
-			unitAIs.add(new AI_MoveRandom((Unit)entityList.get(1)));
-			unitAIs.get(0).addUnit((Unit)entityList.get(2));
+			entityList.add(new Unit(unitImages.get(0), 11 * 32, 5 * 32, 1));
+			entityList.add(new Unit(unitImages.get(0), 13 * 32, 7 * 32, 2));
+			entityList.add(new Unit(unitImages.get(0), 15 * 32, 7 * 32, 3));
+			// entityList.add(new Unit(unitImages.get(0), 11 * 32, 8 * 32, 14));
+
+			unitAIs.add(new AI_MoveRandom((Unit) entityList.get(1)));
+			unitAIs.get(0).addUnit((Unit) entityList.get(2));
 			unitAIs.get(0).addUnit((Unit)entityList.get(3));
-			unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
+			// unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 		map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
 	}
 
@@ -144,12 +143,12 @@ public class Game extends JPanel implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(arg0.getKeyCode() == KeyEvent.VK_0){
-			map = new Map3("resources/Zones/TestMap/Wüstesd.tmx");
+		if (arg0.getKeyCode() == KeyEvent.VK_0) {
+			map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
 
 			return;
 		}
-		
+
 		player.keyPressed(arg0);
 	}
 
@@ -166,8 +165,8 @@ public class Game extends JPanel implements KeyListener {
 	public static Game getGameInstance() {
 		return theGame;
 	}
-	
-	public List<Entity> getEntityList(){
+
+	public List<Entity> getEntityList() {
 		return entityList;
 	}
 
@@ -178,9 +177,8 @@ public class Game extends JPanel implements KeyListener {
 	public Map getMap() {
 		return map;
 	}
-	
-	public Player getPlayer()
-	{
+
+	public Player getPlayer() {
 		return player;
 	}
 }
