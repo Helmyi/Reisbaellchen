@@ -1,6 +1,14 @@
+Baloc:
+Geschichte: 
+Baloc ist ein magischer Pyromane aus Vietnam,
+
+
+
 Klasse: 
 Fähigkeiten:
 Attacke 1: 
 Attacke 2:
-Ultimate: Mit seinen komplex aufgebauten Zaubersprüchen zerstört er durch das Hinzufügen von "war gewesen" die Zeitlinie.
+Ultimate: Mit seinen komplex aufgebauten Zaubersprüchen zerstört er durch das Hinzufügen von "war gewesen" die Zeitlinie. 
 Passive: 
+
+Sonstiges: Zauberspruch: "Du warst gewesen als du gewesen warst!"
