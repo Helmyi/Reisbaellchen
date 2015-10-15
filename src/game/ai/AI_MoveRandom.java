@@ -23,12 +23,18 @@ public class AI_MoveRandom extends UnitAI {
 		int temp;
 		int i = 0;
 		for (Unit unit : getControledUnits()) {
+			
 			temp = random.nextInt() % 4;
 
 			// make sure unit doesnt move until its clear that movementRadius
 			// wont be exceeded
 			unit.setMoving(false);
-
+			
+			// prevent units from moving too often
+			if (System.currentTimeMillis() % 10 != 0)
+			{
+				continue;
+			}
 			// random move in random direction
 			switch (temp) {
 			case 0:
