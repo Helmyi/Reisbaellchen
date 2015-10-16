@@ -1,7 +1,7 @@
 package map;
 
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.List;
 
 public abstract class Map {
@@ -13,7 +13,7 @@ public abstract class Map {
 
 	public Map(String path) {
 		tileSize = 32;
-		tilePath = "resources/Zones/TestMap/";
+		tilePath = "src/main/resources/Zones/TestMap/";
 	}
 
 	
