@@ -20,7 +20,7 @@ public class HealthBar extends Bar {
 		g.setColor(Color.BLACK);
 		g.drawRect(x - viewPointX, y - viewPointY, barWidth, barHeight);
 		g.setColor(barColor);
-		g.fillRect(x - viewPointX + 1, y - viewPointY + 1, (int) fillWidth - 1, barHeight - 1);
+		g.fillRect(x - viewPointX + 1, y - viewPointY + 1, (int) fillWidth + 50, barHeight - 1);
 	}
 
 	public void setFillWidth(int fillWidth) {
