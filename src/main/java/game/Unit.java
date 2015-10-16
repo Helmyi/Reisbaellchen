@@ -5,6 +5,7 @@ import game.actions.Action_Kick;
 import game.actions.Action_Move;
 import game.actions.Action_Punch;
 import game.actions.Action_Stand;
+import game.ui.HealthBar;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -18,6 +19,7 @@ public class Unit extends Entity{
 	
 	private List<Action> actions;
 	private int currentAction;
+	private HealthBar healthBar;
 
 	public static enum ViewDirection {
 		DOWN(0), UP(1), RIGHT(2), LEFT(3);
@@ -81,7 +83,7 @@ public class Unit extends Entity{
 	@Override
 	public void tick() {
 		actions.get(currentAction).tick();
-		
+		healthBar.tick();
 		if (this.isMoving()) {
 			switch (currentViewDirection) {
 			case DOWN:
@@ -127,6 +129,7 @@ public class Unit extends Entity{
 	@Override
 	public void paint(Graphics g) {
 		actions.get(currentAction).drawCurrentImage(g);
+		healthBar.paint(g);
 	}
 
 	public void setViewDirection(ViewDirection action) {
@@ -161,11 +164,12 @@ public class Unit extends Entity{
 	private void init() {
 		speed = 10;
 		isMoving = false;
-		this.tileHeight = 64;
-		this.tileWidth = 32;
-		this.currentViewDirection = ViewDirection.DOWN;
+		tileHeight = 64;
+		tileWidth = 32;
 		
-		//actions
+		currentViewDirection = ViewDirection.DOWN;
+		healthBar = new HealthBar(1000);
+
 		actions = new ArrayList<Action>();
 		actions.add(new Action_Stand(this));
 		actions.add(new Action_Move(this));
