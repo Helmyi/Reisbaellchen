@@ -110,6 +110,7 @@ public class Player {
 		calcMoveDirection();
 		
 		if (arg0.getKeyCode() == key_Action1) {
+
 			playerUnit.setAction(2);
 		}
 		if (arg0.getKeyCode() == key_Action2) {

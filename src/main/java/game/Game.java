@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -186,5 +187,21 @@ public class Game extends JPanel implements KeyListener {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public List<Unit> getUnitsAt(Point2D point) {
+        double x = point.getX();
+        double y = point.getY();
+        List<Unit> units = new ArrayList<>();
+        for (Entity entity : entityList) {
+            if (entity instanceof Unit) {
+                Unit unit = (Unit) entity;
+                if (unit.getX() < x && x < (unit.getX() + unit.getTileWidth()) &&
+                        unit.getY() < y && y < (unit.getY() + unit.getTileHeight())) {
+                    units.add(unit);
+                }
+            }
+        }
+        return units;
     }
 }
