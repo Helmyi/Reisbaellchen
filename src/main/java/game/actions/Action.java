@@ -12,8 +12,8 @@ public abstract class Action {
 	private int firstTileX;
 	private int firstTileY;
 	private Unit owner;
-	
-	public Action(Unit owner, int numberStates, int firstTileX, int firstTileY, String name){
+
+	public Action(Unit owner, int numberStates, int firstTileX, int firstTileY, String name) {
 		this.setOwner(owner);
 		this.setNumberStates(numberStates);
 		this.setFirstTileX(firstTileX);
@@ -21,21 +21,23 @@ public abstract class Action {
 		this.setName(name);
 		currentStep = 0;
 	}
-	
+
 	public abstract void tick();
-	
+
 	public abstract void drawCurrentImage(Graphics g);
 
-	protected void basicImagePaint(Graphics g){
+	protected void basicImagePaint(Graphics g) {
 		int drawX = (int) getOwner().getX() - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
 		int drawY = (int) getOwner().getY() - Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
 
-		g.drawImage(getOwner().getImage(), drawX, drawY, drawX + getOwner().getTileWidth(), drawY + getOwner().getTileHeight(),
-				(getCurrentAnimationStep() + getFirstTileX()) * getOwner().getTileWidth(), 
+		g.drawImage(getOwner().getImage(), drawX, drawY, drawX + getOwner().getTileWidth(),
+				drawY + getOwner().getTileHeight(),
+				(getCurrentAnimationStep() + getFirstTileX()) * getOwner().getTileWidth(),
 				(getOwner().getViewDirection().toInt() + getFirstTileY()) * getOwner().getTileHeight(),
-				(getCurrentAnimationStep() + getFirstTileX()+1) * getOwner().getTileWidth(),
+				(getCurrentAnimationStep() + getFirstTileX() + 1) * getOwner().getTileWidth(),
 				(getOwner().getViewDirection().toInt() + 1 + getFirstTileY()) * getOwner().getTileHeight(), null);
 	}
+
 	public String getName() {
 		return name;
 	}
@@ -75,12 +77,12 @@ public abstract class Action {
 	public void setOwner(Unit owner) {
 		this.owner = owner;
 	}
-	
-	public int getCurrentAnimationStep(){
+
+	public int getCurrentAnimationStep() {
 		return currentStep;
 	}
-	
-	protected void setCurrentAnimationStep(int currentStep){
-		this.currentStep = currentStep%numberAnimationSteps;
+
+	protected void setCurrentAnimationStep(int currentStep) {
+		this.currentStep = currentStep % numberAnimationSteps;
 	}
 }

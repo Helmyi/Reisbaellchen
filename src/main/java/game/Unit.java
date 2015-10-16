@@ -128,11 +128,12 @@ public class Unit extends Entity {
 		}
 		updateHealthBar();
 	}
-	public void updateHealthBar()
-	{
-		double fillWidth = currentHealth / maxHealth;
+
+	public void updateHealthBar() {
+		double fillWidth = (double) currentHealth / maxHealth * healthBar.getBarWidth();
 		healthBar.setFillWidth((int) fillWidth);
 	}
+
 	@Override
 	public void paint(Graphics g) {
 		actions.get(currentAction).drawCurrentImage(g);

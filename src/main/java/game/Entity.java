@@ -3,7 +3,7 @@ package game;
 import java.awt.Graphics;
 import java.awt.Image;
 
-public abstract class Entity implements Comparable<Entity>{
+public abstract class Entity implements Comparable<Entity> {
 	protected double x;
 	protected double y;
 	protected Image entityImage;
@@ -41,8 +41,8 @@ public abstract class Entity implements Comparable<Entity>{
 	public int getTileHeight() {
 		return tileHeight;
 	}
-	
-	public Image getImage(){
+
+	public Image getImage() {
 		return entityImage;
 	}
 
