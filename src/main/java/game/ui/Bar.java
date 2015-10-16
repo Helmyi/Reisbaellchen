@@ -6,7 +6,7 @@ public abstract class Bar {
 	protected int barHeight;
 	protected int barWidth;
 	protected int fillWidth;
-	
+
 	Color barColor;
 
 	public Bar(int width, int height, Color color) {
@@ -14,5 +14,13 @@ public abstract class Bar {
 		barHeight = height;
 		barColor = color;
 		fillWidth = width;
+	}
+
+	public int getBarWidth() {
+		return barWidth;
+	}
+
+	public void setFillWidth(int fillWidth) {
+		this.fillWidth = fillWidth;
 	}
 }
