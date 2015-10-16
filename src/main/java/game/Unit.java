@@ -89,39 +89,39 @@ public class Unit extends Entity {
 		if (this.isMoving()) {
 			switch (currentViewDirection) {
 			case DOWN:
-				this.y += speed;
+				y += speed;
 				if (unitCollision()) {
-					this.y -= speed;
+					y -= speed;
 				}
-				if (this.y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2) {
-					this.y = Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2;
+				if (y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2) {
+					y = Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2;
 				}
 				break;
 			case UP:
-				this.y -= speed;
+				y -= speed;
 				if (unitCollision()) {
-					this.y += speed;
+					y += speed;
 				}
-				if (this.y < 0) {
-					this.y = 0;
+				if (y < 0) {
+					y = 0;
 				}
 				break;
 			case RIGHT:
-				this.x += speed;
+				x += speed;
 				if (unitCollision()) {
-					this.x -= speed;
+					x -= speed;
 				}
-				if (this.x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2) {
-					this.x = Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2;
+				if (x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2) {
+					x = Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2;
 				}
 				break;
 			case LEFT:
-				this.x -= speed;
+				x -= speed;
 				if (unitCollision()) {
-					this.x += speed;
+					x += speed;
 				}
-				if (this.x < 0) {
-					this.x = 0;
+				if (x < 0) {
+					x = 0;
 				}
 				break;
 			}
