@@ -3,27 +3,27 @@ package game.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import game.Game;
+
 public class HealthBar extends Bar {
-	private double percentage;
-	private double fillWidth;
-	public HealthBar(int maxValue) {
-		super(maxValue);
-		this.color = Color.GREEN;
+
+	public HealthBar(int width, int height, Color color) {
+		super(width, height, color);
+
 	}
 
-	public void paint(Graphics g) {
+	public void paint(Graphics g, int x, int y) {
+		int viewPointX, viewPointY;
+
+		viewPointX = Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
+		viewPointY = Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
 		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, this.barWidth, this.barHeight);
-		g.setColor(color);
-		g.fillRect(1, 1, (int)this.fillWidth - 1, this.barHeight - 1);
+		g.drawRect(x - viewPointX, y - viewPointY, barWidth, barHeight);
+		g.setColor(barColor);
+		g.fillRect(x - viewPointX + 1, y - viewPointY + 1, (int) fillWidth - 1, barHeight - 1);
 	}
 
-	public void updateBar() {
-		this.percentage = this.currentValue / this.maxValue;
-		this.fillWidth = this.percentage * this.barWidth;
-	}
-
-	public void tick() {
-		updateBar();
+	public void setFillWidth(int fillWidth) {
+		this.fillWidth = fillWidth;
 	}
 }

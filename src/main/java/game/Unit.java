@@ -7,19 +7,22 @@ import game.actions.Action_Punch;
 import game.actions.Action_Stand;
 import game.ui.HealthBar;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Unit extends Entity{
+public class Unit extends Entity {
 	private boolean isMoving;
 	private ViewDirection currentViewDirection;
 	private double speed;
-	
+
 	private List<Action> actions;
 	private int currentAction;
 	private HealthBar healthBar;
+	private int maxHealth;
+	private int currentHealth;
 
 	public static enum ViewDirection {
 		DOWN(0), UP(1), RIGHT(2), LEFT(3);
@@ -83,7 +86,6 @@ public class Unit extends Entity{
 	@Override
 	public void tick() {
 		actions.get(currentAction).tick();
-		healthBar.tick();
 		if (this.isMoving()) {
 			switch (currentViewDirection) {
 			case DOWN:
@@ -124,12 +126,17 @@ public class Unit extends Entity{
 				break;
 			}
 		}
+		updateHealthBar();
 	}
-
+	public void updateHealthBar()
+	{
+		double fillWidth = currentHealth / maxHealth;
+		healthBar.setFillWidth((int) fillWidth);
+	}
 	@Override
 	public void paint(Graphics g) {
 		actions.get(currentAction).drawCurrentImage(g);
-		healthBar.paint(g);
+		healthBar.paint(g, (int) x, (int) y);
 	}
 
 	public void setViewDirection(ViewDirection action) {
@@ -150,9 +157,9 @@ public class Unit extends Entity{
 
 	public void setMoving(boolean isMoving) {
 		this.isMoving = isMoving;
-		if(isMoving){
+		if (isMoving) {
 			currentAction = 1;
-		}else{
+		} else {
 			currentAction = 0;
 		}
 	}
@@ -166,9 +173,11 @@ public class Unit extends Entity{
 		isMoving = false;
 		tileHeight = 64;
 		tileWidth = 32;
-		
+
+		maxHealth = 100;
+		currentHealth = 69;
 		currentViewDirection = ViewDirection.DOWN;
-		healthBar = new HealthBar(1000);
+		healthBar = new HealthBar(tileWidth, 8, Color.GREEN);
 
 		actions = new ArrayList<Action>();
 		actions.add(new Action_Stand(this));
@@ -177,5 +186,4 @@ public class Unit extends Entity{
 		actions.add(new Action_Kick(this));
 		currentAction = 0;
 	}
-
 }

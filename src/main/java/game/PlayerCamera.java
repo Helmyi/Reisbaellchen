@@ -26,8 +26,6 @@ public class PlayerCamera {
 	}
 
 	public void paint(Graphics g) {
-
-		
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Game.getGameInstance().getWidth(), Game.getGameInstance().getHeight());
 
