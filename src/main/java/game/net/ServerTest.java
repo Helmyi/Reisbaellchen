@@ -20,8 +20,12 @@ public class ServerTest {
 				Scanner in = new Scanner(client.getInputStream());
 				PrintWriter out = new PrintWriter(client.getOutputStream(),	true);
 
-			    String factor1 = in.nextLine();	
-			    System.out.println("in: " + factor1);
+			    String message = in.nextLine();	
+			    System.out.println("in: " + message);
+			    out.println("Hallo Client");
+			    
+			    System.out.println("Done");
+			    in.close();
 				
 				
 			} catch (IOException e) {

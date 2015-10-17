@@ -16,7 +16,11 @@ public class ClientTest {
 			PrintWriter out = new PrintWriter(server.getOutputStream(), true);
 
 			out.println("Hallo Server");
+		    String message = in.nextLine();	
+		    System.out.println("in: " + message);
 			System.out.println("Done");
+			
+			in.close();
 			
 
 		} catch (UnknownHostException e) {
