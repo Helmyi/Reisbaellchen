@@ -42,6 +42,7 @@ public abstract class Map {
 	public abstract boolean getTileCollision(int tileX, int tileY);
 
 	public boolean getPositionCollision(int posX, int posY) {
+		if(posX < 0 || posY < 0) return true;
 		return getTileCollision((posX / tileSize), posY / tileSize);
 	}
 }

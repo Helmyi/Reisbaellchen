@@ -64,7 +64,7 @@ public class Map3 extends Map {
 
 	@Override
 	public boolean getTileCollision(int tileX, int tileY) {
-		if (tileX + tileCountY * tileY >= collision.length || tileX + tileCountY * tileY < 0)
+		if (tileX + tileCountY * tileY >= collision.length || tileX < 0 || tileY < 0 || tileX >= tileCountX || tileY >= tileCountY)
 			return true;
 		return collision[tileX + tileCountY * tileY];
 	}

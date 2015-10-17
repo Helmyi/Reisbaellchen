@@ -43,6 +43,16 @@ public class Unit extends Entity {
 	}
 
 	private boolean unitCollision() {
+		if(!Game.getGameInstance().getMap().getPositionCollision((int)x, (int)y + tileHeight/2)
+			&& !Game.getGameInstance().getMap().getPositionCollision((int)x, (int)y + tileHeight-1)
+			&& !Game.getGameInstance().getMap().getPositionCollision((int)x + tileWidth-1, (int)y + tileHeight/2)
+			&& !Game.getGameInstance().getMap().getPositionCollision((int)x + tileWidth-1, (int)y + tileHeight-1)){
+			return false;
+		}
+		return true;
+	}
+
+	private boolean unitCollision2() {
 		int tempX[] = new int[2];
 		int tempY[] = new int[2];
 		if (currentViewDirection == ViewDirection.DOWN) {
@@ -86,36 +96,29 @@ public class Unit extends Entity {
 				y += speed;
 				if (unitCollision()) {
 					y -= speed;
-				}
-				if (y > Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2) {
-					y = Game.getGameInstance().getMap().getMapHeight() - tileHeight / 2;
+					//move as close as possible
+					y += Game.getGameInstance().getMap().getTileSize() - (y+63)%Game.getGameInstance().getMap().getTileSize() - 1;
 				}
 				break;
 			case UP:
 				y -= speed;
 				if (unitCollision()) {
 					y += speed;
-				}
-				if (y < 0) {
-					y = 0;
+					y -= (int)(y+32)%Game.getGameInstance().getMap().getTileSize();
 				}
 				break;
 			case RIGHT:
 				x += speed;
 				if (unitCollision()) {
 					x -= speed;
-				}
-				if (x > Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2) {
-					x = Game.getGameInstance().getMap().getMapWidth() - tileWidth / 2;
+					x += Game.getGameInstance().getMap().getTileSize() - (x+63)%Game.getGameInstance().getMap().getTileSize() - 1;
 				}
 				break;
 			case LEFT:
 				x -= speed;
 				if (unitCollision()) {
 					x += speed;
-				}
-				if (x < 0) {
-					x = 0;
+					x -= (int)(x+32)%Game.getGameInstance().getMap().getTileSize();
 				}
 				break;
 			}
