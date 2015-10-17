@@ -14,7 +14,7 @@ public class HealthBar extends Bar {
 
 	public void paint(Graphics g, int x, int y) {
 		int viewPointX, viewPointY;
-
+		// attach health bar to top of unit that owns it
 		viewPointX = Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointX();
 		viewPointY = Game.getGameInstance().getPlayer().getPlayerCamera().getViewPointY();
 		g.setColor(Color.BLACK);

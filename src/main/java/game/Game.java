@@ -26,7 +26,6 @@ public class Game extends JPanel implements KeyListener {
     private int fps = 55;
     private static int width = 1000;
     private static int height = 600;
-    private Point viewBegin;
     private Map map;
 
     private Player player;
@@ -94,7 +93,6 @@ public class Game extends JPanel implements KeyListener {
         unitImages = new ArrayList<Image>();
         unitAIs = new ArrayList<UnitAI>();
         player = new Player();
-        viewBegin = new Point(0, 0);
 
         try {
             unitImages.add(ImageIO.read(Resources.getResource("Fa_big_head2.png")));
@@ -175,10 +173,6 @@ public class Game extends JPanel implements KeyListener {
 
     public List<Entity> getEntityList() {
         return entityList;
-    }
-
-    public Point getViewBegin() {
-        return viewBegin;
     }
 
     public Map getMap() {
