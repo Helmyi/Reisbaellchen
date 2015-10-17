@@ -52,41 +52,6 @@ public class Unit extends Entity {
 		return true;
 	}
 
-	private boolean unitCollision2() {
-		int tempX[] = new int[2];
-		int tempY[] = new int[2];
-		if (currentViewDirection == ViewDirection.DOWN) {
-			tempX[0] = (int) this.x;
-			tempX[1] = (int) this.x + tileWidth;
-			tempY[0] = (int) this.y + tileHeight;
-			tempY[1] = (int) this.y + tileHeight;
-		} else if (currentViewDirection == ViewDirection.UP) {
-			tempX[0] = (int) this.x;
-			tempX[1] = (int) this.x + tileWidth;
-			tempY[0] = (int) this.y;// + tileHeight/ 2;
-			tempY[1] = (int) this.y;// + tileHeight/ 2;
-		} else if (currentViewDirection == ViewDirection.LEFT) {
-			tempX[0] = (int) this.x;// + tileWidth/ 2;
-			tempX[1] = (int) this.x;// + tileWidth/ 2;
-			tempY[0] = (int) this.y;
-			tempY[1] = (int) this.y + tileHeight;
-		} else if (currentViewDirection == ViewDirection.RIGHT) {
-			tempX[0] = (int) this.x + tileWidth;// / 2;
-			tempX[1] = (int) this.x + tileWidth;// / 2;
-			tempY[0] = (int) this.y;
-			tempY[1] = (int) this.y + tileHeight;
-		}
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				if (Game.getGameInstance().getMap().getPositionCollision(tempX[i], tempY[j])) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
 	@Override
 	public void tick() {
 		actions.get(currentAction).tick();
