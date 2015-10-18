@@ -4,6 +4,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 public abstract class Entity implements Comparable<Entity> {
+	private static int idCounter = 0;
+	
+	protected final int id;
 	protected double x;
 	protected double y;
 	protected Image entityImage;
@@ -11,6 +14,7 @@ public abstract class Entity implements Comparable<Entity> {
 	protected int tileHeight;
 
 	public Entity(Image image, double x, double y) {
+		id = ++idCounter;
 		this.entityImage = image;
 		this.tileHeight = image.getHeight(null);
 		this.tileWidth = image.getWidth(null);
@@ -53,5 +57,9 @@ public abstract class Entity implements Comparable<Entity> {
 	@Override
 	public int compareTo(Entity otherEnt) {
 		return otherEnt.getY() <= getY() ? 1 : -1;
+	}
+	
+	public int getId(){
+		return id;
 	}
 }

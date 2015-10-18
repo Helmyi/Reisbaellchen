@@ -46,6 +46,9 @@ public class Player {
 	}
 
 	private void calcMoveDirection() {
+		Unit.ViewDirection tempViewDirection = playerUnit.getViewDirection();
+		boolean tempMoving = playerUnit.isMoving();
+		
 		if ((key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed
 						&& lastPressedMoveKey == key_MoveUp)
@@ -53,8 +56,8 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveUp)
 				|| (key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// up
-			playerUnit.setViewDirection(Unit.ViewDirection.UP);
-			playerUnit.setMoving(true);
+			tempViewDirection = Unit.ViewDirection.UP;
+			tempMoving = true;
 		} else if ((!key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed
 						&& lastPressedMoveKey == key_MoveDown)
@@ -62,8 +65,8 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveDown)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// down
-			playerUnit.setViewDirection(Unit.ViewDirection.DOWN);
-			playerUnit.setMoving(true);
+			tempViewDirection = Unit.ViewDirection.DOWN;
+			tempMoving = true;
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed
 						&& lastPressedMoveKey == key_MoveLeft)
@@ -71,8 +74,8 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveLeft)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed)) {
 			// left
-			playerUnit.setViewDirection(Unit.ViewDirection.LEFT);
-			playerUnit.setMoving(true);
+			tempViewDirection = Unit.ViewDirection.LEFT;
+			tempMoving = true;
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed
 						&& lastPressedMoveKey == key_MoveRight)
@@ -80,14 +83,15 @@ public class Player {
 						&& lastPressedMoveKey == key_MoveRight)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// right
-			playerUnit.setViewDirection(Unit.ViewDirection.RIGHT);
-			playerUnit.setMoving(true);
+			tempViewDirection = Unit.ViewDirection.RIGHT;
+			tempMoving = true;
 		} else if ((!key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (key_MoveUp_Pressed && key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (!key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && key_MoveRight_Pressed)) {
 			// no movement
-			playerUnit.setMoving(false);
+			tempMoving = false;
 		}
+		Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, playerUnit.getAction(), tempViewDirection, tempMoving);
 	}
 
 	public void keyPressed(KeyEvent arg0) {
@@ -110,11 +114,10 @@ public class Player {
 		calcMoveDirection();
 		
 		if (arg0.getKeyCode() == key_Action1) {
-
-			playerUnit.setAction(2);
+			Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 2, playerUnit.getViewDirection(), playerUnit.isMoving());
 		}
 		if (arg0.getKeyCode() == key_Action2) {
-			playerUnit.setAction(3);
+			Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 3, playerUnit.getViewDirection(), playerUnit.isMoving());
 		}
 		
 	}
@@ -135,7 +138,7 @@ public class Player {
 
 		calcMoveDirection();
 		if (arg0.getKeyCode() == key_Action1 || arg0.getKeyCode() == key_Action2) {
-			playerUnit.setAction(0);
+			Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 0, playerUnit.getViewDirection(), playerUnit.isMoving());
 		}
 	}
 

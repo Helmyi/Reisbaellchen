@@ -11,7 +11,7 @@ public class ClientTest {
 		Socket server = null;
 
 		try {
-			server = new Socket("127.0.0.1", 27015);
+			server = new Socket("178.202.79.218", 27015);
 			Scanner in = new Scanner(server.getInputStream());
 			PrintWriter out = new PrintWriter(server.getOutputStream(), true);
 

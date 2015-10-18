@@ -137,6 +137,10 @@ public class Unit extends Entity {
 		currentAction = action;
 	}
 
+	public int getAction() {
+		return currentAction;
+	}
+
 	public void takeDamage(int damage) {
 		currentHealth -= damage;
 	}
