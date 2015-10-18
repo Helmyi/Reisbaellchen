@@ -14,7 +14,8 @@ public class AI_MoveRandom extends UnitAI {
 
 	public AI_MoveRandom(Unit controlledUnit) {
 		super(controlledUnit);
-		random = new Random();
+		long seed = 1;
+		random = new Random(seed);
 		movementRadius = 32 * 4; // 4 tiles in every direction
 	}
 

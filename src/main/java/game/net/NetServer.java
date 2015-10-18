@@ -11,6 +11,7 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class NetServer extends Thread{
+	private int clientCount;
 	private ServerSocket serverSocket;
 	private int port;
 	private List<NetConnectedClient> clients;
@@ -19,6 +20,7 @@ public class NetServer extends Thread{
 	
 	public NetServer(int port) {
 		receivedMessages = new LinkedList<String>();
+		clientCount = 0;
 		this.port = port;
 		clients = new ArrayList<NetConnectedClient>();
 		waitingForNewClients = true;
@@ -40,6 +42,10 @@ public class NetServer extends Thread{
 				client = serverSocket.accept();
 				Scanner in = new Scanner(client.getInputStream());
 				PrintWriter out = new PrintWriter(client.getOutputStream(),	true);
+				
+				//send client number
+				out.println(clientCount);
+				clientCount++;
 				
 				connectedClient = new NetConnectedClient(client, in, out, this);
 				clients.add(connectedClient);

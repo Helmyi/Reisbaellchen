@@ -39,7 +39,13 @@ public class Game extends JPanel implements KeyListener {
 	private List<Entity> entityList;
 
 	public Game() {
-		messageHandler = new NetMessageHandler(new NetClient("127.0.0.1", 27015));
+		try{
+			messageHandler = new NetMessageHandler(new NetClient("127.0.0.1", 27015));
+		}catch(Exception e){
+			messageHandler = new NetMessageHandler(null);
+			e.printStackTrace();
+			System.out.println("could not connect to server");
+		}
 		createTestLevel();
 
 		setFocusable(true); // needed for listeners to work
@@ -113,16 +119,27 @@ public class Game extends JPanel implements KeyListener {
 			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
 			player.setPlayerCamera(cam);
 
-			entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, 1));
-			entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, 2));
-			entityList.add(new Unit(unitImages.get(1), 15 * 32, 7 * 32, 3));
+			entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, 10));
+			entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, 10));
+			entityList.add(new Unit(unitImages.get(1), 15 * 32, 7 * 32, 10));
+			entityList.add(new Unit(unitImages.get(1), 15 * 32, 5 * 32, 10));
+			entityList.add(new Unit(unitImages.get(1), 13 * 32, 5 * 32, 10));
 			entityList
 					.add(new Unit(unitImages.get(1), 15 * 32 + 2, 7 * 32, 14));
 
-			unitAIs.add(new AI_MoveRandom((Unit) entityList.get(1)));
-			unitAIs.get(0).addUnit((Unit) entityList.get(2));
+			unitAIs.add(new AI_MoveRandom((Unit) entityList.get(4)));
+			unitAIs.get(0).addUnit((Unit) entityList.get(5));
 			// unitAIs.get(0).addUnit((Unit)entityList.get(3));
 			// unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
+			
+			//set player unit depending on clientNumber
+			if(messageHandler.getNetClient() != null){
+				List<Unit> units=getAllUnits(); 
+				if(units.size() > messageHandler.getNetClient().getClientNumber()){
+					player.setPlayerUnit(units.get(messageHandler.getNetClient().getClientNumber()));
+				}
+			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -208,6 +225,16 @@ public class Game extends JPanel implements KeyListener {
 						&& y < (unit.getY() + unit.getTileHeight())) {
 					units.add(unit);
 				}
+			}
+		}
+		return units;
+	}
+	
+	public List<Unit> getAllUnits(){
+		List<Unit> units = new ArrayList<>();
+		for (Entity entity : entityList) {
+			if (entity instanceof Unit) {
+				units.add((Unit)entity);
 			}
 		}
 		return units;

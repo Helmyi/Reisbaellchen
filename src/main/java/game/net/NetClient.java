@@ -17,8 +17,9 @@ public class NetClient extends Thread{
 	private Scanner in;
 	private PrintWriter out;
 	private Queue<String> receivedMessages;
+	private int clientNumber;
 	
-	public NetClient(String serverIp, int port){
+	public NetClient(String serverIp, int port) throws Exception{
 		receivedMessages = new LinkedList<String>();
 		this.port = port;
 		this.serverIp = serverIp;
@@ -27,14 +28,16 @@ public class NetClient extends Thread{
 			serverSocket = new Socket(serverIp, port);
 			in = new Scanner(serverSocket.getInputStream());
 			out = new PrintWriter(serverSocket.getOutputStream(), true);
-			System.out.println("Connected to: " + serverIp + ":" + port);	
+			System.out.println("Connected to: " + serverIp + ":" + port);
+			
+			//get clientNumber
+			String message = in.nextLine();
+			clientNumber = Integer.parseInt(message);
 			
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw e;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw e;
 		}
 	}
 	
@@ -43,7 +46,7 @@ public class NetClient extends Thread{
 			String message = in.nextLine();
 			System.out.println("received Message: " + message);
 			receivedMessages.add(message);
-			//
+			//TODO not here
 			Game.getGameInstance().getNetMessageHandler().processMessage(receivedMessages.poll());
 		}
 	}
@@ -62,5 +65,9 @@ public class NetClient extends Thread{
 
 	public String getIp(){
 		return serverIp;
+	}
+	
+	public int getClientNumber(){
+		return clientNumber;
 	}
 }

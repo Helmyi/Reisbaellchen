@@ -8,7 +8,11 @@ public class NetMessageHandler {
 	
 	public NetMessageHandler(NetClient netClient){
 		this.netClient = netClient;
-		netClient.start();
+		if(netClient != null)netClient.start();
+	}
+	
+	public NetClient getNetClient(){
+		return netClient;
 	}
 	
 	public void sendUnitAction(Unit unit, int action, Unit.ViewDirection direction, boolean moving){
