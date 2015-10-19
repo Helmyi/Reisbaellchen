@@ -38,7 +38,7 @@ public class Game extends JPanel implements KeyListener {
 	private List<UnitAI> unitAIs;
 	private List<Image> unitImages;
 	private List<Entity> entityList;
-
+	
 	public Game() {
 		gameTime = 0;
 		try{
@@ -65,17 +65,20 @@ public class Game extends JPanel implements KeyListener {
 
 		theGame.run();
 	}
+	@Override
+	public void paint(Graphics g) {
+		paintAndTickSynchronizer(g);
+	}
 
 	/**
 	 * only paint, no logic
 	 */
-	@Override
-	public void paint(Graphics g) {
+	public void realPaint(Graphics g) {
 		if (imageBuffer == null) {
 			imageBuffer = this.createImage(width, height);
 			graphicBuffer = imageBuffer.getGraphics();
 		}
-
+		
 		player.getPlayerCamera().paint(graphicBuffer);
 		g.drawImage(imageBuffer, 0, 0, this);
 	}
@@ -84,7 +87,6 @@ public class Game extends JPanel implements KeyListener {
 	 * game logic
 	 */
 	private void tick() {
-
 		for (UnitAI ai : unitAIs) {
 			ai.tick();
 		}
@@ -100,6 +102,17 @@ public class Game extends JPanel implements KeyListener {
 		player.updatePlayerPosition();
 		cam.updateViewPointX();
 		cam.updateViewPointY();
+	}
+	
+	/**
+	 * because otherwise it happens that paint and tick run in parallel because paint is an extra threat
+	 * and sometimes takes it times before it start from the repaint call
+	 * g == null -> tick
+	 * g != null -> paint
+	 */
+	private synchronized void paintAndTickSynchronizer(Graphics g){
+		if(g == null) tick();
+		else realPaint(g);
 	}
 
 	public void createTestLevel() {
@@ -146,7 +159,7 @@ public class Game extends JPanel implements KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		map = new Map3("src/main/resources/Zones/TestMap/Wüste.tmx");
+		map = new Map3("src/main/resources/Zones/TestMap/Wüste6.tmx");
 	}
 
 	public void run() {
@@ -155,7 +168,8 @@ public class Game extends JPanel implements KeyListener {
 
 		// loop
 		while (true) {
-			tick();
+			//tick
+			paintAndTickSynchronizer(null);
 			repaint();
 
 			timePassed = System.currentTimeMillis() - timeBefore;
@@ -165,6 +179,7 @@ public class Game extends JPanel implements KeyListener {
 			
 			if (sleepTime < 0) {
 				sleepTime = 0;
+				System.out.println("Game.run: no sleep");
 			}
 
 			try {
