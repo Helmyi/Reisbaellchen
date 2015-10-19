@@ -126,9 +126,9 @@ public class Unit extends Entity {
 
 	public void setMoving(boolean isMoving) {
 		this.isMoving = isMoving;
-		if (isMoving) {
+		if (isMoving && currentAction == 0) {
 			currentAction = 1;
-		} else {
+		} else if(!isMoving && currentAction == 1){
 			currentAction = 0;
 		}
 	}

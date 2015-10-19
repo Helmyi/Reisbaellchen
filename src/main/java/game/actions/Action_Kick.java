@@ -10,13 +10,13 @@ public class Action_Kick extends Action {
 
     public Action_Kick(Unit owner) {
         super(owner, 2, 2, 4, "Kick");
-        lastAnimationStepTime = System.currentTimeMillis();
+        lastAnimationStepTime = 0;
     }
 
     @Override
     public void tick() {
-        if (lastAnimationStepTime + 200 < System.currentTimeMillis()) {
-            lastAnimationStepTime = System.currentTimeMillis();
+        if (lastAnimationStepTime + 200 < Game.getGameInstance().getGameTime()) {
+            lastAnimationStepTime = Game.getGameInstance().getGameTime();
             setCurrentAnimationStep(getCurrentAnimationStep() + 1);
         }
         final java.util.List<Unit> kickedUnits = Game.getGameInstance().getUnitsAt(calculateHitPoint());

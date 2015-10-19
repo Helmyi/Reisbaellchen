@@ -10,13 +10,13 @@ public class Action_Punch extends Action {
 
     public Action_Punch(Unit owner) {
         super(owner, 2, 0, 4, "Punch");
-        lastAnimationStepTime = System.currentTimeMillis();
+        lastAnimationStepTime = 0;
     }
 
     @Override
     public void tick() {
-        if (lastAnimationStepTime + 200 < System.currentTimeMillis()) {
-            lastAnimationStepTime = System.currentTimeMillis();
+        if (lastAnimationStepTime + 200 < Game.getGameInstance().getGameTime()) {
+            lastAnimationStepTime = Game.getGameInstance().getGameTime();
             setCurrentAnimationStep(getCurrentAnimationStep() + 1);
         }
 

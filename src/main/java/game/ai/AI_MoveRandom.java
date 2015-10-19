@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import game.Game;
 import game.Unit;
 
 public class AI_MoveRandom extends UnitAI {
@@ -33,7 +34,7 @@ public class AI_MoveRandom extends UnitAI {
 
 			// prevent units from moving too often
 			// TODO: find better solution for this
-			if (System.currentTimeMillis() % 13 != 0) {
+			if (Game.getGameInstance().getGameTime() % 13 != 0) {
 				continue;
 			}
 			// random move in random direction

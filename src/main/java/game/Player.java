@@ -48,6 +48,7 @@ public class Player {
 	private void calcMoveDirection() {
 		Unit.ViewDirection tempViewDirection = playerUnit.getViewDirection();
 		boolean tempMoving = playerUnit.isMoving();
+		int tempAction = playerUnit.getAction();
 		
 		if ((key_MoveUp_Pressed && !key_MoveDown_Pressed && !key_MoveLeft_Pressed && !key_MoveRight_Pressed)
 				|| (key_MoveUp_Pressed && !key_MoveDown_Pressed && key_MoveLeft_Pressed && !key_MoveRight_Pressed
@@ -91,7 +92,9 @@ public class Player {
 			// no movement
 			tempMoving = false;
 		}
-		Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, playerUnit.getAction(), tempViewDirection, tempMoving);
+		if(playerUnit.getAction() == 0 && tempMoving) tempAction = 1;
+		else if(playerUnit.getAction() == 1 && !tempMoving) tempAction = 0;
+		Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, tempAction, tempViewDirection, tempMoving);
 	}
 
 	public void keyPressed(KeyEvent arg0) {

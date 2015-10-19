@@ -2,6 +2,7 @@ package game.actions;
 
 import java.awt.Graphics;
 
+import game.Game;
 import game.Unit;
 
 public class Action_Move extends Action{
@@ -9,13 +10,13 @@ public class Action_Move extends Action{
 		
 	public Action_Move(Unit owner) {
 		super(owner, 4, 0, 0, "Move");
-		lastAnimationStepTime = System.currentTimeMillis();
+		lastAnimationStepTime = 0;
 	}
 
 	@Override
 	public void tick() {
-		if(lastAnimationStepTime+200 < System.currentTimeMillis()){
-			lastAnimationStepTime = System.currentTimeMillis();
+		if(lastAnimationStepTime+200 < Game.getGameInstance().getGameTime()){
+			lastAnimationStepTime = Game.getGameInstance().getGameTime();
 			setCurrentAnimationStep(getCurrentAnimationStep() + 1);
 		}
 	}

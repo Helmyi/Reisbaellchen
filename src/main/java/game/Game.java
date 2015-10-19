@@ -27,6 +27,7 @@ public class Game extends JPanel implements KeyListener {
 	Graphics graphicBuffer;
 	NetMessageHandler messageHandler;
 
+	private long gameTime;
 	private static Game theGame;
 	private int fps = 55;
 	private static int width = 1000;
@@ -39,6 +40,7 @@ public class Game extends JPanel implements KeyListener {
 	private List<Entity> entityList;
 
 	public Game() {
+		gameTime = 0;
 		try{
 			messageHandler = new NetMessageHandler(new NetClient("127.0.0.1", 27015));
 		}catch(Exception e){
@@ -159,6 +161,8 @@ public class Game extends JPanel implements KeyListener {
 			timePassed = System.currentTimeMillis() - timeBefore;
 
 			sleepTime = (1000 / fps) - timePassed;
+			gameTime += (1000 / fps);
+			
 			if (sleepTime < 0) {
 				sleepTime = 0;
 			}
@@ -207,6 +211,10 @@ public class Game extends JPanel implements KeyListener {
 
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public long getGameTime(){
+		return gameTime;
 	}
 	
 	public NetMessageHandler getNetMessageHandler(){
