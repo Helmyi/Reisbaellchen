@@ -45,12 +45,12 @@ public class UDPClient extends Client{
     
     @Override
 	public void sendMessage(String message) {
-		byte[] sendData = new byte[256];
-		sendData = message.getBytes();
+		byte[] data = new byte[256];
+		data = message.getBytes();
 		System.out.println("UDPClient Message: " + message);
-		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverIpAddress, port);
+		DatagramPacket packet = new DatagramPacket(data, data.length, serverIpAddress, port);
 		try {
-			clientSocket.send(sendPacket);
+			clientSocket.send(packet);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
