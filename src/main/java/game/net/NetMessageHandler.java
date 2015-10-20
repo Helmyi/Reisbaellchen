@@ -4,32 +4,32 @@ import game.Game;
 import game.Unit;
 
 public class NetMessageHandler {
-	private NetClient netClient;
+	private Client client;
 	
-	public NetMessageHandler(NetClient netClient){
-		this.netClient = netClient;
-		if(netClient != null)netClient.start();
+	public NetMessageHandler(Client client){
+		this.client = client;
+		if(client != null)client.start();
 	}
 	
-	public NetClient getNetClient(){
-		return netClient;
+	public Client getClient(){
+		return client;
 	}
 	
 	public void sendUnitAction(Unit unit, int action, Unit.ViewDirection direction, boolean moving){
-		String message = unit.getId() + ":" + action + ":" + direction.toInt() + ":" + moving;
-		if(netClient != null){
-			netClient.sendMessage(message);
+		String message = unit.getId() + ":" + action + ":" + direction.toInt() + ":" + moving + ":End";
+		if(client != null){
+			client.sendMessage(message);
 		}else{
 			//singleplayer
 			processMessage(message);
 		}
 	}
 	
-//	public static String sendUnitAction(Unit unit, int action, Unit.ViewDirection direction, boolean moving){
-//		return unit.getId() + ":" + action + ":" + direction.toInt() + ":" + moving;
-//	}
-//	
 	public void processMessage(String message){
+		if(message.startsWith("Hello")){
+			helloMessage(message);
+			return;
+		}
 		int unitId;
 		int action;
 		Unit.ViewDirection direction;
@@ -61,5 +61,11 @@ public class NetMessageHandler {
 			unit.setMoving(isMoving);
 			unit.setAction(action);
 		}
+	}
+	
+	private void helloMessage(String message){
+		String  messageSplit[] = message.split(":");
+		int clientNumber = Integer.parseInt(messageSplit[1]);
+		client.setClientNumber(clientNumber);
 	}
 }

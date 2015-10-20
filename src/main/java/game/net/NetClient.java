@@ -10,14 +10,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class NetClient extends Thread{
+public class NetClient extends Client{
 	private int port;
 	private String serverIp;
 	private Socket serverSocket;
 	private Scanner in;
 	private PrintWriter out;
 	private Queue<String> receivedMessages;
-	private int clientNumber;
 	
 	public NetClient(String serverIp, int port) throws Exception{
 		receivedMessages = new LinkedList<String>();
@@ -32,7 +31,7 @@ public class NetClient extends Thread{
 			
 			//get clientNumber
 			String message = in.nextLine();
-			clientNumber = Integer.parseInt(message);
+			setClientNumber(Integer.parseInt(message));
 			
 		} catch (UnknownHostException e) {
 			throw e;
@@ -55,6 +54,7 @@ public class NetClient extends Thread{
 		return receivedMessages.poll();
 	}
 	
+	@Override
 	public void sendMessage(String message){
 		out.println(message);
 	}
@@ -65,9 +65,5 @@ public class NetClient extends Thread{
 
 	public String getIp(){
 		return serverIp;
-	}
-	
-	public int getClientNumber(){
-		return clientNumber;
 	}
 }

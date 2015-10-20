@@ -4,8 +4,8 @@ import com.google.common.io.Resources;
 
 import game.ai.AI_MoveRandom;
 import game.ai.UnitAI;
-import game.net.NetClient;
 import game.net.NetMessageHandler;
+import game.net.UDPClient;
 import map.Map;
 import map.Map3;
 
@@ -40,16 +40,6 @@ public class Game extends JPanel implements KeyListener {
 	private List<Entity> entityList;
 	
 	public Game() {
-		gameTime = 0;
-		try{
-			messageHandler = new NetMessageHandler(new NetClient("127.0.0.1", 27015));
-		}catch(Exception e){
-			messageHandler = new NetMessageHandler(null);
-			e.printStackTrace();
-			System.out.println("could not connect to server");
-		}
-		createTestLevel();
-
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
 	}
@@ -79,7 +69,7 @@ public class Game extends JPanel implements KeyListener {
 			graphicBuffer = imageBuffer.getGraphics();
 		}
 		
-		player.getPlayerCamera().paint(graphicBuffer);
+		if (player != null && player.getPlayerCamera() != null) player.getPlayerCamera().paint(graphicBuffer);
 		g.drawImage(imageBuffer, 0, 0, this);
 	}
 
@@ -148,10 +138,10 @@ public class Game extends JPanel implements KeyListener {
 			// unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
 			
 			//set player unit depending on clientNumber
-			if(messageHandler.getNetClient() != null){
+			if(messageHandler.getClient() != null){
 				List<Unit> units=getAllUnits(); 
-				if(units.size() > messageHandler.getNetClient().getClientNumber()){
-					player.setPlayerUnit(units.get(messageHandler.getNetClient().getClientNumber()));
+				if(units.size() > messageHandler.getClient().getClientNumber()){
+					player.setPlayerUnit(units.get(messageHandler.getClient().getClientNumber()));
 				}
 			}
 			
@@ -163,7 +153,18 @@ public class Game extends JPanel implements KeyListener {
 	}
 
 	public void run() {
-		long timeBefore, timePassed, sleepTime;
+		//load test level
+		gameTime = 0;
+		try{
+			messageHandler = new NetMessageHandler(new UDPClient("127.0.0.1", 27015));
+		}catch(Exception e){
+			messageHandler = new NetMessageHandler(null);
+			e.printStackTrace();
+			System.out.println("could not connect to server");
+		}
+		
+		
+		createTestLevel();		long timeBefore, timePassed, sleepTime;
 		timeBefore = System.currentTimeMillis();
 
 		// loop
