@@ -53,36 +53,37 @@ public class Unit extends Entity {
 	}
 
 	@Override
-	public void tick() {
+	public void tick(int elapsedTime) {
 		actions.get(currentAction).tick();
 		if (this.isMoving()) {
+			double moveDistance = speed * elapsedTime / 1000.0;
 			switch (currentViewDirection) {
 			case DOWN:
-				y += speed;
+				y += moveDistance;
 				if (unitCollision()) {
-					y -= speed;
+					y -= moveDistance;
 					//move as close as possible
 					y += Game.getGameInstance().getMap().getTileSize() - (y+63)%Game.getGameInstance().getMap().getTileSize() - 1;
 				}
 				break;
 			case UP:
-				y -= speed;
+				y -= moveDistance;
 				if (unitCollision()) {
-					y += speed;
+					y += moveDistance;
 					y -= (int)(y+32)%Game.getGameInstance().getMap().getTileSize();
 				}
 				break;
 			case RIGHT:
-				x += speed;
+				x += moveDistance;
 				if (unitCollision()) {
-					x -= speed;
+					x -= moveDistance;
 					x += Game.getGameInstance().getMap().getTileSize() - (x+63)%Game.getGameInstance().getMap().getTileSize() - 1;
 				}
 				break;
 			case LEFT:
-				x -= speed;
+				x -= moveDistance;
 				if (unitCollision()) {
-					x += speed;
+					x += moveDistance;
 					x -= (int)(x+32)%Game.getGameInstance().getMap().getTileSize();
 				}
 				break;

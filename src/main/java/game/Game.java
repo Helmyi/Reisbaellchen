@@ -57,7 +57,7 @@ public class Game extends JPanel implements KeyListener {
 	}
 	@Override
 	public void paint(Graphics g) {
-		paintAndTickSynchronizer(g);
+		paintAndTickSynchronizer(g,0);
 	}
 
 	/**
@@ -76,14 +76,14 @@ public class Game extends JPanel implements KeyListener {
 	/**
 	 * game logic
 	 */
-	private void tick() {
+	private void tick(int elapsedTime) {
 		for (UnitAI ai : unitAIs) {
 			ai.tick();
 		}
 
 		Collections.sort(entityList);
 		for (Entity ent : entityList) {
-			ent.tick();
+			ent.tick(elapsedTime);
 		}
 
 		// update camera position
@@ -100,8 +100,8 @@ public class Game extends JPanel implements KeyListener {
 	 * g == null -> tick
 	 * g != null -> paint
 	 */
-	private synchronized void paintAndTickSynchronizer(Graphics g){
-		if(g == null) tick();
+	private synchronized void paintAndTickSynchronizer(Graphics g, int elapsedTime){
+		if(g == null) tick(elapsedTime);
 		else realPaint(g);
 	}
 
@@ -116,7 +116,7 @@ public class Game extends JPanel implements KeyListener {
 					.getResource("Fa_big_head2.png")));
 			unitImages
 					.add(ImageIO.read(Resources.getResource("Hero_Base.png")));
-			entityList.add(new Unit(unitImages.get(1), 10 * 32, 5 * 32, 10));
+			entityList.add(new Unit(unitImages.get(1), 10 * 32, 5 * 32, 350));
 			player.setPlayerUnit((Unit) entityList.get(0));
 			PlayerCamera cam = new PlayerCamera((int) player.getPlayerUnit()
 					.getX(), (int) player.getPlayerUnit().getY());
@@ -124,13 +124,11 @@ public class Game extends JPanel implements KeyListener {
 			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
 			player.setPlayerCamera(cam);
 
-			entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, 10));
-			entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, 10));
-			entityList.add(new Unit(unitImages.get(1), 15 * 32, 7 * 32, 10));
-			entityList.add(new Unit(unitImages.get(1), 15 * 32, 5 * 32, 10));
-			entityList.add(new Unit(unitImages.get(1), 13 * 32, 5 * 32, 10));
-			entityList
-					.add(new Unit(unitImages.get(1), 15 * 32 + 2, 7 * 32, 14));
+			entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, 100));
+			entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, 100));
+			entityList.add(new Unit(unitImages.get(1), 15 * 32, 7 * 32, 100));
+			entityList.add(new Unit(unitImages.get(1), 15 * 32, 5 * 32, 100));
+			entityList.add(new Unit(unitImages.get(1), 13 * 32, 5 * 32, 100));
 
 			unitAIs.add(new AI_MoveRandom((Unit) entityList.get(4)));
 			unitAIs.get(0).addUnit((Unit) entityList.get(5));
@@ -162,15 +160,16 @@ public class Game extends JPanel implements KeyListener {
 			e.printStackTrace();
 			System.out.println("could not connect to server");
 		}
+				
+		createTestLevel();
 		
-		
-		createTestLevel();		long timeBefore, timePassed, sleepTime;
+		long timeBefore, timePassed, sleepTime;
 		timeBefore = System.currentTimeMillis();
 
 		// loop
 		while (true) {
 			//tick
-			paintAndTickSynchronizer(null);
+			paintAndTickSynchronizer(null, 1000 / fps);
 			repaint();
 
 			timePassed = System.currentTimeMillis() - timeBefore;

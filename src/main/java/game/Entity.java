@@ -50,7 +50,7 @@ public abstract class Entity implements Comparable<Entity> {
 		return entityImage;
 	}
 
-	public abstract void tick();
+	public abstract void tick(int elapsedTime);
 
 	public abstract void paint(Graphics g);
 

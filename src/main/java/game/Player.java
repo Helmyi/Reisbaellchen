@@ -99,28 +99,43 @@ public class Player {
 
 	public void keyPressed(KeyEvent arg0) {
 		if (arg0.getKeyCode() == key_MoveUp) {
+			if(key_MoveUp_Pressed) return;
 			key_MoveUp_Pressed = true;
 			lastPressedMoveKey = key_MoveUp;
+			calcMoveDirection();
 		}
 		if (arg0.getKeyCode() == key_MoveDown) {
+			if(key_MoveDown_Pressed) return;
 			key_MoveDown_Pressed = true;
 			lastPressedMoveKey = key_MoveDown;
+			calcMoveDirection();
 		}
 		if (arg0.getKeyCode() == key_MoveRight) {
+			if(key_MoveRight_Pressed) return;
 			key_MoveRight_Pressed = true;
 			lastPressedMoveKey = key_MoveRight;
+			calcMoveDirection();
 		}
 		if (arg0.getKeyCode() == key_MoveLeft) {
+			if(key_MoveLeft_Pressed) return;
 			key_MoveLeft_Pressed = true;
 			lastPressedMoveKey = key_MoveLeft;
+			calcMoveDirection();
 		}
-		calcMoveDirection();
 		
 		if (arg0.getKeyCode() == key_Action1) {
-			Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 2, playerUnit.getViewDirection(), playerUnit.isMoving());
+			if(playerUnit.getAction() != 2){
+				Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 2, playerUnit.getViewDirection(), playerUnit.isMoving());
+			}else{
+				return;
+			}
 		}
 		if (arg0.getKeyCode() == key_Action2) {
-			Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 3, playerUnit.getViewDirection(), playerUnit.isMoving());
+			if(playerUnit.getAction() != 3){
+				Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 3, playerUnit.getViewDirection(), playerUnit.isMoving());
+			}else{
+				return;
+			}
 		}
 		
 	}
@@ -128,20 +143,27 @@ public class Player {
 	public void keyReleased(KeyEvent arg0) {
 		if (arg0.getKeyCode() == key_MoveUp) {
 			key_MoveUp_Pressed = false;
+			calcMoveDirection();
 		}
 		if (arg0.getKeyCode() == key_MoveDown) {
 			key_MoveDown_Pressed = false;
+			calcMoveDirection();
 		}
 		if (arg0.getKeyCode() == key_MoveRight) {
 			key_MoveRight_Pressed = false;
+			calcMoveDirection();
 		}
 		if (arg0.getKeyCode() == key_MoveLeft) {
 			key_MoveLeft_Pressed = false;
+			calcMoveDirection();
 		}
 
-		calcMoveDirection();
 		if (arg0.getKeyCode() == key_Action1 || arg0.getKeyCode() == key_Action2) {
-			Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 0, playerUnit.getViewDirection(), playerUnit.isMoving());
+			if(playerUnit.isMoving()){
+				Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 1, playerUnit.getViewDirection(), playerUnit.isMoving());
+			}else{
+				Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 0, playerUnit.getViewDirection(), playerUnit.isMoving());
+			}
 		}
 	}
 

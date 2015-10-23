@@ -49,22 +49,24 @@ public class UDPServer extends Thread {
 				e.printStackTrace();
 			}
 
-			String message = new String(receivePacket.getData());
-			System.out.println("Server received: \"" + message + "\"");
-
 			InetAddress ipAddress = receivePacket.getAddress();
-			if (isNewIP(ipAddress)){
-				clientIps.add(ipAddress);
-				clientPorts.add(receivePacket.getPort());
+			
+			if(receivePacket.getData()[0] == NetMessageHandler.MESSAGE_CONNECT){
+				//add new data
+				if (getClientNumber(ipAddress, receivePacket.getPort()) == -1){
+					clientIps.add(ipAddress);
+					clientPorts.add(receivePacket.getPort());
 				
-				if(message.startsWith("Hello")){
-					message = "Hello:" + (clientIps.size()-1) + ":End";
+					receivePacket.getData()[1] = (byte)(clientIps.size()-1);
 					System.out.println("new client connected: Nr:" + clientIps.size());
+				}else{
+					receivePacket.getData()[1] = (byte)getClientNumber(ipAddress, receivePacket.getPort());
+					System.out.println("client connected twice ? Nr:" + getClientNumber(ipAddress, receivePacket.getPort()));
 				}
 			}
 
 			//just send immediately back
-			sendData = message.getBytes();
+			sendData = receivePacket.getData();
 			try {
 				sendPackageToAllClients(sendData);
 			} catch (IOException e) {
@@ -81,11 +83,19 @@ public class UDPServer extends Thread {
 		}
 	}
 
-	private boolean isNewIP(InetAddress newIpAddress) {
-		for (InetAddress ipAddress : clientIps) {
-			if (ipAddress.equals(newIpAddress))
-				return false;
+	/**
+	 * 
+	 * @param newIpAddress
+	 * @param port
+	 * @return -1 = new Client, number > -1 -> position in lists and clientNumber
+	 */
+	private int getClientNumber(InetAddress ipAddress, int port) {
+		for(int i = 0; i < clientIps.size(); i++){
+			if (clientIps.get(i).equals(ipAddress) && clientPorts.get(i) == port){
+				return i;
+			}
 		}
-		return true;
+
+		return -1;
 	}
 }

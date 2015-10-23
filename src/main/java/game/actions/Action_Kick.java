@@ -21,6 +21,7 @@ public class Action_Kick extends Action {
         }
         final java.util.List<Unit> kickedUnits = Game.getGameInstance().getUnitsAt(calculateHitPoint());
         for (Unit unit : kickedUnits){
+        	if(getOwner() == unit) continue;
             unit.takeDamage(5);
         }
     }

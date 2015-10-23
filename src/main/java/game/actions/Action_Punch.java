@@ -22,7 +22,8 @@ public class Action_Punch extends Action {
 
         final java.util.List<Unit> punchedUnits = Game.getGameInstance().getUnitsAt(calculateHitPoint());
         for (Unit unit : punchedUnits){
-            unit.takeDamage(2);
+        	if(getOwner() == unit) continue;
+        	unit.takeDamage(2);
         }
     }
 
