@@ -30,7 +30,7 @@ public class NetMessageHandler {
 	public void processByteMessage(byte[] data){
 		switch (data[0]) {
 		case MESSAGE_CONNECT:
-			helloMessage(data);
+			//handled by UDPClient for connection establishment
 			break;
 		case MESSAGE_UNIT_UPDATE:
 			processUnitUpdate(data);
@@ -105,19 +105,12 @@ public class NetMessageHandler {
 	public void tick(){
 		tickCounter += 1;
 	}
-	
-	private void helloMessage(byte[] data){
-		int clientNumber = (int)data[1];
-		client.setClientNumber(clientNumber);
-	}
 
 	private static final void intIntoMessageArray(int value, byte[] messageArray, int MessageArrayStartPosition) {
 		byte[] intArray = toByteArray(value);
-		messageArray[MessageArrayStartPosition] = intArray[0];
-		messageArray[MessageArrayStartPosition+1] = intArray[1];
-		messageArray[MessageArrayStartPosition+2] = intArray[2];
-		messageArray[MessageArrayStartPosition+3] = intArray[3];
-		
+		for(int i = 0; i < 4; i++){
+			messageArray[MessageArrayStartPosition + i] = intArray[i];
+		}
 	}
 	
 	private static final int getIntOutOfmessage(byte[] data, int arrayStartinPositon){
@@ -127,15 +120,9 @@ public class NetMessageHandler {
 	
 	private static final void doubleIntoMessageArray(double value, byte[] messageArray, int MessageArrayStartPosition) {
 		byte[] intArray = toByteArray(value);
-		messageArray[MessageArrayStartPosition] = intArray[0];
-		messageArray[MessageArrayStartPosition+1] = intArray[1];
-		messageArray[MessageArrayStartPosition+2] = intArray[2];
-		messageArray[MessageArrayStartPosition+3] = intArray[3];
-		messageArray[MessageArrayStartPosition+4] = intArray[4];
-		messageArray[MessageArrayStartPosition+5] = intArray[5];
-		messageArray[MessageArrayStartPosition+6] = intArray[6];
-		messageArray[MessageArrayStartPosition+7] = intArray[7];
-		
+		for(int i = 0; i < 8; i++){
+			messageArray[MessageArrayStartPosition + i] = intArray[i];
+		}
 	}
 	
 	private static final double getDoubleOutOfmessage(byte[] data, int arrayStartinPositon){

@@ -154,11 +154,10 @@ public class Game extends JPanel implements KeyListener {
 		//load test level
 		gameTime = 0;
 		try{
-			messageHandler = new NetMessageHandler(new UDPClient("127.0.0.1", 27015));
+			messageHandler = new NetMessageHandler(new UDPClient("127.0.0.1", 27015, 3));
 		}catch(Exception e){
 			messageHandler = new NetMessageHandler(null);
 			e.printStackTrace();
-			System.out.println("could not connect to server");
 		}
 				
 		createTestLevel();

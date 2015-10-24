@@ -7,6 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 public class UDPClient extends Thread{
@@ -15,23 +16,43 @@ public class UDPClient extends Thread{
     private DatagramSocket clientSocket;
     private InetAddress serverIpAddress;
     
-    public UDPClient(String serverIp, int port){
+    public UDPClient(String serverIp, int port, int maxConnectTrys) throws ConnectionFailedException{
     	this.port = port;
+    	clientNumber = -1; // -1 = connection failed
     	try {
 			clientSocket = new DatagramSocket();
 			serverIpAddress = InetAddress.getByName(serverIp);
-			sendMessage(new byte[]{NetMessageHandler.MESSAGE_CONNECT});
+			
+			//connection handshake
+	        byte[] receiveData = new byte[256];
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			for(int i=0; i < maxConnectTrys; i++){
+				try {
+					//say hello, wait, get response clientNumber for connection established
+					sendMessage(new byte[]{NetMessageHandler.MESSAGE_CONNECT});
+					clientSocket.setSoTimeout(1000);
+					clientSocket.receive(receivePacket);
+					clientNumber = (int)receivePacket.getData()[1];
+					clientSocket.setSoTimeout(0);
+					break;
+				} catch (SocketTimeoutException e){
+					System.out.println("Client connect Try " + (i+1) +" failed");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		} catch (SocketException e1) {
 			e1.printStackTrace();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+    	
+    	if(clientNumber == -1) throw new ConnectionFailedException("Connection to IP: " + serverIp + ":" + port + " failed");
     }
     
     public void run(){
         byte[] receiveData = new byte[256];
 		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-		
 		while(true){
 			try {
 				clientSocket.receive(receivePacket);
