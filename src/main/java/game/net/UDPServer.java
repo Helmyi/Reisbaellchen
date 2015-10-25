@@ -11,13 +11,12 @@ import java.util.List;
 public class UDPServer extends Thread {
 
 	private DatagramSocket serverSocket;
-	private List<InetAddress> clientIps;
-	private List<Integer> clientPorts;
+	private List<ClientInfo> clientInfos;
+
 	private int port;
 
 	public UDPServer(int port) {
-		clientIps = new ArrayList<InetAddress>();
-		clientPorts = new ArrayList<Integer>();
+		clientInfos = new ArrayList<ClientInfo>();
 		this.port = port;
 		
 		try {
@@ -35,51 +34,103 @@ public class UDPServer extends Thread {
 	
 	public void run() {
 		System.out.println("UDP server started, waiting for Client");
-		byte[] receiveData = new byte[256];
-		byte[] sendData = new byte[256];
+		byte[] receiveData = new byte[UDPClient.sendPacketSize];
 
 		while (true) {
 			
 			//receive something
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			try {
-				serverSocket.receive(receivePacket);
+				serverSocket.receive(receivePacket);				
+				
+				switch(receivePacket.getData()[0]){
+				case NetMessageHandler.MESSAGE_CONNECT:
+					handleNewClient(receivePacket);
+					break;
+				case NetMessageHandler.MESSAGE_UNIT_UPDATE:
+					handleUnitUpdate(receivePacket,  getClientNumber(receivePacket.getAddress(), receivePacket.getPort()));
+					break;
+				default:
+					sendPackageToAllClients(receivePacket.getData());
+				}
 			} catch (IOException e) {
 				System.out.println("Server receive exception");
 				e.printStackTrace();
 			}
 
-			InetAddress ipAddress = receivePacket.getAddress();
-			
-			if(receivePacket.getData()[0] == NetMessageHandler.MESSAGE_CONNECT){
-				//add new data
-				if (getClientNumber(ipAddress, receivePacket.getPort()) == -1){
-					clientIps.add(ipAddress);
-					clientPorts.add(receivePacket.getPort());
-				
-					receivePacket.getData()[1] = (byte)(clientIps.size()-1);
-					System.out.println("new client connected: Nr:" + clientIps.size());
-				}else{
-					receivePacket.getData()[1] = (byte)getClientNumber(ipAddress, receivePacket.getPort());
-					System.out.println("client connected twice ? Nr:" + getClientNumber(ipAddress, receivePacket.getPort()));
-				}
-			}
-
-			//just send immediately back
-			sendData = receivePacket.getData();
-			try {
-				sendPackageToAllClients(sendData);
-			} catch (IOException e) {
-				System.out.println("Server send exception");
-				e.printStackTrace();
-			}
 		}
 	}
 	
 	public void sendPackageToAllClients(byte[] sendData) throws IOException{
-		for(int i=0; i < clientIps.size(); i++){
-			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientIps.get(i), clientPorts.get(i));
+		for(int i=0; i < clientInfos.size(); i++){
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(i).getClientIp(), clientInfos.get(i).getClientPort());
 			serverSocket.send(sendPacket);
+		}
+	}
+	
+	public void sendPackageToAllClientsAndAddAckForSendClient(byte[] sendData, int sendClientId, byte ackPackageNumber) throws IOException{
+		for(int i=0; i < clientInfos.size(); i++){
+			if(i == sendClientId) continue;
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(i).getClientIp(), clientInfos.get(i).getClientPort());
+			serverSocket.send(sendPacket);
+		}
+		
+		int sendDataEnd = NetMessageHandler.getMessageEnd(sendData);
+		if(sendDataEnd != -1){
+			//add ack
+			sendData[sendDataEnd] = NetMessageHandler.MESSAGE_ACK;
+			sendData[sendDataEnd + 1] = ackPackageNumber;
+			sendData[sendDataEnd + 2] = NetMessageHandler.MESSAGE_END;
+			
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(sendClientId).getClientIp(), clientInfos.get(sendClientId).getClientPort());
+			serverSocket.send(sendPacket);
+		}
+	}
+	
+	public void sendPackageToClient(byte[] sendData, int clientId) throws IOException{
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(clientId).getClientIp(), clientInfos.get(clientId).getClientPort());
+		serverSocket.send(sendPacket);
+	}
+	
+	private void handleUnitUpdate(DatagramPacket receivePacket, int clientNumber){
+		//check if old or duplicate
+		byte recPackageNumber = receivePacket.getData()[1];
+		if(recPackageNumber > clientInfos.get(clientNumber).getHighestReceivedPackageNumber()
+				|| (recPackageNumber < -100 && clientInfos.get(clientNumber).getHighestReceivedPackageNumber() > 100)){
+			clientInfos.get(clientNumber).setHighestReceivedPackageNumber(recPackageNumber);
+		}else{
+			System.out.println("old or duplicate Package thrown away");
+			return;
+		}
+		
+		//send
+		try {
+			sendPackageToAllClientsAndAddAckForSendClient(receivePacket.getData(), clientNumber, recPackageNumber);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void handleNewClient(DatagramPacket receivePacket){
+		//add new data
+		int clientId = -1;
+		if (getClientNumber(receivePacket.getAddress(), receivePacket.getPort()) == -1){
+			clientInfos.add(new ClientInfo(receivePacket.getAddress(), receivePacket.getPort(), (byte)-1));
+		
+			receivePacket.getData()[1] = (byte)(clientInfos.size()-1);
+			clientId = clientInfos.size()-1;
+			System.out.println("new client connected: Nr:" + clientInfos.size());
+		}else{
+			clientId = getClientNumber(receivePacket.getAddress(), receivePacket.getPort());
+			clientInfos.get(clientId).setHighestReceivedPackageNumber((byte)-1);
+			receivePacket.getData()[1] = (byte)clientId;
+			System.out.println("client connected twice ? Nr:" + clientId);
+		}
+		
+		try {
+			sendPackageToClient(receivePacket.getData(), clientId);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -90,8 +141,8 @@ public class UDPServer extends Thread {
 	 * @return -1 = new Client, number > -1 -> position in lists and clientNumber
 	 */
 	private int getClientNumber(InetAddress ipAddress, int port) {
-		for(int i = 0; i < clientIps.size(); i++){
-			if (clientIps.get(i).equals(ipAddress) && clientPorts.get(i) == port){
+		for(int i = 0; i < clientInfos.size(); i++){
+			if (clientInfos.get(i).getClientIp().equals(ipAddress) && clientInfos.get(i).getClientPort() == port){
 				return i;
 			}
 		}

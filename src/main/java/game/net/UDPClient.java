@@ -15,16 +15,19 @@ public class UDPClient extends Thread{
 	private int port;
     private DatagramSocket clientSocket;
     private InetAddress serverIpAddress;
+    public static final int sendPacketSize = 128;
+    public static final int receivePacketSize = 256;
     
     public UDPClient(String serverIp, int port, int maxConnectTrys) throws ConnectionFailedException{
     	this.port = port;
+    	
     	clientNumber = -1; // -1 = connection failed
     	try {
 			clientSocket = new DatagramSocket();
 			serverIpAddress = InetAddress.getByName(serverIp);
 			
 			//connection handshake
-	        byte[] receiveData = new byte[256];
+	        byte[] receiveData = new byte[receivePacketSize];
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			for(int i=0; i < maxConnectTrys; i++){
 				try {
@@ -51,7 +54,7 @@ public class UDPClient extends Thread{
     }
     
     public void run(){
-        byte[] receiveData = new byte[256];
+        byte[] receiveData = new byte[receivePacketSize];
 		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		while(true){
 			try {
@@ -65,7 +68,7 @@ public class UDPClient extends Thread{
     
 
 	public void sendMessage(byte[] data) {
-		if(data.length > 256) System.out.println("Warning UDPCLient: to much data to send"); 
+		if(data.length > sendPacketSize) System.out.println("Warning UDPCLient: to much data to send"); 
 		DatagramPacket packet = new DatagramPacket(data, data.length, serverIpAddress, port);
 		try {
 			clientSocket.send(packet);

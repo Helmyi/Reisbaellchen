@@ -168,6 +168,7 @@ public class Game extends JPanel implements KeyListener {
 		// loop
 		while (true) {
 			//tick
+			messageHandler.tick();
 			paintAndTickSynchronizer(null, 1000 / fps);
 			repaint();
 
