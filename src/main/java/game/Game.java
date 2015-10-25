@@ -116,19 +116,19 @@ public class Game extends JPanel implements KeyListener {
 					.getResource("Fa_big_head2.png")));
 			unitImages
 					.add(ImageIO.read(Resources.getResource("Hero_Base.png")));
-			entityList.add(new Unit(unitImages.get(1), 10 * 32, 5 * 32, 350));
+			entityList.add(new Unit(unitImages.get(1), 10 * 32, 5 * 32, 250));
+			entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, 200));
+			entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, 200));
+			entityList.add(new Unit(unitImages.get(1), 15 * 32, 7 * 32, 200));
+			entityList.add(new Unit(unitImages.get(1), 15 * 32, 5 * 32, 200));
+			entityList.add(new Unit(unitImages.get(1), 13 * 32, 5 * 32, 200));
+
 			player.setPlayerUnit((Unit) entityList.get(0));
 			PlayerCamera cam = new PlayerCamera((int) player.getPlayerUnit()
 					.getX(), (int) player.getPlayerUnit().getY());
 			cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
 			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
 			player.setPlayerCamera(cam);
-
-			entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, 100));
-			entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, 100));
-			entityList.add(new Unit(unitImages.get(1), 15 * 32, 7 * 32, 100));
-			entityList.add(new Unit(unitImages.get(1), 15 * 32, 5 * 32, 100));
-			entityList.add(new Unit(unitImages.get(1), 13 * 32, 5 * 32, 100));
 
 			unitAIs.add(new AI_MoveRandom((Unit) entityList.get(4)));
 			unitAIs.get(0).addUnit((Unit) entityList.get(5));
