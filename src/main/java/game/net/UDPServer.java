@@ -68,27 +68,32 @@ public class UDPServer extends Thread {
 		}
 	}
 	
-	public void sendPackageToAllClientsAndAddAckForSendClient(byte[] sendData, int sendClientId, byte ackPackageNumber) throws IOException{
+	public void sendPackageToAllClientsAndAddAckForSendClient(byte[] sendData, int sendClientNumber, byte ackPackageNumber) throws IOException{
 		for(int i=0; i < clientInfos.size(); i++){
-			if(i == sendClientId) continue;
+			if(i == sendClientNumber) continue;
 			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(i).getClientIp(), clientInfos.get(i).getClientPort());
 			serverSocket.send(sendPacket);
 		}
 		
 		int sendDataEnd = NetMessageHandler.getMessageEnd(sendData);
 		if(sendDataEnd != -1){
-			//add ack
-			sendData[sendDataEnd] = NetMessageHandler.MESSAGE_ACK;
-			sendData[sendDataEnd + 1] = ackPackageNumber;
-			sendData[sendDataEnd + 2] = NetMessageHandler.MESSAGE_END;
+			//add ack at start
+			for(int i = sendDataEnd; i >= 0; i--){
+				sendData[i+2] = sendData[i];
+			}
+			sendData[0] = NetMessageHandler.MESSAGE_ACK;
+			sendData[1] = ackPackageNumber;
 			
-			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(sendClientId).getClientIp(), clientInfos.get(sendClientId).getClientPort());
+			//remember last package of client
+			clientInfos.get(sendClientNumber).setLastPackageData(sendData);
+			
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(sendClientNumber).getClientIp(), clientInfos.get(sendClientNumber).getClientPort());
 			serverSocket.send(sendPacket);
 		}
 	}
 	
-	public void sendPackageToClient(byte[] sendData, int clientId) throws IOException{
-		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(clientId).getClientIp(), clientInfos.get(clientId).getClientPort());
+	public void sendPackageToClient(byte[] sendData, int clientNumber) throws IOException{
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(clientNumber).getClientIp(), clientInfos.get(clientNumber).getClientPort());
 		serverSocket.send(sendPacket);
 	}
 	
@@ -97,10 +102,21 @@ public class UDPServer extends Thread {
 		byte recPackageNumber = receivePacket.getData()[1];
 		if(recPackageNumber > clientInfos.get(clientNumber).getHighestReceivedPackageNumber()
 				|| (recPackageNumber < -100 && clientInfos.get(clientNumber).getHighestReceivedPackageNumber() > 100)){
-			clientInfos.get(clientNumber).setHighestReceivedPackageNumber(recPackageNumber);
+			clientInfos.get(clientNumber).setHighestReceivedPackage(recPackageNumber, receivePacket.getData());
 		}else{
-			System.out.println("old or duplicate Package thrown away");
-			return;
+			if(recPackageNumber == clientInfos.get(clientNumber).getHighestReceivedPackageNumber()){
+				//resent last package only to client //TODO maybe update unit position in information 
+				System.out.println("resent last Package");
+				try {
+					sendPackageToClient(clientInfos.get(clientNumber).getLastPackageData(), clientNumber);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return;
+			}else{
+				System.out.println("old Package thrown away");
+				return;
+			}
 		}
 		
 		//send
@@ -115,7 +131,7 @@ public class UDPServer extends Thread {
 		//add new data
 		int clientId = -1;
 		if (getClientNumber(receivePacket.getAddress(), receivePacket.getPort()) == -1){
-			clientInfos.add(new ClientInfo(receivePacket.getAddress(), receivePacket.getPort(), (byte)-1));
+			clientInfos.add(new ClientInfo(receivePacket.getAddress(), receivePacket.getPort()));
 		
 			receivePacket.getData()[1] = (byte)(clientInfos.size()-1);
 			clientId = clientInfos.size()-1;

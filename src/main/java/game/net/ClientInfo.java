@@ -6,11 +6,12 @@ public class ClientInfo {
 	private InetAddress clientIp;
 	private int clientPort;
 	private byte highestReceivedPackageNumber;
+	private byte[] lastPackageData;
 	
-	public ClientInfo(InetAddress clientIp, int clientPort, byte highestReceivedPackageNumber){
+	public ClientInfo(InetAddress clientIp, int clientPort){
 		setClientIp(clientIp);
 		setClientPort(clientPort);
-		setHighestReceivedPackageNumber(highestReceivedPackageNumber);
+		setHighestReceivedPackageNumber((byte)-1);
 	}
 	
 	public InetAddress getClientIp() {
@@ -35,5 +36,18 @@ public class ClientInfo {
 	
 	public void setHighestReceivedPackageNumber(byte highestReceivedPackageNumber) {
 		this.highestReceivedPackageNumber = highestReceivedPackageNumber;
+	}
+
+	public void setHighestReceivedPackage(byte highestReceivedPackageNumber, byte[] data) {
+		this.highestReceivedPackageNumber = highestReceivedPackageNumber;
+		setLastPackageData(data);
+	}
+
+	public byte[] getLastPackageData() {
+		return lastPackageData;
+	}
+
+	public void setLastPackageData(byte[] lastPackageData) {
+		this.lastPackageData = lastPackageData;
 	}
 }

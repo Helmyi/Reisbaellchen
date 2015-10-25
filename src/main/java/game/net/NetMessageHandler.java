@@ -10,6 +10,7 @@ public class NetMessageHandler {
 	private byte tickCounter;
 	private byte packageCounter;
 	private int ping;
+	private byte lastReceiedPackageNumber;
 	
 	//ack only for last package
 	private byte[] lastPackage;
@@ -28,6 +29,7 @@ public class NetMessageHandler {
 		tickCounter = 0;
 		packageCounter = 0;
 		ackReceived = true;
+		lastReceiedPackageNumber = -1;
 		ping = 50; //TODO correct ping
 		
 		this.client = client;
@@ -47,17 +49,17 @@ public class NetMessageHandler {
 				i += messageLength[MESSAGE_UNIT_UPDATE];
 				break;
 			case MESSAGE_UNIT_UPDATE:
-				processUnitUpdate(data);
+				processUnitUpdate(data, i);
 				i += messageLength[MESSAGE_UNIT_UPDATE];
 				break;
 			case MESSAGE_ACK:
-				processAck(data, i);
+				if(!processAck(data, i)) return;
 				i += messageLength[MESSAGE_ACK];
 				break;
 			case MESSAGE_END:
 				return;
 			default:
-				System.out.println("NetMessageHandler error: message length or missing message end");
+				System.out.println("NetMessageHandler:processByteMessage error: message length or missing message end");
 				return;
 			}
 		}
@@ -81,13 +83,22 @@ public class NetMessageHandler {
 		packageCounter++;
 	}
 	
-	private void processAck(byte[] data, int begin){
+	/**
+	 * @return false if package is old or duplicate
+	 */
+	private boolean processAck(byte[] data, int begin){
+		if(data[begin+1] <= lastReceiedPackageNumber || (lastReceiedPackageNumber < -100 && data[begin+1] > 100)){
+			System.out.println("NetMessageHandler:processAck: throw old or duplicate package away");
+			return false;
+		}
+		
 		if(data[begin+1] == lastPackage[1]){
 			ackReceived = true;
 		}
+		return true;
 	}
 	
-	private void processUnitUpdate(byte[] data){
+	private void processUnitUpdate(byte[] data, int begin){
 		int unitId;
 		int action;
 		Unit.ViewDirection direction;
@@ -96,9 +107,9 @@ public class NetMessageHandler {
 		double posY;
 		
 		//get message parameters
-		unitId = getIntOutOfmessage(data, 3);
-		action = (int)data[7];
-		int viewDirectionInt = (int)data[8];
+		unitId = getIntOutOfmessage(data, 3+begin);
+		action = (int)data[7+begin];
+		int viewDirectionInt = (int)data[8+begin];
 		if(viewDirectionInt == Unit.ViewDirection.DOWN.toInt()){
 			direction = Unit.ViewDirection.DOWN;
 		}else if(viewDirectionInt == Unit.ViewDirection.UP.toInt()){
@@ -111,9 +122,9 @@ public class NetMessageHandler {
 			System.out.println("netMessageHandler: unitViewDirection int error: " + viewDirectionInt);
 			direction = Unit.ViewDirection.DOWN;
 		}
-		isMoving = data[9] == (byte)1 ? true: false;
-		posX = getDoubleOutOfmessage(data, 10);
-		posY = getDoubleOutOfmessage(data, 18);
+		isMoving = data[9+begin] == (byte)1 ? true: false;
+		posX = getDoubleOutOfmessage(data, 10+begin);
+		posY = getDoubleOutOfmessage(data, 18+begin);
 		
 		//change
 		Unit unit = (Unit)Game.getGameInstance().getEnityById(unitId);
@@ -177,7 +188,7 @@ public class NetMessageHandler {
 			}
 		}
 		
-		System.out.println("NetMessageHandler: Message length error or Message_End missing");
+		System.out.println("NetMessageHandler:getMessageEnd: Message length error or Message_End missing");
 		return -1;
 	}
 	
