@@ -30,7 +30,7 @@ public class NetMessageHandler {
 		packageCounter = 0;
 		ackReceived = true;
 		lastReceivedPackageNumber = -1;
-		ping = 50; //TODO correct ping
+		ping = 80; //TODO correct ping
 		
 		this.client = client;
 		if(client != null)client.start();
@@ -82,6 +82,7 @@ public class NetMessageHandler {
 			//singleplayer
 			processByteMessage(data);
 		}
+
 		packageCounter++;
 	}
 	
@@ -154,6 +155,7 @@ public class NetMessageHandler {
 	 */
 	public void tick(){
 		tickCounter += 1;
+		if(client instanceof UDPTestClient) ((UDPTestClient) client).tick();
 		
 		//resend package test
 		if(!ackReceived && System.currentTimeMillis() > timeSend + ping){

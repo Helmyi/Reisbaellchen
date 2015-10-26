@@ -5,8 +5,8 @@ import com.google.common.io.Resources;
 import game.ai.AI_MoveRandom;
 import game.ai.UnitAI;
 import game.net.NetMessageHandler;
-import game.net.TestNetMessageHandler;
 import game.net.UDPClient;
+import game.net.UDPTestClient;
 import map.Map;
 import map.Map3;
 
@@ -155,7 +155,7 @@ public class Game extends JPanel implements KeyListener {
 		//load test level
 		gameTime = 0;
 		try{
-			messageHandler = new TestNetMessageHandler(new UDPClient("127.0.0.1", 27015, 3), 100);
+			messageHandler = new NetMessageHandler(new UDPTestClient("127.0.0.1", 27015, 3, 100));
 		}catch(Exception e){
 			messageHandler = new NetMessageHandler(null);
 			e.printStackTrace();

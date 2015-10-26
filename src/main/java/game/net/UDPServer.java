@@ -34,11 +34,11 @@ public class UDPServer extends Thread {
 	
 	public void run() {
 		System.out.println("UDP server started, waiting for Client");
-		byte[] receiveData = new byte[UDPClient.sendPacketSize];
 
 		while (true) {
 			
 			//receive something
+			byte[] receiveData = new byte[UDPClient.sendPacketSize];
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			try {
 				serverSocket.receive(receivePacket);				
@@ -85,7 +85,7 @@ public class UDPServer extends Thread {
 			sendData[1] = ackPackageNumber;
 			
 			//remember last package of client
-			clientInfos.get(sendClientNumber).setLastPackageData(sendData.clone());
+			clientInfos.get(sendClientNumber).setLastPackageData(sendData);
 
 			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(sendClientNumber).getClientIp(), clientInfos.get(sendClientNumber).getClientPort());
 			serverSocket.send(sendPacket);

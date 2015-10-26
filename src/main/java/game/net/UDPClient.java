@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 public class UDPClient extends Thread{
 	private int clientNumber;
 	private int port;
-    private DatagramSocket clientSocket;
+    protected DatagramSocket clientSocket;
     private InetAddress serverIpAddress;
     public static final int sendPacketSize = 128;
     public static final int receivePacketSize = 256;
