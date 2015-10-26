@@ -137,7 +137,6 @@ public class Player {
 				return;
 			}
 		}
-		
 	}
 
 	public void keyReleased(KeyEvent arg0) {

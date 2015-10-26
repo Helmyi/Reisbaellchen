@@ -59,7 +59,7 @@ public class UDPClient extends Thread{
 		while(true){
 			try {
 				clientSocket.receive(receivePacket);
-				Game.getGameInstance().getNetMessageHandler().processByteMessage(receivePacket.getData());
+				Game.getGameInstance().getNetMessageHandler().processByteMessage(receivePacket.getData().clone());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

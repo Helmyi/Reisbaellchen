@@ -85,8 +85,8 @@ public class UDPServer extends Thread {
 			sendData[1] = ackPackageNumber;
 			
 			//remember last package of client
-			clientInfos.get(sendClientNumber).setLastPackageData(sendData);
-			
+			clientInfos.get(sendClientNumber).setLastPackageData(sendData.clone());
+
 			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientInfos.get(sendClientNumber).getClientIp(), clientInfos.get(sendClientNumber).getClientPort());
 			serverSocket.send(sendPacket);
 		}
@@ -106,7 +106,7 @@ public class UDPServer extends Thread {
 		}else{
 			if(recPackageNumber == clientInfos.get(clientNumber).getHighestReceivedPackageNumber()){
 				//resent last package only to client //TODO maybe update unit position in information 
-				System.out.println("resent last Package: " + recPackageNumber);
+				System.out.println("resent last Package: " + recPackageNumber + " Time:" + System.currentTimeMillis());
 				try {
 					sendPackageToClient(clientInfos.get(clientNumber).getLastPackageData(), clientNumber);
 				} catch (IOException e) {
@@ -114,7 +114,7 @@ public class UDPServer extends Thread {
 				}
 				return;
 			}else{
-				System.out.println("old Package thrown away");
+				System.out.println("old Package thrown away: Nr: " + recPackageNumber + " Time:" + System.currentTimeMillis());
 				return;
 			}
 		}

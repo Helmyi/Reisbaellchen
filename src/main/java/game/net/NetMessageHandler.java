@@ -8,14 +8,14 @@ import game.Unit;
 public class NetMessageHandler {
 	private UDPClient client;
 	private byte tickCounter;
-	private byte packageCounter;
+	protected byte packageCounter;
 	private int ping;
-	private byte lastReceivedPackageNumber;
+	protected byte lastReceivedPackageNumber;
 	
 	//ack only for last package
-	private byte[] lastPackage;
-	private boolean ackReceived;
-	private long timeSend;
+	protected byte[] lastPackage;
+	protected boolean ackReceived;
+	protected long timeSend;
     
 	//message types
 	public static final byte MESSAGE_END = -1;
@@ -76,11 +76,19 @@ public class NetMessageHandler {
 			lastPackage = data;
 			ackReceived = false;
 			timeSend = System.currentTimeMillis();
+			
+			directPlayerUnitAction(unit, action, direction, moving);
 		}else{
 			//singleplayer
 			processByteMessage(data);
 		}
 		packageCounter++;
+	}
+	
+	protected void directPlayerUnitAction(Unit unit, int action, Unit.ViewDirection direction, boolean moving){
+		unit.setViewDirection(direction);
+		unit.setMoving(moving);
+		unit.setAction(action);
 	}
 	
 	/**
@@ -94,7 +102,7 @@ public class NetMessageHandler {
 			}
 			return true;
 		}else{
-			System.out.println("NetMessageHandler:processAck: throw old or duplicate package away");
+			System.out.println("NetMessageHandler:processAck: throw old or duplicate package away. Nr:" + data[begin+1] + " Time:" + System.currentTimeMillis());
 			return false;
 		}
 	}
@@ -109,6 +117,9 @@ public class NetMessageHandler {
 		
 		//get message parameters
 		unitId = getIntOutOfmessage(data, 3+begin);
+		//igonore own unit
+		if(unitId == Game.getGameInstance().getPlayer().getPlayerUnit().getId()) return;
+		
 		action = (int)data[7+begin];
 		int viewDirectionInt = (int)data[8+begin];
 		if(viewDirectionInt == Unit.ViewDirection.DOWN.toInt()){
@@ -146,7 +157,7 @@ public class NetMessageHandler {
 		
 		//resend package test
 		if(!ackReceived && System.currentTimeMillis() > timeSend + ping){
-			System.out.println("resent test: Nr:" + lastPackage[1]);
+			System.out.println("resent test: Nr:" + lastPackage[1] + " Time:" + System.currentTimeMillis());
 			client.sendMessage(lastPackage);
 			timeSend = System.currentTimeMillis();
 		}
@@ -156,7 +167,7 @@ public class NetMessageHandler {
 	 * 
 	 * @return length of the information in byte
 	 */
-	private int addUnitDataToArray(Unit unit, int action, Unit.ViewDirection direction, boolean moving, byte[] messageArray, int messageArrayStartPosition){
+	protected int addUnitDataToArray(Unit unit, int action, Unit.ViewDirection direction, boolean moving, byte[] messageArray, int messageArrayStartPosition){
 		int masp = messageArrayStartPosition;
 		int length = 0;
 		messageArray[masp + length++] = MESSAGE_UNIT_UPDATE;
