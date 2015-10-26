@@ -10,7 +10,7 @@ public class NetMessageHandler {
 	private byte tickCounter;
 	private byte packageCounter;
 	private int ping;
-	private byte lastReceiedPackageNumber;
+	private byte lastReceivedPackageNumber;
 	
 	//ack only for last package
 	private byte[] lastPackage;
@@ -29,7 +29,7 @@ public class NetMessageHandler {
 		tickCounter = 0;
 		packageCounter = 0;
 		ackReceived = true;
-		lastReceiedPackageNumber = -1;
+		lastReceivedPackageNumber = -1;
 		ping = 50; //TODO correct ping
 		
 		this.client = client;
@@ -87,7 +87,7 @@ public class NetMessageHandler {
 	 * @return false if package is old or duplicate
 	 */
 	private boolean processAck(byte[] data, int begin){
-		if(data[begin+1] <= lastReceiedPackageNumber || (lastReceiedPackageNumber < -100 && data[begin+1] > 100)){
+		if(data[begin+1] <= lastReceivedPackageNumber || (lastReceivedPackageNumber < -100 && data[begin+1] > 100)){
 			System.out.println("NetMessageHandler:processAck: throw old or duplicate package away");
 			return false;
 		}
