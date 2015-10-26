@@ -45,7 +45,7 @@ public class UDPTestClient extends UDPClient{
 					Game.getGameInstance().getNetMessageHandler().processByteMessage(receivePacket.getData().clone());
 					continue;
 				}
-				recPacketInfos.add(new PacketInfo(receivePacket.getData().clone(), System.currentTimeMillis()));
+				recPacketInfos.add(0, new PacketInfo(receivePacket.getData().clone(), System.currentTimeMillis()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -58,7 +58,7 @@ public class UDPTestClient extends UDPClient{
     		super.sendMessage(data);
     		return;
     	}
-		sendPacketInfos.add(new PacketInfo(data, System.currentTimeMillis()));
+		sendPacketInfos.add(0, new PacketInfo(data, System.currentTimeMillis()));
 	}
     
 	public void tick(){

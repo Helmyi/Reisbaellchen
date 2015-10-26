@@ -155,7 +155,7 @@ public class Game extends JPanel implements KeyListener {
 		//load test level
 		gameTime = 0;
 		try{
-			messageHandler = new NetMessageHandler(new UDPTestClient("127.0.0.1", 27015, 3, 100));
+			messageHandler = new NetMessageHandler(new UDPTestClient("127.0.0.1", 27015, 3, 30));
 		}catch(Exception e){
 			messageHandler = new NetMessageHandler(null);
 			e.printStackTrace();
