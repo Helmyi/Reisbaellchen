@@ -106,7 +106,7 @@ public class UDPServer extends Thread {
 		}else{
 			if(recPackageNumber == clientInfos.get(clientNumber).getHighestReceivedPackageNumber()){
 				//resent last package only to client //TODO maybe update unit position in information 
-				System.out.println("resent last Package");
+				System.out.println("resent last Package: " + recPackageNumber);
 				try {
 					sendPackageToClient(clientInfos.get(clientNumber).getLastPackageData(), clientNumber);
 				} catch (IOException e) {

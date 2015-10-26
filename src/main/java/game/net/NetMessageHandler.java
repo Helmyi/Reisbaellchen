@@ -87,15 +87,16 @@ public class NetMessageHandler {
 	 * @return false if package is old or duplicate
 	 */
 	private boolean processAck(byte[] data, int begin){
-		if(data[begin+1] <= lastReceiedPackageNumber || (lastReceiedPackageNumber < -100 && data[begin+1] > 100)){
+		if(data[begin+1] > lastReceiedPackageNumber || (data[begin+1] < -100 && lastReceiedPackageNumber > 100)){
+			if(data[begin+1] == lastPackage[1]){
+				lastReceiedPackageNumber = data[begin+1];
+				ackReceived = true;
+			}
+			return true;
+		}else{
 			System.out.println("NetMessageHandler:processAck: throw old or duplicate package away");
 			return false;
 		}
-		
-		if(data[begin+1] == lastPackage[1]){
-			ackReceived = true;
-		}
-		return true;
 	}
 	
 	private void processUnitUpdate(byte[] data, int begin){
@@ -145,7 +146,7 @@ public class NetMessageHandler {
 		
 		//resend package test
 		if(!ackReceived && System.currentTimeMillis() > timeSend + ping){
-			System.out.println("resent test");
+			System.out.println("resent test: Nr:" + lastPackage[1]);
 			client.sendMessage(lastPackage);
 			timeSend = System.currentTimeMillis();
 		}
