@@ -1,19 +1,7 @@
 package game;
 
-import com.google.common.io.Resources;
-
-import game.ai.AI_MoveRandom;
-import game.ai.UnitAI;
-import game.net.NetMessageHandler;
-import game.net.UDPClient;
-import game.net.UDPTestClient;
-import map.Map;
-import map.Map3;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
@@ -21,6 +9,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import com.google.common.io.Resources;
+
+import game.ai.AI_MoveRandom;
+import game.ai.UnitAI;
+import game.net.NetMessageHandler;
+import game.net.UDPTestClient;
+import map.Map;
+import map.Map3;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements KeyListener {
@@ -39,7 +40,7 @@ public class Game extends JPanel implements KeyListener {
 	private List<UnitAI> unitAIs;
 	private List<Image> unitImages;
 	private List<Entity> entityList;
-	
+
 	public Game() {
 		setFocusable(true); // needed for listeners to work
 		addKeyListener(this);
@@ -56,9 +57,10 @@ public class Game extends JPanel implements KeyListener {
 
 		theGame.run();
 	}
+
 	@Override
 	public void paint(Graphics g) {
-		paintAndTickSynchronizer(g,0);
+		paintAndTickSynchronizer(g, 0);
 	}
 
 	/**
@@ -69,8 +71,9 @@ public class Game extends JPanel implements KeyListener {
 			imageBuffer = this.createImage(width, height);
 			graphicBuffer = imageBuffer.getGraphics();
 		}
-		
-		if (player != null && player.getPlayerCamera() != null) player.getPlayerCamera().paint(graphicBuffer);
+
+		if (player != null && player.getPlayerCamera() != null)
+			player.getPlayerCamera().paint(graphicBuffer);
 		g.drawImage(imageBuffer, 0, 0, this);
 	}
 
@@ -94,16 +97,17 @@ public class Game extends JPanel implements KeyListener {
 		cam.updateViewPointX();
 		cam.updateViewPointY();
 	}
-	
+
 	/**
-	 * because otherwise it happens that paint and tick run in parallel because paint is an extra threat
-	 * and sometimes takes it times before it start from the repaint call
-	 * g == null -> tick
-	 * g != null -> paint
+	 * because otherwise it happens that paint and tick run in parallel because
+	 * paint is an extra threat and sometimes takes it times before it start
+	 * from the repaint call g == null -> tick g != null -> paint
 	 */
-	private synchronized void paintAndTickSynchronizer(Graphics g, int elapsedTime){
-		if(g == null) tick(elapsedTime);
-		else realPaint(g);
+	private synchronized void paintAndTickSynchronizer(Graphics g, int elapsedTime) {
+		if (g == null)
+			tick(elapsedTime);
+		else
+			realPaint(g);
 	}
 
 	public void createTestLevel() {
@@ -113,10 +117,8 @@ public class Game extends JPanel implements KeyListener {
 		player = new Player();
 
 		try {
-			unitImages.add(ImageIO.read(Resources
-					.getResource("Fa_big_head2.png")));
-			unitImages
-					.add(ImageIO.read(Resources.getResource("Hero_Base.png")));
+			unitImages.add(ImageIO.read(Resources.getResource("Fa_big_head2.png")));
+			unitImages.add(ImageIO.read(Resources.getResource("Hero_Base.png")));
 			entityList.add(new Unit(unitImages.get(1), 10 * 32, 5 * 32, 250));
 			entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, 200));
 			entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, 200));
@@ -125,8 +127,8 @@ public class Game extends JPanel implements KeyListener {
 			entityList.add(new Unit(unitImages.get(1), 13 * 32, 5 * 32, 200));
 
 			player.setPlayerUnit((Unit) entityList.get(0));
-			PlayerCamera cam = new PlayerCamera((int) player.getPlayerUnit()
-					.getX(), (int) player.getPlayerUnit().getY());
+			PlayerCamera cam = new PlayerCamera((int) player.getPlayerUnit().getX(),
+					(int) player.getPlayerUnit().getY());
 			cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
 			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
 			player.setPlayerCamera(cam);
@@ -135,15 +137,15 @@ public class Game extends JPanel implements KeyListener {
 			unitAIs.get(0).addUnit((Unit) entityList.get(5));
 			// unitAIs.get(0).addUnit((Unit)entityList.get(3));
 			// unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
-			
-			//set player unit depending on clientNumber
-			if(messageHandler.getClient() != null){
-				List<Unit> units=getAllUnits(); 
-				if(units.size() > messageHandler.getClient().getClientNumber()){
+
+			// set player unit depending on clientNumber
+			if (messageHandler.getClient() != null) {
+				List<Unit> units = getAllUnits();
+				if (units.size() > messageHandler.getClient().getClientNumber()) {
 					player.setPlayerUnit(units.get(messageHandler.getClient().getClientNumber()));
 				}
 			}
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -152,23 +154,23 @@ public class Game extends JPanel implements KeyListener {
 	}
 
 	public void run() {
-		//load test level
+		// load test level
 		gameTime = 0;
-		try{
+		try {
 			messageHandler = new NetMessageHandler(new UDPTestClient("127.0.0.1", 27015, 3, 30));
-		}catch(Exception e){
+		} catch (Exception e) {
 			messageHandler = new NetMessageHandler(null);
 			e.printStackTrace();
 		}
-				
+
 		createTestLevel();
-		
+
 		long timeBefore, timePassed, sleepTime;
 		timeBefore = System.currentTimeMillis();
 
 		// loop
 		while (true) {
-			//tick
+			// tick
 			messageHandler.tick();
 			paintAndTickSynchronizer(null, 1000 / fps);
 			repaint();
@@ -177,10 +179,10 @@ public class Game extends JPanel implements KeyListener {
 
 			sleepTime = (1000 / fps) - timePassed;
 			gameTime += (1000 / fps);
-			
+
 			if (sleepTime < 0) {
 				sleepTime = 0;
-//				System.out.println("Game.run: no sleep");
+				// System.out.println("Game.run: no sleep");
 			}
 
 			try {
@@ -194,9 +196,15 @@ public class Game extends JPanel implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if (arg0.getKeyCode() == KeyEvent.VK_0) {
+		switch (arg0.getKeyCode()) {
+		case KeyEvent.VK_0:
 			map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
-
+			return;
+		case KeyEvent.VK_ESCAPE:
+			// TODO: pause game, show menu
+			return;
+		case KeyEvent.VK_ENTER:
+			// TODO: open chat
 			return;
 		}
 
@@ -228,12 +236,12 @@ public class Game extends JPanel implements KeyListener {
 	public Player getPlayer() {
 		return player;
 	}
-	
-	public long getGameTime(){
+
+	public long getGameTime() {
 		return gameTime;
 	}
-	
-	public NetMessageHandler getNetMessageHandler(){
+
+	public NetMessageHandler getNetMessageHandler() {
 		return messageHandler;
 	}
 
@@ -244,8 +252,7 @@ public class Game extends JPanel implements KeyListener {
 		for (Entity entity : entityList) {
 			if (entity instanceof Unit) {
 				Unit unit = (Unit) entity;
-				if (unit.getX() < x && x < (unit.getX() + unit.getTileWidth())
-						&& unit.getY() < y
+				if (unit.getX() < x && x < (unit.getX() + unit.getTileWidth()) && unit.getY() < y
 						&& y < (unit.getY() + unit.getTileHeight())) {
 					units.add(unit);
 				}
@@ -253,12 +260,12 @@ public class Game extends JPanel implements KeyListener {
 		}
 		return units;
 	}
-	
-	public List<Unit> getAllUnits(){
+
+	public List<Unit> getAllUnits() {
 		List<Unit> units = new ArrayList<>();
 		for (Entity entity : entityList) {
 			if (entity instanceof Unit) {
-				units.add((Unit)entity);
+				units.add((Unit) entity);
 			}
 		}
 		return units;
