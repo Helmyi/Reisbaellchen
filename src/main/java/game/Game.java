@@ -24,7 +24,7 @@ import map.Map;
 import map.Map3;
 
 @SuppressWarnings("serial")
-public class Game extends JPanel implements KeyListener {
+public class Game extends JPanel implements KeyListener, Runnable {
 	Image imageBuffer;
 	Graphics graphicBuffer;
 	NetMessageHandler messageHandler;
@@ -42,8 +42,9 @@ public class Game extends JPanel implements KeyListener {
 	private List<Entity> entityList;
 
 	public Game() {
-		setFocusable(true); // needed for listeners to work
-		addKeyListener(this);
+		this.setFocusable(true); // needed for listeners to work
+		this.requestFocusInWindow();
+		this.addKeyListener(this);
 	}
 
 	public static void main(String[] args) {
@@ -153,6 +154,7 @@ public class Game extends JPanel implements KeyListener {
 		map = new Map3("src/main/resources/Zones/TestMap/Wüste6.tmx");
 	}
 
+	@Override
 	public void run() {
 		// load test level
 		gameTime = 0;
