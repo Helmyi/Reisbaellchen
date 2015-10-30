@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -34,6 +35,8 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	private int fps = 55;
 	private static int width = 1000;
 	private static int height = 600;
+	private GameMenu menu;
+	private boolean isMenuVisible;
 	private Map map;
 
 	private Player player;
@@ -45,11 +48,14 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		this.setFocusable(true); // needed for listeners to work
 		this.requestFocusInWindow();
 		this.addKeyListener(this);
+		this.menu = new GameMenu();
+		this.isMenuVisible = false;
+
 	}
 
 	public static void main(String[] args) {
 		theGame = new Game();
-
+		theGame.init();
 		JFrame frame = new JFrame("Reisbaellchen Game");
 		frame.add(theGame);
 		frame.setSize(width, height);
@@ -57,6 +63,12 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		theGame.run();
+	}
+
+	// initializing the game
+	private void init() {
+		theGame.add(menu);
+		menu.setLocation(width / 2, height / 2);
 	}
 
 	@Override
@@ -156,6 +168,9 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
 	@Override
 	public void run() {
+		long timeBefore, timePassed, sleepTime;
+		timeBefore = System.currentTimeMillis();
+
 		// load test level
 		gameTime = 0;
 		try {
@@ -166,9 +181,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		}
 
 		createTestLevel();
-
-		long timeBefore, timePassed, sleepTime;
-		timeBefore = System.currentTimeMillis();
 
 		// loop
 		while (true) {
@@ -203,7 +215,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 			map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
 			return;
 		case KeyEvent.VK_ESCAPE:
-			// TODO: pause game, show menu
+			toggleMenu();
 			return;
 		case KeyEvent.VK_ENTER:
 			// TODO: open chat
@@ -280,5 +292,15 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		}
 		System.out.println("Entity id not found: " + id);
 		return null;
+	}
+
+	/**
+	 * toggles the game menu
+	 */
+	public void toggleMenu() {
+		// toggle menu visibility flag
+		isMenuVisible = !isMenuVisible;
+		// set to toggled state
+		menu.setVisible(isMenuVisible);
 	}
 }
