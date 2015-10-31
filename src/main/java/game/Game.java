@@ -19,6 +19,7 @@ import com.google.common.io.Resources;
 
 import game.ai.AI_MoveRandom;
 import game.ai.UnitAI;
+import game.menu.GameMenu;
 import game.net.NetMessageHandler;
 import game.net.UDPTestClient;
 import map.Map;
