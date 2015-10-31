@@ -81,6 +81,7 @@ public class NetMessageHandler {
 		}else{
 			//singleplayer
 			processByteMessage(data);
+			directPlayerUnitAction(unit, action, direction, moving);
 		}
 
 		packageCounter++;

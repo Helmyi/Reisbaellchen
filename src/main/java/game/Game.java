@@ -21,6 +21,7 @@ import game.ai.AI_MoveRandom;
 import game.ai.UnitAI;
 import game.menu.GameMenu;
 import game.net.NetMessageHandler;
+import game.net.UDPClient;
 import game.net.UDPTestClient;
 import map.Map;
 import map.Map3;
@@ -175,7 +176,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		// load test level
 		gameTime = 0;
 		try {
-			messageHandler = new NetMessageHandler(new UDPTestClient("127.0.0.1", 27015, 3, 30));
+			messageHandler = new NetMessageHandler(new UDPClient("127.0.0.1", 27015, 3));
 		} catch (Exception e) {
 			messageHandler = new NetMessageHandler(null);
 			e.printStackTrace();
