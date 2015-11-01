@@ -19,7 +19,7 @@ public class Action_Kick extends Action {
             lastAnimationStepTime = Game.getGameInstance().getGameTime();
             setCurrentAnimationStep(getCurrentAnimationStep() + 1);
         }
-        final java.util.List<Unit> kickedUnits = Game.getGameInstance().getUnitsAt(calculateHitPoint());
+        final java.util.List<Unit> kickedUnits = Game.getGameInstance().getUnitsAt(calculateHitPoint(), getOwner().getCurrentLevelId());
         for (Unit unit : kickedUnits){
         	if(getOwner() == unit) continue;
             unit.takeDamage(5);

@@ -10,8 +10,10 @@ public abstract class Map {
 	protected int tileCountX;
 	protected int tileCountY;
 	protected List<TileInfo> tileInfoList;
+	protected String mapPath;
 
 	public Map(String path) {
+		mapPath = path;
 		tileSize = 32;
 		tilePath = "src/main/resources/Zones/TestMap/";
 	}
@@ -37,6 +39,10 @@ public abstract class Map {
 
 	public int getMapHeight() {
 		return tileCountY * tileSize;
+	}
+	
+	public String getMapPath(){
+		return mapPath;
 	}
 
 	public abstract boolean getTileCollision(int tileX, int tileY);

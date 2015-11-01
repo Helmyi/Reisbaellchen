@@ -12,14 +12,16 @@ public abstract class Entity implements Comparable<Entity> {
 	protected Image entityImage;
 	protected int tileWidth;
 	protected int tileHeight;
-
-	public Entity(Image image, double x, double y) {
-		id = ++idCounter;
+	protected int currentLevelId;
+	
+	public Entity(Image image, double x, double y, int currentLevelId) {
+		id = idCounter++;
 		this.entityImage = image;
 		this.tileHeight = image.getHeight(null);
 		this.tileWidth = image.getWidth(null);
 		this.x = x;
 		this.y = y;
+		this.currentLevelId = currentLevelId;
 	}
 
 	public double getX() {
@@ -36,6 +38,14 @@ public abstract class Entity implements Comparable<Entity> {
 
 	public void setY(double y) {
 		this.y = y;
+	}
+
+	public int getCurrentLevelId() {
+		return currentLevelId;
+	}
+
+	public void setCurrentLevelId(int currentLevelId) {
+		this.currentLevelId = currentLevelId;
 	}
 
 	public int getTileWidth() {

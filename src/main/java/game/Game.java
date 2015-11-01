@@ -7,7 +7,6 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -16,14 +15,10 @@ import javax.swing.JPanel;
 
 import com.google.common.io.Resources;
 
-import game.ai.AI_MoveRandom;
-import game.ai.UnitAI;
 import game.menu.GameMenu;
 import game.net.NetMessageHandler;
 import game.net.UDPClient;
-import game.net.UDPTestClient;
 import map.Map;
-import map.Map3;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements KeyListener, Runnable {
@@ -38,12 +33,10 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	private static int height = 600;
 	private GameMenu menu;
 	private boolean isMenuVisible;
-	private Map map;
+	private List<Image> unitImages;
 
 	private Player player;
-	private List<UnitAI> unitAIs;
-	private List<Image> unitImages;
-	private List<Entity> entityList;
+	private List<Level> levels;
 
 	public Game() {
 		this.setFocusable(true); // needed for listeners to work
@@ -51,6 +44,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		this.addKeyListener(this);
 		this.menu = new GameMenu();
 		this.isMenuVisible = false;
+		levels = new ArrayList<Level>();
 
 	}
 
@@ -70,6 +64,48 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	private void init() {
 		theGame.add(menu);
 		menu.setLocation(width / 2, height / 2);
+	}
+	
+	/**
+	 * initializing when running begins. theGame instance exists here, but not in normal init
+	 */
+	private void runInit(){
+		// load test level
+		gameTime = 0;
+		try {
+			messageHandler = new NetMessageHandler(new UDPClient("127.0.0.1", 27015, 2));
+		} catch (Exception e) {
+			messageHandler = new NetMessageHandler(null);
+			e.printStackTrace();
+		}
+
+		unitImages = new ArrayList<Image>();
+		try {
+			unitImages.add(ImageIO.read(Resources.getResource("Fa_big_head2.png")));
+			unitImages.add(ImageIO.read(Resources.getResource("Hero_Base.png")));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		player = new Player();
+
+		levels.add(Level.createTestLevel());
+		
+		// set player unit depending on clientNumber
+		if (messageHandler.getClient() != null) {
+			if(getEnityById(messageHandler.getClient().getClientNumber()) != null){
+				player.setPlayerUnit((Unit) getEnityById(messageHandler.getClient().getClientNumber()));
+			}else{
+				player.setPlayerUnit((Unit) getEnityById(0));
+			}
+		}else{
+			player.setPlayerUnit((Unit) getEnityById(0));
+		}
+
+		PlayerCamera cam = new PlayerCamera(player);
+		cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
+		cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
+		player.setPlayerCamera(cam);
 	}
 
 	@Override
@@ -95,21 +131,9 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	 * game logic
 	 */
 	private void tick(int elapsedTime) {
-		for (UnitAI ai : unitAIs) {
-			ai.tick();
+		for (Level level : levels) {
+			level.tick(elapsedTime);
 		}
-
-		Collections.sort(entityList);
-		for (Entity ent : entityList) {
-			ent.tick(elapsedTime);
-		}
-
-		// update camera position
-		Player player = getPlayer();
-		PlayerCamera cam = getPlayer().getPlayerCamera();
-		player.updatePlayerPosition();
-		cam.updateViewPointX();
-		cam.updateViewPointY();
 	}
 
 	/**
@@ -124,65 +148,13 @@ public class Game extends JPanel implements KeyListener, Runnable {
 			realPaint(g);
 	}
 
-	public void createTestLevel() {
-		entityList = new ArrayList<Entity>();
-		unitImages = new ArrayList<Image>();
-		unitAIs = new ArrayList<UnitAI>();
-		player = new Player();
-
-		try {
-			unitImages.add(ImageIO.read(Resources.getResource("Fa_big_head2.png")));
-			unitImages.add(ImageIO.read(Resources.getResource("Hero_Base.png")));
-			entityList.add(new Unit(unitImages.get(1), 10 * 32, 5 * 32, 250));
-			entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, 200));
-			entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, 200));
-			entityList.add(new Unit(unitImages.get(1), 15 * 32, 7 * 32, 200));
-			entityList.add(new Unit(unitImages.get(1), 15 * 32, 5 * 32, 200));
-			entityList.add(new Unit(unitImages.get(1), 13 * 32, 5 * 32, 200));
-
-			player.setPlayerUnit((Unit) entityList.get(0));
-			PlayerCamera cam = new PlayerCamera((int) player.getPlayerUnit().getX(),
-					(int) player.getPlayerUnit().getY());
-			cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
-			cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
-			player.setPlayerCamera(cam);
-
-			unitAIs.add(new AI_MoveRandom((Unit) entityList.get(4)));
-			unitAIs.get(0).addUnit((Unit) entityList.get(5));
-			// unitAIs.get(0).addUnit((Unit)entityList.get(3));
-			// unitAIs.add(new AI_MoveRandom((Unit)entityList.get(4)));
-
-			// set player unit depending on clientNumber
-			if (messageHandler.getClient() != null) {
-				List<Unit> units = getAllUnits();
-				if (units.size() > messageHandler.getClient().getClientNumber()) {
-					player.setPlayerUnit(units.get(messageHandler.getClient().getClientNumber()));
-				}
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		map = new Map3("src/main/resources/Zones/TestMap/Wüste6.tmx");
-	}
-
 	@Override
 	public void run() {
 		long timeBefore, timePassed, sleepTime;
 		timeBefore = System.currentTimeMillis();
 
-		// load test level
-		gameTime = 0;
-		try {
-			messageHandler = new NetMessageHandler(new UDPClient("127.0.0.1", 27015, 3));
-		} catch (Exception e) {
-			messageHandler = new NetMessageHandler(null);
-			e.printStackTrace();
-		}
-
-		createTestLevel();
-
+		runInit();
+		
 		// loop
 		while (true) {
 			// tick
@@ -212,9 +184,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		switch (arg0.getKeyCode()) {
-		case KeyEvent.VK_0:
-			map = new Map3("resources/Zones/TestMap/Wüste1.tmx");
-			return;
 		case KeyEvent.VK_ESCAPE:
 			toggleMenu();
 			return;
@@ -240,12 +209,12 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		return theGame;
 	}
 
-	public List<Entity> getEntityList() {
-		return entityList;
+	public List<Entity> getEntityList(int levelId) {
+		return getLevelById(levelId).getEntityList();
 	}
 
-	public Map getMap() {
-		return map;
+	public Map getMap(int levelId) {
+		return getLevelById(levelId).getMap();
 	}
 
 	public Player getPlayer() {
@@ -260,39 +229,70 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		return messageHandler;
 	}
 
-	public List<Unit> getUnitsAt(Point2D point) {
+	public List<Unit> getUnitsAt(Point2D point, int levelId) {
 		double x = point.getX();
 		double y = point.getY();
 		List<Unit> units = new ArrayList<>();
-		for (Entity entity : entityList) {
-			if (entity instanceof Unit) {
-				Unit unit = (Unit) entity;
-				if (unit.getX() < x && x < (unit.getX() + unit.getTileWidth()) && unit.getY() < y
-						&& y < (unit.getY() + unit.getTileHeight())) {
-					units.add(unit);
+		for (Unit unit : getAllUnits(levelId)) {
+			if (unit.getX() < x && x < (unit.getX() + unit.getTileWidth()) && unit.getY() < y
+					&& y < (unit.getY() + unit.getTileHeight())) {
+				units.add(unit);
+			}
+		}
+		return units;
+	}
+
+	public List<Unit> getAllUnits(int levelId) {
+		List<Unit> units = new ArrayList<>();
+		for (Level level : levels) {
+			if(level.getLevelId() == levelId){
+				for (Entity entity : level.getEntityList()) {
+					if (entity instanceof Unit) {
+						units.add((Unit) entity);
+					}
+				}
+				return units;
+			}
+		}
+		System.out.println("Game.getAllUnits: levelId not found: " + levelId);
+		return null;
+	}
+
+	public List<Unit> getAllUnitsFromAllLevels() {
+		List<Unit> units = new ArrayList<>();
+		for (Level level : levels) {
+			for (Entity entity : level.getEntityList()) {
+				if (entity instanceof Unit) {
+					units.add((Unit) entity);
 				}
 			}
 		}
 		return units;
 	}
 
-	public List<Unit> getAllUnits() {
-		List<Unit> units = new ArrayList<>();
-		for (Entity entity : entityList) {
-			if (entity instanceof Unit) {
-				units.add((Unit) entity);
-			}
-		}
-		return units;
-	}
-
 	public Entity getEnityById(int id) {
-		for (Entity entity : entityList) {
-			if (entity.getId() == id)
-				return entity;
+		for (Level level : levels) {
+			for (Entity entity : level.getEntityList()) {
+				if (entity.getId() == id)
+					return entity;
+			}
 		}
 		System.out.println("Entity id not found: " + id);
 		return null;
+	}
+	
+	public Level getLevelById(int levelId){
+		for (Level level : levels) {
+			if(level.getLevelId() == levelId){
+				return level;
+			}
+		}
+		System.out.println("Level id not found: " + levelId);
+		return null;
+	}
+	
+	public List<Image> getImageList(){
+		return unitImages;
 	}
 
 	/**

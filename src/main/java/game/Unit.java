@@ -31,22 +31,22 @@ public class Unit extends Entity {
 		}
 	}
 
-	public Unit(Image image, double x, double y) {
-		super(image, x, y);
+	public Unit(Image image, double x, double y, int currentLevelId) {
+		super(image, x, y, currentLevelId);
 		init();
 	}
 
-	public Unit(Image image, double x, double y, double speed) {
-		super(image, x, y);
+	public Unit(Image image, double x, double y, int currentLevelId, double speed) {
+		super(image, x, y, currentLevelId);
 		init();
 		this.speed = speed;
 	}
 
 	private boolean unitCollision() {
-		if(!Game.getGameInstance().getMap().getPositionCollision((int)x, (int)y + tileHeight/2)
-			&& !Game.getGameInstance().getMap().getPositionCollision((int)x, (int)y + tileHeight-1)
-			&& !Game.getGameInstance().getMap().getPositionCollision((int)x + tileWidth-1, (int)y + tileHeight/2)
-			&& !Game.getGameInstance().getMap().getPositionCollision((int)x + tileWidth-1, (int)y + tileHeight-1)){
+		if(!Game.getGameInstance().getMap(currentLevelId).getPositionCollision((int)x, (int)y + tileHeight/2)
+			&& !Game.getGameInstance().getMap(currentLevelId).getPositionCollision((int)x, (int)y + tileHeight-1)
+			&& !Game.getGameInstance().getMap(currentLevelId).getPositionCollision((int)x + tileWidth-1, (int)y + tileHeight/2)
+			&& !Game.getGameInstance().getMap(currentLevelId).getPositionCollision((int)x + tileWidth-1, (int)y + tileHeight-1)){
 			return false;
 		}
 		return true;
@@ -63,28 +63,28 @@ public class Unit extends Entity {
 				if (unitCollision()) {
 					y -= moveDistance;
 					//move as close as possible
-					y += Game.getGameInstance().getMap().getTileSize() - (y+63)%Game.getGameInstance().getMap().getTileSize() - 1;
+					y += Game.getGameInstance().getMap(currentLevelId).getTileSize() - (y+63)%Game.getGameInstance().getMap(currentLevelId).getTileSize() - 1;
 				}
 				break;
 			case UP:
 				y -= moveDistance;
 				if (unitCollision()) {
 					y += moveDistance;
-					y -= (int)(y+32)%Game.getGameInstance().getMap().getTileSize();
+					y -= (int)(y+32)%Game.getGameInstance().getMap(currentLevelId).getTileSize();
 				}
 				break;
 			case RIGHT:
 				x += moveDistance;
 				if (unitCollision()) {
 					x -= moveDistance;
-					x += Game.getGameInstance().getMap().getTileSize() - (x+63)%Game.getGameInstance().getMap().getTileSize() - 1;
+					x += Game.getGameInstance().getMap(currentLevelId).getTileSize() - (x+63)%Game.getGameInstance().getMap(currentLevelId).getTileSize() - 1;
 				}
 				break;
 			case LEFT:
 				x -= moveDistance;
 				if (unitCollision()) {
 					x += moveDistance;
-					x -= (int)(x+32)%Game.getGameInstance().getMap().getTileSize();
+					x -= (int)(x+32)%Game.getGameInstance().getMap(currentLevelId).getTileSize();
 				}
 				break;
 			}

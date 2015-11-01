@@ -20,7 +20,7 @@ public class Action_Punch extends Action {
             setCurrentAnimationStep(getCurrentAnimationStep() + 1);
         }
 
-        final java.util.List<Unit> punchedUnits = Game.getGameInstance().getUnitsAt(calculateHitPoint());
+        final java.util.List<Unit> punchedUnits = Game.getGameInstance().getUnitsAt(calculateHitPoint(), getOwner().getCurrentLevelId());
         for (Unit unit : punchedUnits){
         	if(getOwner() == unit) continue;
         	unit.takeDamage(2);
