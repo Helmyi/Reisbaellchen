@@ -3,7 +3,6 @@ package game;
 import game.ai.AI_MoveRandom;
 import game.ai.UnitAI;
 
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,15 +69,14 @@ public class Level {
 		Level level = new Level("Test Level", "src/main/resources/Zones/TestMap/Wüste6.tmx");
 		List<Entity> entityList = level.getEntityList();
 		List<UnitAI> unitAIs = level.getUnitAIs();
-		List<Image> unitImages = Game.getGameInstance().getImageList();
 		int levelId = level.getLevelId();
 		
-		entityList.add(new Unit(unitImages.get(1), 10 * 32, 5 * 32, levelId, 250));
-		entityList.add(new Unit(unitImages.get(1), 11 * 32, 5 * 32, levelId, 250));
-		entityList.add(new Unit(unitImages.get(1), 13 * 32, 7 * 32, levelId, 250));
-		entityList.add(new Unit(unitImages.get(1), 15 * 32, 7 * 32, levelId, 250));
-		entityList.add(new Unit(unitImages.get(1), 15 * 32, 5 * 32, levelId, 250));
-		entityList.add(new Unit(unitImages.get(1), 13 * 32, 5 * 32, levelId, 250));
+		entityList.add(new Unit(ImageLoader.getImage("Hero_Base.png"), 10 * 32, 5 * 32, levelId, 250));
+		entityList.add(new Unit(ImageLoader.getImage("Hero_Base.png"), 11 * 32, 5 * 32, levelId, 250));
+		entityList.add(new Unit(ImageLoader.getImage("Hero_Base.png"), 13 * 32, 7 * 32, levelId, 250));
+		entityList.add(new Unit(ImageLoader.getImage("Hero_Base.png"), 15 * 32, 7 * 32, levelId, 250));
+		entityList.add(new Unit(ImageLoader.getImage("Hero_Base.png"), 15 * 32, 5 * 32, levelId, 250));
+		entityList.add(new Unit(ImageLoader.getImage("Hero_Base.png"), 13 * 32, 5 * 32, levelId, 250));
 
 		unitAIs.add(new AI_MoveRandom((Unit) entityList.get(4)));
 		unitAIs.get(0).addUnit((Unit) entityList.get(5));

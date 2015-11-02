@@ -5,15 +5,11 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import com.google.common.io.Resources;
 
 import game.menu.GameMenu;
 import game.net.NetMessageHandler;
@@ -33,7 +29,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	private static int height = 600;
 	private GameMenu menu;
 	private boolean isMenuVisible;
-	private List<Image> unitImages;
 
 	private Player player;
 	private List<Level> levels;
@@ -79,14 +74,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
 			e.printStackTrace();
 		}
 
-		unitImages = new ArrayList<Image>();
-		try {
-			unitImages.add(ImageIO.read(Resources.getResource("Fa_big_head2.png")));
-			unitImages.add(ImageIO.read(Resources.getResource("Hero_Base.png")));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
 		player = new Player();
 
 		levels.add(Level.createTestLevel());
@@ -291,10 +278,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		return null;
 	}
 	
-	public List<Image> getImageList(){
-		return unitImages;
-	}
-
 	/**
 	 * toggles the game menu
 	 */
