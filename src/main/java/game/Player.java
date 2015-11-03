@@ -22,10 +22,13 @@ public class Player {
 		key_MoveDown_Pressed = false;
 		key_MoveLeft_Pressed = false;
 		key_MoveRight_Pressed = false;
+		setPlayerCamera(new PlayerCamera(this));
 	}
 
 	public void setPlayerUnit(Unit playerUnit) {
 		this.playerUnit = playerUnit;
+		camera.setPlayerTileWidth(getPlayerUnit().getTileWidth());
+		camera.setPlayerTileHeight(getPlayerUnit().getTileHeight());
 	}
 
 	public void setPlayerCamera(PlayerCamera cam) {

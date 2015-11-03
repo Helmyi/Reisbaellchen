@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import game.menu.GameMenu;
 import game.net.NetMessageHandler;
 import game.net.UDPClient;
+import game.net.UDPTestClient;
 import map.Map;
 
 @SuppressWarnings("serial")
@@ -68,7 +69,9 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		// load test level
 		gameTime = 0;
 		try {
-			messageHandler = new NetMessageHandler(new UDPClient("127.0.0.1", 27015, 2));
+			int customDelay = 20;
+			int customJitter = 10;
+			messageHandler = new NetMessageHandler(new UDPTestClient("127.0.0.1", 27015, 2, customDelay, customJitter));
 		} catch (Exception e) {
 			messageHandler = new NetMessageHandler(null);
 			e.printStackTrace();
@@ -88,11 +91,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		}else{
 			player.setPlayerUnit((Unit) getEnityById(0));
 		}
-
-		PlayerCamera cam = new PlayerCamera(player);
-		cam.setPlayerTileWidth(player.getPlayerUnit().getTileWidth());
-		cam.setPlayerTileHeight(player.getPlayerUnit().getTileHeight());
-		player.setPlayerCamera(cam);
 	}
 
 	@Override
@@ -126,7 +124,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	/**
 	 * because otherwise it happens that paint and tick run in parallel because
 	 * paint is an extra threat and sometimes takes it times before it start
-	 * from the repaint call g == null -> tick g != null -> paint
+	 * from the repaint call g == null -> tick; g != null -> paint
 	 */
 	private synchronized void paintAndTickSynchronizer(Graphics g, int elapsedTime) {
 		if (g == null)
@@ -137,16 +135,17 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
 	@Override
 	public void run() {
+		runInit();
+		
 		long timeBefore, timePassed, sleepTime;
 		timeBefore = System.currentTimeMillis();
 
-		runInit();
-		
 		// loop
 		while (true) {
 			// tick
 			messageHandler.tick();
 			paintAndTickSynchronizer(null, 1000 / fps);
+			
 			repaint();
 
 			timePassed = System.currentTimeMillis() - timeBefore;

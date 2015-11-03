@@ -16,6 +16,7 @@ public class UDPTestClient extends UDPClient{
 	private List<PacketInfo> recPacketInfos;
 	private List<PacketInfo> sendPacketInfos;
 	private int customDelay;
+	private int customJitter;
 	
 	public class PacketInfo{
 		public PacketInfo(byte[] data, long receivedTime){
@@ -27,11 +28,12 @@ public class UDPTestClient extends UDPClient{
 		long receivedTime;
 	}
     
-    public UDPTestClient(String serverIp, int port, int maxConnectTrys, int customDelay) throws ConnectionFailedException{
+    public UDPTestClient(String serverIp, int port, int maxConnectTrys, int customDelay, int customJitter) throws ConnectionFailedException{
     	super(serverIp, port, maxConnectTrys);
     	this.customDelay = customDelay;
 		recPacketInfos = new LinkedList<PacketInfo>();
 		sendPacketInfos = new LinkedList<PacketInfo>();
+		this.customJitter = customJitter;
 	}
     
     @Override
@@ -45,7 +47,7 @@ public class UDPTestClient extends UDPClient{
 					Game.getGameInstance().getNetMessageHandler().processByteMessage(receivePacket.getData().clone());
 					continue;
 				}
-				recPacketInfos.add(0, new PacketInfo(receivePacket.getData().clone(), System.currentTimeMillis()));
+				recPacketInfos.add(0, new PacketInfo(receivePacket.getData().clone(), calcPacketTime()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -58,19 +60,26 @@ public class UDPTestClient extends UDPClient{
     		super.sendMessage(data);
     		return;
     	}
-		sendPacketInfos.add(0, new PacketInfo(data, System.currentTimeMillis()));
+		sendPacketInfos.add(0, new PacketInfo(data, calcPacketTime()));
 	}
+    
+    /**
+     * @return should simulate the travel time of a packet
+     */
+    private long calcPacketTime(){
+    	return System.currentTimeMillis() + (int)(customJitter * Math.random()) + customDelay;
+    }
     
 	public void tick(){
 		for(int i=sendPacketInfos.size()-1; i>=0; i--){
-			if(sendPacketInfos.get(i).receivedTime + customDelay < System.currentTimeMillis()){
+			if(sendPacketInfos.get(i).receivedTime < System.currentTimeMillis()){
 				super.sendMessage(sendPacketInfos.get(i).data);
 				sendPacketInfos.remove(i);
 			}
 		}
 		
 		for(int i=recPacketInfos.size()-1; i>=0; i--){
-			if(recPacketInfos.get(i).receivedTime + customDelay < System.currentTimeMillis()){
+			if(recPacketInfos.get(i).receivedTime < System.currentTimeMillis()){
 				Game.getGameInstance().getNetMessageHandler().processByteMessage(recPacketInfos.get(i).data);
 				recPacketInfos.remove(i);
 			}
