@@ -1,7 +1,5 @@
 package game;
 
-import java.awt.event.KeyEvent;
-
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
