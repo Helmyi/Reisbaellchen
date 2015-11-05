@@ -1,18 +1,18 @@
 package game;
 
+import game.player.PlayerAction_ActionX_Pressed;
+import game.player.PlayerAction_ActionX_Released;
+import game.player.PlayerAction_MoveDown_Pressed;
+import game.player.PlayerAction_MoveDown_Released;
+import game.player.PlayerAction_MoveLeft_Pressed;
+import game.player.PlayerAction_MoveLeft_Released;
+import game.player.PlayerAction_MoveRight_Pressed;
+import game.player.PlayerAction_MoveRight_Released;
+import game.player.PlayerAction_MoveUp_Pressed;
+import game.player.PlayerAction_MoveUp_Released;
+
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-
-import player.PlayerAction_ActionX_Pressed;
-import player.PlayerAction_ActionX_Released;
-import player.PlayerAction_MoveDown_Pressed;
-import player.PlayerAction_MoveDown_Released;
-import player.PlayerAction_MoveLeft_Pressed;
-import player.PlayerAction_MoveLeft_Released;
-import player.PlayerAction_MoveRight_Pressed;
-import player.PlayerAction_MoveRight_Released;
-import player.PlayerAction_MoveUp_Pressed;
-import player.PlayerAction_MoveUp_Released;
 
 public class Player{
 	private Unit playerUnit;

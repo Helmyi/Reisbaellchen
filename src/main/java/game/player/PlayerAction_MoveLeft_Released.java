@@ -1,4 +1,4 @@
-package player;
+package game.player;
 
 import game.Player;
 
@@ -6,18 +6,16 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 @SuppressWarnings("serial")
-public class PlayerAction_MoveUp_Pressed extends AbstractAction {
+public class PlayerAction_MoveLeft_Released extends AbstractAction {
 	private Player player;
 
-	public PlayerAction_MoveUp_Pressed(Player player) {
+	public PlayerAction_MoveLeft_Released(Player player) {
 		this.player = player;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (player.getKeyMoveUp())
-			return;
-		player.setKeyMoveUp(true);
+		player.setKeyMoveLeft(false);
 		player.calcMoveDirection();
 	}
 }
