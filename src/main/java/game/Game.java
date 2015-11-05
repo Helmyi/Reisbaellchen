@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 
 import game.menu.GameMenu;
 import game.net.NetMessageHandler;
-import game.net.UDPClient;
 import game.net.UDPTestClient;
 import map.Map;
 
@@ -41,10 +40,13 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		this.menu = new GameMenu();
 		this.isMenuVisible = false;
 		levels = new ArrayList<Level>();
-
 	}
 
 	public static void main(String[] args) {
+		if(theGame != null){
+			System.out.println("Game already exists");
+			return;
+		}
 		theGame = new Game();
 		theGame.init();
 		JFrame frame = new JFrame("Reisbaellchen Game");
@@ -52,7 +54,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		frame.setSize(width, height);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
 		theGame.run();
 	}
 
@@ -109,7 +111,10 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
 		if (player != null && player.getPlayerCamera() != null)
 			player.getPlayerCamera().paint(graphicBuffer);
+		
+		
 		g.drawImage(imageBuffer, 0, 0, this);
+		paintComponents(g);
 	}
 
 	/**
@@ -136,7 +141,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	@Override
 	public void run() {
 		runInit();
-		
 		long timeBefore, timePassed, sleepTime;
 		timeBefore = System.currentTimeMillis();
 
@@ -166,7 +170,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 			timeBefore = System.currentTimeMillis();
 		}
 	}
-
+	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		switch (arg0.getKeyCode()) {
