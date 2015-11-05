@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import player.PlayerAction_ActionX_Pressed;
+import player.PlayerAction_ActionX_Released;
 import player.PlayerAction_MoveDown_Pressed;
 import player.PlayerAction_MoveDown_Released;
 import player.PlayerAction_MoveLeft_Pressed;
@@ -27,8 +29,8 @@ public class Player{
 	public static String key_MoveLeft = "A";
 	public static String key_MoveRight = "D";
 	
-	public static int key_Action1 = KeyEvent.VK_F;
-	public static int key_Action2 = KeyEvent.VK_G;
+	public static String key_Action1 = "F";
+	public static String key_Action2 = "G";
 	
 	private PlayerCamera camera;
 
@@ -43,15 +45,13 @@ public class Player{
 	}
 	
 	private void configureKeys(){
+		//movement keys
 		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_MoveUp), "player move Up");
 		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_MoveUp), "player move Up released");
-		
 		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_MoveDown), "player move Down");
 		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_MoveDown), "player move Down released");
-		
 		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_MoveLeft), "player move Left");
 		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_MoveLeft), "player move Left released");
-		
 		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_MoveRight), "player move Right");
 		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_MoveRight), "player move Right released");
 		
@@ -63,12 +63,24 @@ public class Player{
 		Game.getGameInstance().getActionMap().put("player move Right released", new PlayerAction_MoveRight_Released(this));
 		Game.getGameInstance().getActionMap().put("player move Left",  new PlayerAction_MoveLeft_Pressed(this));
 		Game.getGameInstance().getActionMap().put("player move Left released", new PlayerAction_MoveLeft_Released(this));
+		
+		//attack keys
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_Action1), "player Action1");
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_Action1), "player Action1 released");
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_Action2), "player Action2");
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_Action2), "player Action2 released");
+
+		Game.getGameInstance().getActionMap().put("player Action1",  new PlayerAction_ActionX_Pressed(this, 2));
+		Game.getGameInstance().getActionMap().put("player Action1 released", new PlayerAction_ActionX_Released(this, 2));
+		Game.getGameInstance().getActionMap().put("player Action2",  new PlayerAction_ActionX_Pressed(this, 3));
+		Game.getGameInstance().getActionMap().put("player Action2 released", new PlayerAction_ActionX_Released(this, 3));
 	}
 	
 	public void setPlayerUnit(Unit playerUnit) {
 		this.playerUnit = playerUnit;
 		camera.setPlayerTileWidth(getPlayerUnit().getTileWidth());
 		camera.setPlayerTileHeight(getPlayerUnit().getTileHeight());
+		calcMoveDirection();
 	}
 
 	public void setPlayerCamera(PlayerCamera cam) {
@@ -83,37 +95,8 @@ public class Player{
 		return playerUnit;
 	}
 
-	public void keyPressed(KeyEvent arg0) {
-		if (arg0.getKeyCode() == key_Action1) {
-			if(playerUnit.getAction() != 2){
-				Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 2, playerUnit.getViewDirection(), playerUnit.isMoving());
-			}else{
-				return;
-			}
-		}
-		if (arg0.getKeyCode() == key_Action2) {
-			if(playerUnit.getAction() != 3){
-				Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 3, playerUnit.getViewDirection(), playerUnit.isMoving());
-			}else{
-				return;
-			}
-		}
-	}
-
-	public void keyReleased(KeyEvent arg0) {
-		if (arg0.getKeyCode() == key_Action1 || arg0.getKeyCode() == key_Action2) {
-			if(playerUnit.isMoving()){
-				Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 1, playerUnit.getViewDirection(), playerUnit.isMoving());
-			}else{
-				Game.getGameInstance().getNetMessageHandler().sendUnitAction(playerUnit, 0, playerUnit.getViewDirection(), playerUnit.isMoving());
-			}
-		}
-	}
-
-	public void keyTyped(KeyEvent arg0) {
-	}
-	
 	public void calcMoveDirection() {
+		if(playerUnit == null) return;
 		Unit.ViewDirection tempViewDirection = playerUnit.getViewDirection();
 		boolean tempMoving = playerUnit.isMoving();
 		int tempAction = playerUnit.getAction();

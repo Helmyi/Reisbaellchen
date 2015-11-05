@@ -181,18 +181,14 @@ public class Game extends JPanel implements KeyListener, Runnable {
 			// TODO: open chat
 			return;
 		}
-
-		player.keyPressed(arg0);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		player.keyReleased(arg0);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		player.keyTyped(arg0);
 	}
 
 	public static Game getGameInstance() {
