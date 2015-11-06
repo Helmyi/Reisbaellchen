@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import game.menu.GameMenu;
+import game.menu.StartMenu;
 import game.net.NetMessageHandler;
 import game.net.UDPTestClient;
 import map.Map;
@@ -29,9 +30,13 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	private static int height = 600;
 	private GameMenu menu;
 	private boolean isMenuVisible;
-
+	
 	private Player player;
 	private List<Level> levels;
+
+	private boolean inStartMenu;
+	private StartMenu startMenu;
+	private Image menuBackground;
 
 	public Game() {
 		this.setFocusable(true); // needed for listeners to work
@@ -60,41 +65,18 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
 	// initializing the game
 	private void init() {
+		menuBackground = ImageLoader.getImage("images/mainMenuImage.png");
+		
 		theGame.add(menu);
 		menu.setLocation(width / 2, height / 2);
+
+		setLayout(null);
+		startMenu = new StartMenu();
+		add(startMenu);
+		inStartMenu = true;
+
 	}
 	
-	/**
-	 * initializing when running begins. theGame instance exists here, but not in normal init
-	 */
-	private void runInit(){
-		// load test level
-		gameTime = 0;
-		try {
-			int customDelay = 20;
-			int customJitter = 10;
-			messageHandler = new NetMessageHandler(new UDPTestClient("127.0.0.1", 27015, 2, customDelay, customJitter));
-		} catch (Exception e) {
-			messageHandler = new NetMessageHandler(null);
-			e.printStackTrace();
-		}
-
-		player = new Player();
-
-		levels.add(Level.createTestLevel());
-		
-		// set player unit depending on clientNumber
-		if (messageHandler.getClient() != null) {
-			if(getEnityById(messageHandler.getClient().getClientNumber()) != null){
-				player.setPlayerUnit((Unit) getEnityById(messageHandler.getClient().getClientNumber()));
-			}else{
-				player.setPlayerUnit((Unit) getEnityById(0));
-			}
-		}else{
-			player.setPlayerUnit((Unit) getEnityById(0));
-		}
-	}
-
 	@Override
 	public void paint(Graphics g) {
 		paintAndTickSynchronizer(g, 0);
@@ -109,18 +91,24 @@ public class Game extends JPanel implements KeyListener, Runnable {
 			graphicBuffer = imageBuffer.getGraphics();
 		}
 
-		if (player != null && player.getPlayerCamera() != null)
-			player.getPlayerCamera().paint(graphicBuffer);
+		if(inStartMenu){
+			graphicBuffer.drawImage(menuBackground, 0, 0, null);
+			paintComponents(graphicBuffer);
+		}else{
+			if (player != null && player.getPlayerCamera() != null)
+				player.getPlayerCamera().paint(graphicBuffer);
+		}
 		
 		
 		g.drawImage(imageBuffer, 0, 0, this);
-		paintComponents(g);
 	}
 
 	/**
 	 * game logic
 	 */
 	private void tick(int elapsedTime) {
+		if(messageHandler != null) messageHandler.tick();
+
 		for (Level level : levels) {
 			level.tick(elapsedTime);
 		}
@@ -140,14 +128,13 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
 	@Override
 	public void run() {
-		runInit();
+//		runInit();
 		long timeBefore, timePassed, sleepTime;
 		timeBefore = System.currentTimeMillis();
 
 		// loop
 		while (true) {
 			// tick
-			messageHandler.tick();
 			paintAndTickSynchronizer(null, 1000 / fps);
 			
 			repaint();
@@ -171,6 +158,45 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		}
 	}
 	
+	public void startMultiPlayer() {
+		toggleStartMenu();
+		gameTime = 0;
+		try {
+			int customDelay = 20;
+			int customJitter = 10;
+			messageHandler = new NetMessageHandler(new UDPTestClient(
+					"127.0.0.1", 27015, 2, customDelay, customJitter));
+
+			player = new Player();
+
+			levels.add(Level.createTestLevel());
+
+			// set player unit depending on clientNumber
+			if (messageHandler.getClient() != null) {
+				if (getEnityById(messageHandler.getClient().getClientNumber()) != null) {
+					player.setPlayerUnit((Unit) getEnityById(messageHandler
+							.getClient().getClientNumber()));
+				} else {
+					player.setPlayerUnit((Unit) getEnityById(0));
+				}
+			} else {
+				player.setPlayerUnit((Unit) getEnityById(0));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			toggleStartMenu();
+		}
+	}
+	
+	public void startSinglePlayer(){
+		toggleStartMenu();
+		gameTime = 0;
+		messageHandler = new NetMessageHandler(null);
+		player = new Player();
+		levels.add(Level.createTestLevel());
+		player.setPlayerUnit((Unit) getEnityById(0));
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		switch (arg0.getKeyCode()) {
@@ -182,7 +208,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 			return;
 		}
 	}
-
+	
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 	}
@@ -275,6 +301,11 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		}
 		System.out.println("Level id not found: " + levelId);
 		return null;
+	}
+	
+	public void toggleStartMenu(){
+		inStartMenu = !inStartMenu;
+		startMenu.setVisible(inStartMenu);
 	}
 	
 	/**
