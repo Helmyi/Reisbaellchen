@@ -57,12 +57,13 @@ public class StartMenu extends JPanel implements ActionListener {
 		//layout
 		tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
 		
+		tempPanel.add(Box.createRigidArea(new Dimension(100, 5)));
 		tempPanel.add(button1);
-		tempPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+		tempPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		tempPanel.add(button2);
-		tempPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+		tempPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		tempPanel.add(button3);
-		tempPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+		tempPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		tempPanel.add(button4);
 		
 		this.add(tempPanel, BorderLayout.WEST);
