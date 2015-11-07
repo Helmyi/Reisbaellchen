@@ -65,12 +65,12 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
 	// initializing the game
 	private void init() {
+		setLayout(null);
 		menuBackground = ImageLoader.getImage("images/FFA.png");
 		
 		theGame.add(menu);
 		menu.setLocation(width / 2, height / 2);
 
-		setLayout(null);
 		startMenu = new StartMenu();
 		add(startMenu);
 		inStartMenu = true;
@@ -78,7 +78,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	}
 	
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		paintAndTickSynchronizer(g, 0);
 	}
 
@@ -94,13 +94,12 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		if(inStartMenu){
 			graphicBuffer.drawImage(menuBackground, 0 ,0 , width, height,
 					0, 0 , menuBackground.getWidth(null), menuBackground.getHeight(null), null);
-			paintComponents(graphicBuffer);
 		}else{
 			if (player != null && player.getPlayerCamera() != null)
 				player.getPlayerCamera().paint(graphicBuffer);
 		}
 		
-		
+		super.paintComponent(g);
 		g.drawImage(imageBuffer, 0, 0, this);
 	}
 

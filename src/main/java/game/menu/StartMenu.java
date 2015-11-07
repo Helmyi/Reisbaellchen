@@ -29,6 +29,7 @@ public class StartMenu extends JPanel implements ActionListener {
 	
 	private void createStartMenuPanel(){
 		JPanel tempPanel = new JPanel();
+		setOpaque(false);
 		tempPanel.setOpaque(false);
 		
 		JButton button1 = new JButton("Singleplayer");
