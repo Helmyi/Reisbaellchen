@@ -71,11 +71,6 @@ public class StartMenu extends JPanel implements ActionListener {
 		currentPanel = tempPanel;
 	}
 
-//	@Override
-//	public void paint(Graphics g) {
-//		paintComponents(g);
-//	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()){

@@ -11,6 +11,7 @@ import game.player.PlayerAction_MoveRight_Released;
 import game.player.PlayerAction_MoveUp_Pressed;
 import game.player.PlayerAction_MoveUp_Released;
 
+import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -44,34 +45,45 @@ public class Player{
 	
 	private void configureKeys(){
 		//movement keys
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_MoveUp), "player move Up");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_MoveUp), "player move Up released");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_MoveDown), "player move Down");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_MoveDown), "player move Down released");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_MoveLeft), "player move Left");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_MoveLeft), "player move Left released");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_MoveRight), "player move Right");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_MoveRight), "player move Right released");
-		
-		Game.getGameInstance().getActionMap().put("player move Up",  new PlayerAction_MoveUp_Pressed(this));
-		Game.getGameInstance().getActionMap().put("player move Up released", new PlayerAction_MoveUp_Released(this));
-		Game.getGameInstance().getActionMap().put("player move Down",  new PlayerAction_MoveDown_Pressed(this));
-		Game.getGameInstance().getActionMap().put("player move Down released", new PlayerAction_MoveDown_Released(this));
-		Game.getGameInstance().getActionMap().put("player move Right",  new PlayerAction_MoveRight_Pressed(this));
-		Game.getGameInstance().getActionMap().put("player move Right released", new PlayerAction_MoveRight_Released(this));
-		Game.getGameInstance().getActionMap().put("player move Left",  new PlayerAction_MoveLeft_Pressed(this));
-		Game.getGameInstance().getActionMap().put("player move Left released", new PlayerAction_MoveLeft_Released(this));
+		bindAKeyForPressAndReleaseAndModifiers("player move Up", key_MoveUp, new PlayerAction_MoveUp_Pressed(this), new PlayerAction_MoveUp_Released(this));		
+		bindAKeyForPressAndReleaseAndModifiers("player move Down", key_MoveDown ,new PlayerAction_MoveDown_Pressed(this), new PlayerAction_MoveDown_Released(this));
+		bindAKeyForPressAndReleaseAndModifiers("player move Right", key_MoveRight, new PlayerAction_MoveRight_Pressed(this), new PlayerAction_MoveRight_Released(this));		
+		bindAKeyForPressAndReleaseAndModifiers("player move Left", key_MoveLeft ,new PlayerAction_MoveLeft_Pressed(this), new PlayerAction_MoveLeft_Released(this));
 		
 		//attack keys
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_Action1), "player Action1");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_Action1), "player Action1 released");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key_Action2), "player Action2");
-		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key_Action2), "player Action2 released");
-
-		Game.getGameInstance().getActionMap().put("player Action1",  new PlayerAction_ActionX_Pressed(this, 2));
-		Game.getGameInstance().getActionMap().put("player Action1 released", new PlayerAction_ActionX_Released(this, 2));
-		Game.getGameInstance().getActionMap().put("player Action2",  new PlayerAction_ActionX_Pressed(this, 3));
-		Game.getGameInstance().getActionMap().put("player Action2 released", new PlayerAction_ActionX_Released(this, 3));
+		bindAKeyForPressAndReleaseAndModifiers("player Action1", key_Action1, new PlayerAction_ActionX_Pressed(this,2), new PlayerAction_ActionX_Released(this,2));		
+		bindAKeyForPressAndReleaseAndModifiers("player Action2", key_Action2 ,new PlayerAction_ActionX_Pressed(this,3), new PlayerAction_ActionX_Released(this,3));
+	}
+	
+	private void bindAKeyForPressAndReleaseAndModifiers(String bindingName, String key, AbstractAction actionPressed, AbstractAction actionReleased){
+		String bindingReleased = bindingName + " released";
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), bindingName);
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + key), bindingReleased);
+		
+		String modKey = "control";
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + key), bindingName);
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + "released " + key), bindingReleased);
+		modKey = "shift";
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + key), bindingName);
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + "released " + key), bindingReleased);
+		modKey = "alt";
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + key), bindingName);
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + "released " + key), bindingReleased);
+		modKey = "alt control";
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + key), bindingName);
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + "released " + key), bindingReleased);
+		modKey = "alt shift";
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + key), bindingName);
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + "released " + key), bindingReleased);
+		modKey = "control shift";
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + key), bindingName);
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + "released " + key), bindingReleased);
+		modKey = "control alt shift";
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + key), bindingName);
+		Game.getGameInstance().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(modKey + " " + "released " + key), bindingReleased);
+		
+		Game.getGameInstance().getActionMap().put(bindingName, actionPressed);
+		Game.getGameInstance().getActionMap().put(bindingReleased, actionReleased);
 	}
 	
 	public void setPlayerUnit(Unit playerUnit) {
