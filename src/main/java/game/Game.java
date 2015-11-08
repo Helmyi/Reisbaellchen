@@ -11,6 +11,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import game.hero.Hero;
+import game.hero.Hero_Base;
 import game.menu.GameMenu;
 import game.menu.StartMenu;
 import game.net.NetMessageHandler;
@@ -33,6 +35,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	
 	private Player player;
 	private List<Level> levels;
+	private Class<? extends Hero> chosenPlayerHero;
 
 	private boolean inStartMenu;
 	private StartMenu startMenu;
@@ -194,7 +197,23 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		messageHandler = new NetMessageHandler(null);
 		player = new Player();
 		levels.add(Level.createTestLevel());
-		player.setPlayerUnit((Unit) getEnityById(0));
+		
+		if(chosenPlayerHero != null){
+			try {
+				Unit temp;
+				temp = chosenPlayerHero.newInstance();
+				levels.get(0).getEntityList().add(temp);
+				player.setPlayerUnit(temp);
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}else{
+			Unit temp = new Hero_Base();
+			levels.get(0).getEntityList().add(temp);
+			player.setPlayerUnit(temp);
+		}
 	}
 	
 	@Override
@@ -301,6 +320,10 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		}
 		System.out.println("Level id not found: " + levelId);
 		return null;
+	}
+	
+	public void setChosenPlayerHero(Class<? extends Hero> clazz){
+		chosenPlayerHero = clazz;
 	}
 	
 	public void toggleStartMenu(){
