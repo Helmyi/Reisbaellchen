@@ -11,12 +11,11 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import game.hero.Hero;
-import game.hero.Hero_Base;
+import game.hero.HeroCreator;
 import game.menu.GameMenu;
 import game.menu.StartMenu;
 import game.net.NetMessageHandler;
-import game.net.UDPTestClient;
+import game.net.UDPClient;
 import map.Map;
 
 @SuppressWarnings("serial")
@@ -35,11 +34,14 @@ public class Game extends JPanel implements KeyListener, Runnable {
 	
 	private Player player;
 	private List<Level> levels;
-	private Class<? extends Hero> chosenPlayerHero;
+	private int heroPickNumber;
 
 	private boolean inStartMenu;
 	private StartMenu startMenu;
 	private Image menuBackground;
+	
+	private int port = 27015;
+	private String ip = "127.0.0.1";
 
 	public Game() {
 		this.setFocusable(true); // needed for listeners to work
@@ -165,10 +167,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		toggleStartMenu();
 		gameTime = 0;
 		try {
-			int customDelay = 20;
-			int customJitter = 10;
-			messageHandler = new NetMessageHandler(new UDPTestClient(
-					"127.0.0.1", 27015, 2, customDelay, customJitter));
+			messageHandler = new NetMessageHandler(new UDPClient(ip, port, 2));
 
 			player = new Player();
 
@@ -198,22 +197,10 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		player = new Player();
 		levels.add(Level.createTestLevel());
 		
-		if(chosenPlayerHero != null){
-			try {
-				Unit temp;
-				temp = chosenPlayerHero.newInstance();
-				levels.get(0).getEntityList().add(temp);
-				player.setPlayerUnit(temp);
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}else{
-			Unit temp = new Hero_Base();
-			levels.get(0).getEntityList().add(temp);
-			player.setPlayerUnit(temp);
-		}
+		Unit temp;
+		temp = HeroCreator.createHero(heroPickNumber);
+		levels.get(0).getEntityList().add(temp);
+		player.setPlayerUnit(temp);
 	}
 	
 	@Override
@@ -322,8 +309,24 @@ public class Game extends JPanel implements KeyListener, Runnable {
 		return null;
 	}
 	
-	public void setChosenPlayerHero(Class<? extends Hero> clazz){
-		chosenPlayerHero = clazz;
+	public int getPort(){
+		return port;
+	}
+	
+	public String getIp(){
+		return ip;
+	}
+	
+	public void setPort(int port){
+		this.port = port;
+	}
+	
+	public void setIp(String ip){
+		this.ip = ip;
+	}
+	
+	public void setHeroPickNumber(int pickNumber){
+		heroPickNumber = pickNumber;
 	}
 	
 	public void toggleStartMenu(){
